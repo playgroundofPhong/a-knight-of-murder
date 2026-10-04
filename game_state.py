@@ -8,11 +8,11 @@ from typing import Dict, List, Any, Optional, Set
 logger = logging.getLogger("game_state")
 
 STAGE_TITLES = {
-    1: "Stage 1: Arrival & Reception (Envelope A)",
-    2: "Stage 2: The Banquet & Festivities",
-    3: "Stage 3: The Foul Murder of Sir Rufus (Envelope B)",
-    4: "Stage 4: Presentation of Tangible Evidence & Accusations",
-    5: "Stage 5: The Grand Climax & Royal Solution"
+    1: "Giai Đoạn 1: Đón Tiếp Khách Mời (Phong Bì A)",
+    2: "Giai Đoạn 2: Khai Mạc Đại Yến & Giao Lưu",
+    3: "Giai Đoạn 3: Án Mạng Sir Rufus (Phong Bì B)",
+    4: "Giai Đoạn 4: Công Bố Tang Vật & Bỏ Phiếu Kết Án",
+    5: "Giai Đoạn 5: Phán Quyết Triều Đình & Vạch Trần Hung Thủ"
 }
 
 class GameStateManager:
@@ -130,12 +130,12 @@ class GameStateManager:
         intro_announcement = {
             "id": f"msg_{int(time.time()*1000)}",
             "sender_id": "game_master",
-            "sender_name": "Royal Herald (Host)",
+            "sender_name": "Quản Trò Hoàng Gia",
             "sender_avatar": "🎺",
             "content": (
-                "Hear ye! Hear ye! Lords and Ladies of the Realm! Welcome to Fernwood Manor! "
-                "The grand tournament has concluded, and our honored guests have gathered in the Great Hall. "
-                "Review your Envelope A in your Secret Dossier, observe the Laws of the Land, and prepare your wits!"
+                "Hỡi các Lãnh chúa và Phu nhân tôn kính! Chào mừng quý vị đã đến với Lâu Đài Fernwood! "
+                "Giải đấu thương mã vừa khép lại, và các vị khách quý đã tề tựu đông đủ tại Đại Sảnh. "
+                "Xin hãy xem Phong Bì A trong Hồ Sơ Bí Mật, tuân thủ Luật Lệ Lâu Đài và chuẩn bị sẵn sàng tâm trí!"
             ),
             "timestamp": time.time(),
             "type": "announcement"
@@ -173,9 +173,9 @@ class GameStateManager:
             msg = {
                 "id": f"msg_{int(time.time()*1000)}",
                 "sender_id": "lord_taylor",
-                "sender_name": "Lord Taylor",
+                "sender_name": "Lãnh chúa Taylor",
                 "sender_avatar": "🏰",
-                "content": f"[Lord Taylor steps to the podium, unrolls the parchment, and addresses the banquet]:\n\n{intro_speech}",
+                "content": f"[Lãnh chúa Taylor bước lên bục cao, mở cuộn da dê và phát biểu khai mạc đại yến]:\n\n{intro_speech}",
                 "timestamp": time.time(),
                 "type": "event"
             }
@@ -187,22 +187,22 @@ class GameStateManager:
             toast_msg = {
                 "id": f"msg_{int(time.time()*1000)}_1",
                 "sender_id": "lord_taylor",
-                "sender_name": "Lord Taylor",
+                "sender_name": "Lãnh chúa Taylor",
                 "sender_avatar": "🏰",
-                "content": f"[Lord Taylor raises his jeweled goblet high]:\n\n\"{toast_speech}\"",
+                "content": f"[Lãnh chúa Taylor nâng cao chiếc ly nạm ngọc chúc mừng hôn lễ]:\n\n\"{toast_speech}\"",
                 "timestamp": time.time(),
                 "type": "event"
             }
             blackout_msg = {
                 "id": f"msg_{int(time.time()*1000)}_2",
                 "sender_id": "system",
-                "sender_name": "THE SHADOW OF DEATH",
+                "sender_name": "BÓNG ĐÊM CHẾT CHÓC",
                 "sender_avatar": "⚡",
                 "content": (
-                    "⚡ SUDDEN THUNDER CRACKS OVERHEAD! THE CANDLES FLICKER AND BLOW OUT! "
-                    "DARKNESS ENVELOPS THE GREAT HALL! A BLOOD-CURDLING SCREAM SHATTERS THE NIGHT!\n\n"
-                    "The torchlights return... Sir Rufus lies motionless across the stone floor, "
-                    "a jeweled dagger driven directly through his breastplate into his cold heart! SIR RUFUS HAS BEEN MURDERED!"
+                    "⚡ TIẾNG SẤM NỔ VANG RỀN! TOÀN BỘ ÁNH NẾN VÀ ĐUỐC PHỤT TẮT! "
+                    "BÓNG ĐÊM ĐEN KỊT BAO TRÙM ĐẠI SẢNH! MỘT TIẾNG THÉT KINH HOÀNG VANG LÊN XÉ TOẠC MÀN ĐÊM!\n\n"
+                    "Khi ánh đuốc bừng sáng trở lại... Hiệp sĩ Rufus đã nằm bất động trên sàn đá lạnh lẽo, "
+                    "một thanh đoản kiếm nạm ngọc đâm xuyên qua áo giáp vào thẳng tim! HIỆP SĨ RUFUS ĐÃ BỊ SÁT HẠI!"
                 ),
                 "timestamp": time.time() + 1,
                 "type": "event",
@@ -214,7 +214,7 @@ class GameStateManager:
                 "sender_id": "willie_watchman",
                 "sender_name": "Willie the Watchman",
                 "sender_avatar": "🗝️",
-                "content": f"[Willie draws chalk around the corpse, draws his iron baton, and commands order]:\n\n{inv_speech}",
+                "content": f"[Willie vẽ phấn quanh thi thể, rút gậy sắt và ra lệnh phong tỏa lâu đài]:\n\n{inv_speech}",
                 "timestamp": time.time() + 2,
                 "type": "event"
             }
@@ -229,7 +229,7 @@ class GameStateManager:
                 "sender_id": "willie_watchman",
                 "sender_name": "Willie the Watchman",
                 "sender_avatar": "🗝️",
-                "content": f"[Willie steps forward and lays the evidence upon the velvet trestle table]:\n\n{ev_speech}",
+                "content": f"[Willie bước lên và trải các tang vật A đến F lên bàn đại yến]:\n\n{ev_speech}",
                 "timestamp": time.time(),
                 "type": "event"
             }
@@ -245,7 +245,7 @@ class GameStateManager:
                 "sender_id": "willie_watchman",
                 "sender_name": "Willie the Watchman",
                 "sender_avatar": "🗝️",
-                "content": f"[Willie stands before the assembled court to deliver the final verdict]:\n\n{sol_speech}",
+                "content": f"[Willie đứng trước toàn thể triều đình và dõng dạc tuyên đọc lời giải chính thức]:\n\n{sol_speech}",
                 "timestamp": time.time(),
                 "type": "event"
             }
@@ -467,36 +467,36 @@ class GameStateManager:
         lines.append("                   A KNIGHT OF MURDER - COURT CHRONICLES")
         lines.append("              Official Transcripts of Fernwood Manor Banquet")
         lines.append("=" * 80)
-        lines.append(f"Room Code:       {data['room_code']}")
-        lines.append(f"Cast Size:       {data['cast_size']} Guests")
-        lines.append(f"Current Stage:   Stage {data['stage']} - {STAGE_TITLES.get(data['stage'], '')}")
-        lines.append(f"Access Level:    {'👑 Game Master (Host / Omniscient)' if data['can_view_all'] else '👤 Guest Player (Redacted)'}")
-        lines.append(f"Generated At:    {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        lines.append(f"Mã Phòng:         {data['room_code']}")
+        lines.append(f"Quy Mô Khách Mời: {data['cast_size']} Khách mời")
+        lines.append(f"Giai Đoạn Hiện Tại: Giai đoạn {data['stage']} - {STAGE_TITLES.get(data['stage'], '')}")
+        lines.append(f"Cấp Quyền:       {'👑 Quản Trò / Chủ Phòng (Toàn Tri)' if data['can_view_all'] else '👤 Khách Mời (Bảo mật)'}")
+        lines.append(f"Thời Gian Xuất:   {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         lines.append("")
 
-        lines.append("[GUESTS & PLAYERS]")
+        lines.append("[DANH SÁCH KHÁCH MỜI & NGƯỜI CHƠI]")
         for pid, pdata in self.human_players.items():
             cid = pdata.get("character_id")
-            cname = self.characters.get(cid, {}).get("name", "Unknown")
-            lines.append(f"  • {cname} (Controlled by Human Player: {pdata.get('player_name', pid)})")
+            cname = self.characters.get(cid, {}).get("name", "Chưa rõ")
+            lines.append(f"  • {cname} (Điều khiển bởi Người chơi: {pdata.get('player_name', pid)})")
         for cid, cinfo in self.characters.items():
             if not cinfo.get("is_human"):
-                lines.append(f"  • {cinfo['name']} ({cinfo['title']}) [AI Agent]")
+                lines.append(f"  • {cinfo['name']} ({cinfo['title']}) [Tác Nhân AI]")
         lines.append("")
 
         # 1. Great Hall
         lines.append("-" * 80)
-        lines.append("                     I. THE GREAT HALL (BANQUET RECORDS)")
+        lines.append("                     I. ĐẠI SẢNH (BIÊN NIÊN SỬ ĐẠI YẾN)")
         lines.append("-" * 80)
         if not data["great_hall"]:
-            lines.append("  (No words have yet been uttered in the Great Hall.)")
+            lines.append("  (Chưa có lời phát biểu nào tại Đại Sảnh.)")
         else:
             for m in data["great_hall"]:
                 t_str = datetime.fromtimestamp(m.get("timestamp", time.time())).strftime("%H:%M:%S")
-                s_name = m.get("sender_name", "Unknown")
+                s_name = m.get("sender_name", "Ẩn danh")
                 m_type = m.get("type", "public")
                 if m_type in ["announcement", "event"]:
-                    lines.append(f"\n[{t_str}] [PROCLAMATION - {s_name}]:")
+                    lines.append(f"\n[{t_str}] [TUYÊN BỐ - {s_name}]:")
                     lines.append(f"  {m.get('content')}\n")
                 else:
                     lines.append(f"[{t_str}] {s_name}: {m.get('content')}")
@@ -504,75 +504,75 @@ class GameStateManager:
 
         # 2. AI Undercover Whispers
         lines.append("-" * 80)
-        lines.append("         II. CLANDESTINE AI INTRIGUES (COVERT WHISPERS BETWEEN GUESTS)")
-        lines.append("              [Secret dialogues exchanged covertly between castle residents]")
+        lines.append("         II. MẬT ĐÀM NGẦM GIỮA CÁC AI (GIAO LƯU BÍ MẬT NỘI BỘ LÂU ĐÀI)")
+        lines.append("              [Hội thoại riêng tư được trao đổi ngầm giữa các cư dân AI]")
         lines.append("-" * 80)
         if not data["can_view_all"]:
-            lines.append("  🔒 [SEALED WITH ROYAL WAX - CLASSIFIED ARCHIVES]")
-            lines.append("  Clandestine records and secret intrigues between castle residents are sealed")
-            lines.append("  to preserve absolute fairness and dramatic suspense during the investigation.")
-            lines.append("  -> Accessible only via Host Room Code, or unsealed publicly upon Stage 5 (Verdict).")
+            lines.append("  🔒 [NIÊM PHONG SÁP ĐỎ HOÀNG GIA - TÀI LIỆU BẢO MẬT]")
+            lines.append("  Các trao đổi ngầm giữa các nhân vật lâu đài được niêm phong để bảo đảm tính")
+            lines.append("  công bằng và bất ngờ kịch tính trong suốt quá trình điều tra phá án.")
+            lines.append("  -> Chỉ có Quản Trò xem được, hoặc mở niêm phong toàn thể tại Giai đoạn 5.")
         elif not data["ai_undercover_whispers"]:
-            lines.append("  (No covert meetings have transpired between AI guests as of yet.)")
+            lines.append("  (Chưa có cuộc gặp gỡ bí mật nào giữa các AI.)")
         else:
             for k, info in data["ai_undercover_whispers"].items():
-                lines.append(f"\n>>> Secluded Chamber: {info['pair_label']}")
+                lines.append(f"\n>>> Phòng Kín: {info['pair_label']}")
                 for m in info["messages"]:
                     t_str = datetime.fromtimestamp(m.get("timestamp", time.time())).strftime("%H:%M:%S")
-                    s_name = m.get("sender_name", "Unknown")
+                    s_name = m.get("sender_name", "Chưa rõ")
                     lines.append(f"  [{t_str}] {s_name}: {m.get('content')}")
         lines.append("")
 
         # 3. Private Whispers
         lines.append("-" * 80)
-        lines.append("              III. PRIVATE WHISPERS (PERSONAL / GUEST CHAMBERS)")
+        lines.append("              III. MẬT ĐÀM RIÊNG (PHÒNG KÍN CỦA NGƯỜI CHƠI)")
         lines.append("-" * 80)
         if not data["human_whispers"]:
-            lines.append("  (No private whispers recorded.)")
+            lines.append("  (Chưa có mật đàm riêng nào được ghi nhận.)")
         else:
             for k, info in data["human_whispers"].items():
-                lines.append(f"\n>>> Private Chamber: {info['pair_label']}")
+                lines.append(f"\n>>> Phòng Riêng: {info['pair_label']}")
                 for m in info["messages"]:
                     t_str = datetime.fromtimestamp(m.get("timestamp", time.time())).strftime("%H:%M:%S")
-                    s_name = m.get("sender_name", "Unknown")
+                    s_name = m.get("sender_name", "Chưa rõ")
                     lines.append(f"  [{t_str}] {s_name}: {m.get('content')}")
         lines.append("")
 
         # 4. Treasury Ledger
         lines.append("-" * 80)
-        lines.append("                   IV. TREASURY LEDGER (GOLD & BRIBES)")
+        lines.append("                   IV. SỔ CÁI NGÂN KHỐ (TIỀN VÀNG & HỐI LỘ)")
         lines.append("-" * 80)
         if not data["transactions"]:
-            lines.append("  (No gold coins recorded.)")
+            lines.append("  (Chưa có giao dịch tiền vàng nào.)")
         else:
             for tx in data["transactions"]:
                 t_str = datetime.fromtimestamp(tx.get("timestamp", time.time())).strftime("%H:%M:%S")
-                lines.append(f"  [{t_str}] {tx['from_name']} -> {tx['to_name']}: {tx['amount']} Gold Coin(s) | Note: \"{tx.get('message', '')}\"")
+                lines.append(f"  [{t_str}] {tx['from_name']} -> {tx['to_name']}: {tx['amount']} Đồng Vàng | Ghi chú: \"{tx.get('message', '')}\"")
         lines.append("")
 
         # 5. Votes & Solution
         lines.append("-" * 80)
-        lines.append("                    V. ACCUSATION BALLOTS & FINAL AWARDS")
+        lines.append("                    V. PHIẾU KẾT ÁN & DANH HIỆU CHUNG CUỘC")
         lines.append("-" * 80)
         if not data["votes"]:
-            lines.append("  (No ballots have been submitted.)")
+            lines.append("  (Chưa có phiếu kết án nào được nộp.)")
         else:
             for vid, v in data["votes"].items():
                 voter_name = self.characters.get(vid, {}).get("name", vid)
                 accused_name = self.characters.get(v.get("accused_id"), {}).get("name", v.get("accused_id"))
-                lines.append(f"  • {voter_name} accused {accused_name}: Motive: {v.get('motive')} | Evidence: {v.get('evidence')}")
+                lines.append(f"  • {voter_name} cáo buộc {accused_name}: Động cơ: {v.get('motive')} | Tang vật: {v.get('evidence')}")
 
         if data["awards"]:
-            lines.append("\n[FINAL REVELATION & AWARDS]")
-            lines.append(f"  True Culprit:       {data['awards'].get('killer')}")
-            lines.append(f"  Motive:             {data['awards'].get('motive_summary')}")
-            lines.append(f"  Smoking Gun Winner: {', '.join(data['awards'].get('smoking_gun_winners', []))}")
-            lines.append(f"  Wealthiest Guest:   {data['awards'].get('wealthiest_guest')}")
-            lines.append(f"  Best Dressed:       {data['awards'].get('best_dressed')}")
-            lines.append(f"  Best Performance:   {data['awards'].get('best_performance')}")
+            lines.append("\n[KẾT QUẢ PHÁN QUYẾT & GIẢI THƯỞNG]")
+            lines.append(f"  Hung Thủ Thực Sự:         {data['awards'].get('killer')}")
+            lines.append(f"  Tóm Tắt Động Cơ:          {data['awards'].get('motive_summary')}")
+            lines.append(f"  Thám Tử Phá Án Xuất Sắc:  {', '.join(data['awards'].get('smoking_gun_winners', []))}")
+            lines.append(f"  Người Giàu Có Nhất:       {data['awards'].get('wealthiest_guest')}")
+            lines.append(f"  Trang Phục Lộng Lẫy Nhất: {data['awards'].get('best_dressed')}")
+            lines.append(f"  Diễn Xuất Ấn Tượng Nhất:  {data['awards'].get('best_performance')}")
 
         lines.append("\n" + "=" * 80)
-        lines.append("                        END OF COURT CHRONICLES")
+        lines.append("                     KẾT THÚC BIÊN NIÊN SỬ TRIỀU ĐÌNH")
         lines.append("=" * 80)
         return "\n".join(lines)
 
