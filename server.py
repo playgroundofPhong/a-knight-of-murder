@@ -14,13 +14,13 @@ if hasattr(sys.stdout, "reconfigure"):
 if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Body
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Body, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse, PlainTextResponse
 from pydantic import BaseModel
 
 from game_state import GameStateManager
-from ai_engine import AIEngine, build_character_system_prompt, build_host_system_prompt
+from ai_engine import AIEngine, build_character_system_prompt, build_host_system_prompt, build_herald_hint_prompt
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("server")
@@ -599,7 +599,7 @@ async def autonomous_human_whisper_loop():
     used_whisper_indices = set()
 
     while True:
-        await asyncio.sleep(25) # Check every 25s
+        await asyncio.sleep(18) # Check every 18s
         try:
             if not game_state.is_game_started or game_state.stage >= 5:
                 continue
@@ -609,8 +609,8 @@ async def autonomous_human_whisper_loop():
                 continue
 
             now = time.time()
-            if now - last_human_proactive_whisper_time < 45:
-                continue # 45-second cooldown between proactive whispers to avoid overwhelming the player
+            if now - last_human_proactive_whisper_time < 28:
+                continue # 28-second cooldown between proactive whispers
 
             pool = PROACTIVE_HUMAN_WHISPERS_STAGE_1_2 if game_state.stage in [1, 2] else PROACTIVE_HUMAN_WHISPERS_STAGE_3_4
 
@@ -640,6 +640,29 @@ async def autonomous_human_whisper_loop():
             chosen_idx, chosen_item, sender_ai = random.choice(fresh)
             used_whisper_indices.add(chosen_idx)
 
+            chat_key = game_state.get_private_chat_key(sender_ai["id"], human_cid)
+
+            # Broadcast typing indicator first to make it feel completely human
+            await broadcast({
+                "type": "ai_typing",
+                "character_id": sender_ai["id"],
+                "character_name": sender_ai["name"],
+                "chat_type": "private",
+                "chat_key": chat_key,
+                "recipient_id": human_cid,
+                "is_typing": True
+            })
+            await asyncio.sleep(2.5)
+            await broadcast({
+                "type": "ai_typing",
+                "character_id": sender_ai["id"],
+                "character_name": sender_ai["name"],
+                "chat_type": "private",
+                "chat_key": chat_key,
+                "recipient_id": human_cid,
+                "is_typing": False
+            })
+
             # Send proactive private whisper from AI to the Human Player
             msg = game_state.add_message(
                 sender_ai["id"],
@@ -648,7 +671,6 @@ async def autonomous_human_whisper_loop():
                 recipient_id=human_cid,
                 is_undercover=False
             )
-            chat_key = game_state.get_private_chat_key(sender_ai["id"], human_cid)
             await broadcast({
                 "type": "new_private_message",
                 "chat_key": chat_key,
@@ -673,6 +695,14 @@ async def lifespan(app: FastAPI):
     human_whisper_task.cancel()
 
 app = FastAPI(title="A Knight of Murder", lifespan=lifespan)
+
+@app.middleware("http")
+async def add_no_cache_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 # Mount static folder
 os.makedirs("static", exist_ok=True)
@@ -1180,6 +1210,69 @@ async def send_message_http_endpoint(payload: Dict[str, Any] = Body(...)):
         raise HTTPException(status_code=400, detail="Invalid message delivery parameters")
     return {"status": "ok", "message": msg}
 
+SUBTLE_HERALD_HINTS = {
+    1: [
+        "The Royal Herald observes the gathering: 'Observe how Sir Cameron casts sullen glares toward the tournament victor. Defeat in the lists tastes bitter, but envy burns deeper still.'",
+        "The Royal Herald whispers softly: 'The holy Father Gabriel speaks of charity, yet his eyes linger anxiously on the Lord\\'s treasury. Inquire what unpaid debts weigh upon the parish.'",
+        "The Royal Herald murmurs: 'Lady Diana\\'s bridal veil conceals more than maiden modesty. A noble daughter of Dunnsberry does not wed without binding terms and secret promises.'",
+        "The Royal Herald remarks: 'Wine loosens tongues, but gold opens locked doors. A modest bribe to a servant often reveals what highborn lords conceal.'"
+    ],
+    2: [
+        "The Royal Herald cautions: 'Lord Taylor\\'s feast flows with sweet wine, yet rumors of soaring tithes stir unrest among the commoners. Notice who speaks with clenched fists.'",
+        "The Royal Herald whispers: 'Maid Monica pours the chalices with trembling hands whenever the groom passes. Love scorned is a dangerous guest at a wedding feast.'",
+        "The Royal Herald observes: 'Sir Rufus flaunts his victory purse and Lady Marilyn\\'s favor openly. A knight who earns so many enemies before supper rarely sleeps without guards.'",
+        "The Royal Herald hints: 'Take heed of who slips out of the banquet hall into the private chambers before the ceremonial toast begins.'"
+    ],
+    3: [
+        "The Royal Herald gestures toward the darkened dais: 'When the torches failed, none could see, but all could hear. Who was seated closest to Sir Rufus, and whose chair scraped the flagstones?'",
+        "The Royal Herald murmurs: 'Willie secured the exits before the blood was cold. The murderer did not flee across the moat; they stand among us even now, wiping their hands upon fine linens.'",
+        "The Royal Herald cautions: 'A dagger plunged in the dark requires proximity, not great strength. Look not only to the armored knights, but to those who move unseen between the tables.'",
+        "The Royal Herald advises: 'Compare each guest\\'s stated whereabouts during the toast. He whose alibi depends on another\\'s word may have bought their silence with gold.'"
+    ],
+    4: [
+        "The Royal Herald examines the exhibits: 'The monogrammed cloth and the Dunnsberry dagger tell contrasting tales. One clue was dropped in panic, but was the other planted to deceive?'",
+        "The Royal Herald notes: 'Review the castle ledgers. A sudden transfer of coins during the banquet reveals either a blackmailer paid or a confidant silenced.'",
+        "The Royal Herald whispers: 'The murderer\\'s deepest dread is not suspicion of wrath, but the unmasking of their true lineage. Question who has the most to lose if their past is exposed.'",
+        "The Royal Herald advises: 'Look to the victim\\'s past in Dunnsberry. Sir Rufus recognized someone here who had long assumed a false identity.'"
+    ],
+    5: [
+        "The Royal Herald strikes the floor with his staff: 'The hour of reckoning is at hand! Weigh physical evidence against sworn testimony, and let truth triumph over deceit!'"
+    ]
+}
+
+@app.post("/api/hint")
+async def get_herald_hint_endpoint(payload: Dict[str, Any] = Body(...)):
+    player_id = payload.get("player_id", "")
+    stage = game_state.stage
+    pool = SUBTLE_HERALD_HINTS.get(stage, SUBTLE_HERALD_HINTS[1])
+
+    hint_text = None
+    try:
+        sys_prompt = build_herald_hint_prompt(stage, game_state.revealed_exhibits, list(game_state.human_players.keys()))
+        recent_history = [
+            {"role": "user", "content": f"{m['sender_name']}: {m['content']}"}
+            for m in game_state.great_hall_messages[-6:]
+        ]
+        recent_history.append({"role": "user", "content": "Deliver one subtle, poetic, non-spoiler medieval observation for the investigators. Do not reveal the murderer!"})
+        reply = await asyncio.wait_for(ai_engine.generate_response(sys_prompt, recent_history, max_tokens=140), timeout=6.0)
+        if reply and len(reply) > 20 and not "AI Error" in reply and not reply.startswith("("):
+            hint_text = f"The Royal Herald shares a subtle insight: \"{reply.strip()}\""
+    except Exception as e:
+        logger.info(f"Dynamic hint fallback to pool: {e}")
+
+    if not hint_text:
+        import random
+        hint_text = random.choice(pool)
+
+    msg = game_state.add_message("system", hint_text, chat_type="public")
+    await broadcast({
+        "type": "herald_hint",
+        "message": msg,
+        "hint": hint_text,
+        "stage": stage
+    })
+    return {"status": "ok", "hint": hint_text, "message": msg}
+
 @app.websocket("/ws/{player_id}")
 async def websocket_endpoint(websocket: WebSocket, player_id: str):
     await websocket.accept()
@@ -1198,6 +1291,8 @@ async def websocket_endpoint(websocket: WebSocket, player_id: str):
                 sender_id = data.get("sender_id")
                 recipient_id = data.get("recipient_id")
                 await process_incoming_message(chat_type, sender_id, content, recipient_id)
+            elif action == "request_hint":
+                await get_herald_hint_endpoint({"player_id": player_id})
 
     except WebSocketDisconnect:
         connected_websockets.pop(player_id, None)
@@ -1210,42 +1305,75 @@ async def generate_ai_great_hall_reply(ai_char: Dict[str, Any], sender_cid: str,
     sender_char = game_state.characters.get(sender_cid)
     sender_name = sender_char["name"] if sender_char else sender_cid
 
-    # Short delay to simulate natural human-like pacing
-    await asyncio.sleep(2.0)
+    # Broadcast typing indicator
+    await broadcast({
+        "type": "ai_typing",
+        "character_id": ai_char["id"],
+        "character_name": ai_char["name"],
+        "chat_type": "public",
+        "is_typing": True
+    })
 
-    sys_prompt = build_character_system_prompt(
-        ai_char,
-        game_state.stage,
-        game_state.get_active_characters(),
-        ai_char["current_gold"],
-        game_state.gold_transactions,
-        is_private_chat=False
-    )
-    history = [
-        {"role": "model" if m["sender_id"] == ai_char["id"] else "user", "content": m["content"] if m["sender_id"] == ai_char["id"] else f"{m['sender_name']}: {m['content']}"}
-        for m in game_state.great_hall_messages[-16:]
-    ]
-    if is_general_speech:
-        mention_instruction = (
-            f"You are {ai_char['name']}. {sender_name} just spoke aloud to everyone in the Great Hall: \"{user_content}\". "
-            "React directly to what they said in your authentic medieval voice fitting your rank and secret objectives. Address them politely or challenge them as your station warrants. Deliver 2 to 3 complete sentences."
-        )
-    else:
-        mention_instruction = (
-            f"You are {ai_char['name']}. {sender_name} just addressed you directly in the Great Hall with: \"{user_content}\". "
-            "Reply directly to them aloud before the banquet in your authentic medieval voice fitting your rank. Deliver 2 to 3 complete sentences."
-        )
-    history.append({"role": "user", "content": mention_instruction})
+    try:
+        # Realistic human-like delay
+        await asyncio.sleep(2.5)
 
-    reply = await ai_engine.generate_response(sys_prompt, history, max_tokens=500)
-    ai_msg = game_state.add_message(ai_char["id"], reply, chat_type="public")
-    await broadcast({"type": "new_message", "message": ai_msg})
+        sys_prompt = build_character_system_prompt(
+            ai_char,
+            game_state.stage,
+            game_state.get_active_characters(),
+            ai_char["current_gold"],
+            game_state.gold_transactions,
+            is_private_chat=False
+        )
+        history = [
+            {"role": "model" if m["sender_id"] == ai_char["id"] else "user", "content": m["content"] if m["sender_id"] == ai_char["id"] else f"{m['sender_name']}: {m['content']}"}
+            for m in game_state.great_hall_messages[-16:]
+        ]
+        if is_general_speech:
+            mention_instruction = (
+                f"You are {ai_char['name']}. {sender_name} just spoke aloud to everyone in the Great Hall: \"{user_content}\". "
+                "React directly to what they said in your authentic medieval voice fitting your rank and secret objectives. Address them politely or challenge them as your station warrants. Deliver 2 to 3 complete sentences."
+            )
+        else:
+            mention_instruction = (
+                f"You are {ai_char['name']}. {sender_name} just addressed you directly in the Great Hall with: \"{user_content}\". "
+                "Reply directly to them aloud before the banquet in your authentic medieval voice fitting your rank. Deliver 2 to 3 complete sentences."
+            )
+        history.append({"role": "user", "content": mention_instruction})
+
+        reply = await ai_engine.generate_response(sys_prompt, history, max_tokens=500)
+        ai_msg = game_state.add_message(ai_char["id"], reply, chat_type="public")
+        await broadcast({"type": "new_message", "message": ai_msg})
+    finally:
+        await broadcast({
+            "type": "ai_typing",
+            "character_id": ai_char["id"],
+            "character_name": ai_char["name"],
+            "chat_type": "public",
+            "is_typing": False
+        })
 
 async def generate_ai_private_reply(ai_char: Dict[str, Any], sender_cid: str, user_content: str):
+    sender_char = game_state.characters.get(sender_cid)
+    sender_name = sender_char["name"] if sender_char else sender_cid
+    chat_key = game_state.get_private_chat_key(ai_char["id"], sender_cid)
+
+    # Broadcast typing indicator
+    await broadcast({
+        "type": "ai_typing",
+        "character_id": ai_char["id"],
+        "character_name": ai_char["name"],
+        "chat_type": "private",
+        "chat_key": chat_key,
+        "recipient_id": sender_cid,
+        "is_typing": True
+    })
+
     try:
-        sender_char = game_state.characters.get(sender_cid)
-        sender_name = sender_char["name"] if sender_char else sender_cid
-        chat_key = game_state.get_private_chat_key(ai_char["id"], sender_cid)
+        # Realistic human typing delay
+        await asyncio.sleep(2.5)
+
         msgs = game_state.private_chats.get(chat_key, [])
         partner_transactions = game_state.get_transactions_between(ai_char["id"], sender_cid)
 
@@ -1260,7 +1388,6 @@ async def generate_ai_private_reply(ai_char: Dict[str, Any], sender_cid: str, us
             partner_transactions=partner_transactions
         )
         history = []
-        # Up to 30 messages for long-term memory
         for m in msgs[-30:]:
             if m["sender_id"] == ai_char["id"]:
                 history.append({"role": "model", "content": m["content"]})
@@ -1277,6 +1404,16 @@ async def generate_ai_private_reply(ai_char: Dict[str, Any], sender_cid: str, us
         })
     except Exception as e:
         logger.error(f"Error in generate_ai_private_reply for {ai_char.get('id')}: {e}", exc_info=True)
+    finally:
+        await broadcast({
+            "type": "ai_typing",
+            "character_id": ai_char["id"],
+            "character_name": ai_char["name"],
+            "chat_type": "private",
+            "chat_key": chat_key,
+            "recipient_id": sender_cid,
+            "is_typing": False
+        })
 
 if __name__ == "__main__":
     import uvicorn

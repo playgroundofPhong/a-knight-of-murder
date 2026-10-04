@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>A Knight of Murder - Medieval Mystery Party at Fernwood Manor</title>
   
+  <!-- Anti-Cache Directives to ensure clients always get latest English version -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -167,12 +172,20 @@
           <span class="text-[11px] text-amber-400/90 ml-1 hidden sm:inline font-cinzel">Gold</span>
         </div>
 
-        <!-- Stage Ready Button -->
+        <!-- Stage Ready Button (Supports up to 3 Human Sleuths) -->
         <button id="ready-stage-btn" onclick="toggleReady()" 
                 class="hidden items-center gap-1.5 px-2.5 md:px-3 py-1 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-lg border border-stone-600 text-xs md:text-sm font-cinzel font-semibold transition shadow">
           <span id="ready-status-icon">⚪</span>
           <span id="ready-btn-text" class="hidden md:inline">Ready</span>
-          <span id="ready-count-badge" class="bg-amber-900/80 text-amber-200 text-[10px] md:text-xs px-1.5 py-0.2 rounded-full border border-amber-600/40">0/2</span>
+          <span id="ready-count-badge" class="bg-amber-900/80 text-amber-200 text-[10px] md:text-xs px-1.5 py-0.2 rounded-full border border-amber-600/40">0/3</span>
+        </button>
+
+        <!-- Royal Herald Subtle Hint Button -->
+        <button onclick="requestHeraldHint()" id="header-hint-btn"
+                class="p-2 md:px-2.5 md:py-1.5 rounded-lg bg-stone-800/90 hover:bg-amber-950 text-amber-300 border border-amber-800/60 hover:border-amber-500 text-xs md:text-sm font-cinzel font-semibold transition flex items-center gap-1 shadow" 
+                title="Consult the Royal Herald for a subtle non-spoiler clue">
+          <span class="text-sm">💡</span>
+          <span class="hidden lg:inline text-xs">Herald Clue</span>
         </button>
 
         <!-- Court Archives Button -->
@@ -273,14 +286,14 @@
         <div class="absolute -left-8 -top-8 opacity-10 text-9xl pointer-events-none select-none">👑</div>
 
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-600/60 text-amber-300 text-xs font-cinzel font-semibold mb-3">
-          <span>⚜️</span> Fernwood Manor • Royal Feast &amp; Murder Mystery <span>⚜️</span>
+          <span>⚜️</span> Fernwood Manor • 3-Player Medieval Murder Mystery <span>⚜️</span>
         </div>
 
         <h2 class="text-2xl md:text-5xl font-cinzel font-black tracking-wide drop-shadow-md mb-3">
           <span class="gold-gradient-text">Hear Ye! Hear Ye! Noble Lords &amp; Ladies!</span>
         </h2>
         <p class="text-amber-100/90 text-xs md:text-base max-w-3xl mx-auto font-serif leading-relaxed">
-          A grand tournament celebration is decreed to honor the holy matrimony of <strong class="text-amber-300 font-cinzel">Baron Bartholomew</strong> and the fair <strong class="text-amber-300 font-cinzel">Lady Diana of Dunnsberry</strong> within Fernwood Manor. Claim your noble identity or faithful servant persona to enter the banquet hall!
+          A grand tournament celebration is decreed to honor the holy matrimony of <strong class="text-amber-300 font-cinzel">Baron Bartholomew</strong> and the fair <strong class="text-amber-300 font-cinzel">Lady Diana of Dunnsberry</strong> within Fernwood Manor. Gather 3 investigators to enter the feast, unmask the murderer, and claim the King's reward!
         </p>
 
         <!-- Quick Share & Join Box -->
@@ -306,6 +319,13 @@
 
       <!-- Player Registration Box -->
       <div class="parchment-card rounded-xl p-5 border-[#3d2e20]">
+        <div class="mb-4 p-3 bg-amber-950/40 border border-amber-600/50 rounded-xl flex items-center gap-3">
+          <span class="text-2xl shrink-0">👥</span>
+          <div class="text-xs text-amber-200/90 font-serif leading-relaxed">
+            <strong class="font-cinzel text-amber-300 uppercase tracking-wide">3-Player Online Mystery:</strong> Up to 3 noble sleuths can join concurrently on separate phones or computers. Each player claims a distinct persona, while the remaining guests are brought to life by autonomous AI agents who will proactively whisper, scheme, and interact with you directly!
+          </div>
+        </div>
+
         <h3 class="text-base md:text-lg font-cinzel font-bold text-amber-300 mb-3 flex items-center gap-2">
           <span>👑</span> Step 1: Declare Your Name &amp; Cast Size
         </h3>
@@ -413,6 +433,12 @@
             <!-- Messages rendered by JS -->
           </div>
 
+          <!-- Great Hall Live Typing Indicator -->
+          <div id="great-hall-typing-indicator" class="hidden text-xs text-amber-300 font-serif italic py-1 px-3 bg-stone-900/90 rounded border border-amber-900/40 mb-1.5 flex items-center gap-2 shadow-sm animate-pulse">
+            <span class="animate-spin text-xs">⏳</span>
+            <span id="great-hall-typing-text">Someone is writing a reply...</span>
+          </div>
+
           <!-- Chat Input -->
           <div class="relative pt-2 border-t border-[#3d2e20]">
             
@@ -499,6 +525,12 @@
             <div class="text-center text-stone-500 italic py-10 font-serif">
               Choose a lord, lady, knight, or servant from the left to open a confidential, private dialogue in the castle alcoves.
             </div>
+          </div>
+
+          <!-- Private Live Typing Indicator -->
+          <div id="private-typing-indicator" class="hidden text-xs text-amber-300 font-serif italic py-1 px-3 bg-stone-900/90 rounded border border-amber-900/40 mb-1.5 flex items-center gap-2 shadow-sm animate-pulse">
+            <span class="animate-spin text-xs">⏳</span>
+            <span id="private-typing-text">Someone is penning a secret whisper...</span>
           </div>
 
           <!-- Quick Bribe Bar & Input -->
@@ -1348,12 +1380,75 @@
           }
           updateHeaderGold();
         }
+      } else if (data.type === 'ai_typing') {
+        handleAiTypingEvent(data);
+      } else if (data.type === 'herald_hint') {
+        soundEngine.playFanfare();
+        showHeraldHintToast(data.hint || (data.message && data.message.content) || '');
+        if (data.message && !appState.greatHallMessages.some(m => m.id === data.message.id)) {
+          appState.greatHallMessages.push(data.message);
+          renderGreatHallMessages();
+        }
       }
 
       // Auto-refresh chatlog modal if it is currently open
       const chatlogModal = document.getElementById('chatlog-modal');
       if (chatlogModal && !chatlogModal.classList.contains('hidden')) {
         refreshChatlogData();
+      }
+    }
+
+    function handleAiTypingEvent(data) {
+      if (data.chat_type === 'public') {
+        const el = document.getElementById('great-hall-typing-indicator');
+        const txt = document.getElementById('great-hall-typing-text');
+        if (!el || !txt) return;
+        if (data.is_typing) {
+          txt.innerText = `${data.character_name || 'An AI Guest'} is writing a reply...`;
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      } else if (data.chat_type === 'private') {
+        const el = document.getElementById('private-typing-indicator');
+        const txt = document.getElementById('private-typing-text');
+        if (!el || !txt) return;
+        if (data.is_typing && data.character_id === appState.activePrivateRecipientId) {
+          txt.innerText = `${data.character_name || 'Noble Guest'} is penning a secret whisper...`;
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      }
+    }
+
+    function showHeraldHintToast(hintText) {
+      showMedievalToast("Royal Herald Insight", "💡", hintText, () => {
+        switchTab('tab-great-hall');
+      });
+    }
+
+    async function requestHeraldHint() {
+      try {
+        const btn = document.getElementById('header-hint-btn');
+        if (btn) {
+          btn.classList.add('opacity-50', 'pointer-events-none');
+          setTimeout(() => btn.classList.remove('opacity-50', 'pointer-events-none'), 8000);
+        }
+        const res = await fetch('/api/hint', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ player_id: appState.playerId })
+        });
+        const data = await res.json();
+        if (data && data.hint) {
+          soundEngine.playFanfare();
+          showMedievalToast("Royal Herald Insight", "💡", data.hint, () => {
+            switchTab('tab-great-hall');
+          });
+        }
+      } catch (e) {
+        console.error('Error requesting hint:', e);
       }
     }
 
@@ -1694,6 +1789,13 @@
         pill.onclick = () => mentionCharacterInGreatHall(c.name);
         container.appendChild(pill);
       });
+
+      const hintPill = document.createElement('button');
+      hintPill.type = 'button';
+      hintPill.className = 'ml-auto px-2.5 py-0.5 rounded-full bg-amber-950/90 hover:bg-amber-900 border border-amber-600/70 text-amber-300 font-cinzel text-[11px] whitespace-nowrap flex items-center gap-1 shadow-sm transition';
+      hintPill.innerHTML = `<span>💡</span> <span>Ask Herald Clue</span>`;
+      hintPill.onclick = () => requestHeraldHint();
+      container.appendChild(hintPill);
     }
 
     // --- Great Hall Chat Logic & Mentions ---
