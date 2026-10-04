@@ -854,7 +854,13 @@ async def trigger_undercover_endpoint():
 async def get_player_state(player_id: str):
     pdata = game_state.human_players.get(player_id)
     if not pdata:
-        return {"registered": False}
+        return {
+            "registered": False,
+            "stage": game_state.stage,
+            "is_game_started": game_state.is_game_started,
+            "great_hall_messages": game_state.great_hall_messages,
+            "human_players": game_state.human_players
+        }
 
     cid = pdata.get("character_id")
     char_info = game_state.characters.get(cid, {})

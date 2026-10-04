@@ -137,17 +137,17 @@
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
       
       <!-- Brand & Castle Seal -->
-      <div class="flex items-center space-x-2.5 md:space-x-3.5 shrink-0">
-        <a href="/" class="flex items-center gap-2 group">
-          <span class="text-2xl md:text-3xl filter drop-shadow group-hover:scale-110 transition duration-200">⚔️</span>
-          <div>
-            <h1 class="text-base md:text-lg font-cinzel font-black tracking-wider flex items-center gap-2">
-              <span class="gold-gradient-text">A KNIGHT OF MURDER</span>
-              <span id="header-stage-badge" class="text-[10px] md:text-xs font-semibold font-cinzel bg-amber-950/90 text-amber-300 px-2 py-0.5 rounded border border-amber-600/60 shadow-sm">
+      <div class="flex items-center space-x-2 md:space-x-3.5 min-w-0 shrink-0">
+        <a href="/" class="flex items-center gap-1.5 sm:gap-2 group min-w-0">
+          <span class="text-xl sm:text-2xl md:text-3xl filter drop-shadow group-hover:scale-110 transition duration-200 shrink-0">⚔️</span>
+          <div class="min-w-0">
+            <h1 class="text-xs sm:text-base md:text-lg font-cinzel font-black tracking-wider flex items-center gap-1.5">
+              <span class="gold-gradient-text truncate">A KNIGHT OF MURDER</span>
+              <span id="header-stage-badge" class="text-[9px] sm:text-[10px] md:text-xs font-semibold font-cinzel bg-amber-950/90 text-amber-300 px-1.5 sm:px-2 py-0.5 rounded border border-amber-600/60 shadow-sm shrink-0">
                 Giai đoạn 1
               </span>
             </h1>
-            <p class="text-[10px] md:text-xs text-stone-400 font-serif italic hidden sm:block">
+            <p class="text-[9px] sm:text-[10px] md:text-xs text-stone-400 font-serif italic hidden md:block truncate">
               Trang Viên Fernwood • Đêm Tiệc Án Mạng Thời Trung Cổ
             </p>
           </div>
@@ -155,74 +155,74 @@
       </div>
 
       <!-- Header Controls & Actions -->
-      <div class="flex items-center space-x-1.5 md:space-x-3">
+      <div class="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2.5 shrink-0">
         
         <!-- Player Persona Indicator -->
-        <div id="header-persona-pill" class="hidden items-center bg-stone-900/90 border border-amber-600/60 rounded-full px-2.5 py-1 shadow text-xs font-cinzel text-amber-200 gap-1.5 cursor-pointer hover:border-amber-400 transition" 
+        <div id="header-persona-pill" class="hidden items-center bg-stone-900/90 border border-amber-600/60 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 shadow text-[11px] sm:text-xs font-cinzel text-amber-200 gap-1 sm:gap-1.5 cursor-pointer hover:border-amber-400 transition" 
              onclick="switchTab('tab-dossier')" title="Nhân vật của bạn - Bấm để xem Hồ sơ Mật">
-          <span id="header-persona-avatar" class="text-base select-none">👤</span>
-          <span id="header-persona-name" class="font-bold truncate max-w-[85px] sm:max-w-[140px] md:max-w-[180px]">Khách Mời</span>
+          <span id="header-persona-avatar" class="text-sm sm:text-base select-none">👤</span>
+          <span id="header-persona-name" class="font-bold truncate max-w-[70px] sm:max-w-[120px] md:max-w-[160px]">Khách Mời</span>
         </div>
 
         <!-- Gold Counter (when in game) -->
-        <div id="header-gold-pill" class="hidden items-center bg-amber-950/80 border border-amber-500/60 rounded-full px-2.5 py-1 shadow-inner cursor-pointer hover:border-amber-400 transition"
+        <div id="header-gold-pill" class="hidden items-center bg-amber-950/80 border border-amber-500/60 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 shadow-inner cursor-pointer hover:border-amber-400 transition"
              onclick="openModal('bribe-modal')" title="Túi Tiền Ngân Khố - Bấm để tặng hoặc nhận hối lộ">
-          <span class="text-amber-400 mr-1 text-sm md:text-base">💰</span>
-          <span id="player-gold-display" class="font-bold text-amber-200 text-xs md:text-sm">12</span>
-          <span class="text-[11px] text-amber-400/90 ml-1 hidden sm:inline font-cinzel">Vàng</span>
+          <span class="text-amber-400 mr-0.5 text-xs sm:text-sm">💰</span>
+          <span id="player-gold-display" class="font-bold text-amber-200 text-xs sm:text-sm">12</span>
+          <span class="text-[10px] text-amber-400/90 ml-1 hidden md:inline font-cinzel">Vàng</span>
         </div>
 
         <!-- Stage Ready Button (Supports up to 3 Human Sleuths) -->
         <button id="ready-stage-btn" onclick="toggleReady()" 
-                class="hidden items-center gap-1.5 px-2.5 md:px-3 py-1 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-lg border border-stone-600 text-xs md:text-sm font-cinzel font-semibold transition shadow">
+                class="hidden items-center gap-1 px-2 py-1 sm:px-2.5 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-lg border border-stone-600 text-[11px] sm:text-xs font-cinzel font-semibold transition shadow">
           <span id="ready-status-icon">⚪</span>
-          <span id="ready-btn-text" class="hidden md:inline">Sẵn sàng</span>
-          <span id="ready-count-badge" class="bg-amber-900/80 text-amber-200 text-[10px] md:text-xs px-1.5 py-0.2 rounded-full border border-amber-600/40">0/3</span>
+          <span id="ready-btn-text" class="hidden sm:inline">Sẵn sàng</span>
+          <span id="ready-count-badge" class="bg-amber-900/80 text-amber-200 text-[9px] sm:text-[10px] px-1 py-0.2 rounded-full border border-amber-600/40">0/3</span>
         </button>
 
         <!-- Royal Herald Subtle Hint Button -->
         <button onclick="requestHeraldHint()" id="header-hint-btn"
-                class="p-2 md:px-2.5 md:py-1.5 rounded-lg bg-stone-800/90 hover:bg-amber-950 text-amber-300 border border-amber-800/60 hover:border-amber-500 text-xs md:text-sm font-cinzel font-semibold transition flex items-center gap-1 shadow" 
+                class="p-1.5 sm:p-2 md:px-2.5 md:py-1.5 rounded-lg bg-stone-800/90 hover:bg-amber-950 text-amber-300 border border-amber-800/60 hover:border-amber-500 text-xs md:text-sm font-cinzel font-semibold transition flex items-center gap-1 shadow" 
                 title="Hỏi Quản Trò Hoàng Gia để nhận manh mối kín đáo không lộ hung thủ">
-          <span class="text-sm">💡</span>
+          <span class="text-xs sm:text-sm">💡</span>
           <span class="hidden lg:inline text-xs">Manh Mối Quản Trò</span>
         </button>
 
         <!-- Court Archives Button -->
         <button onclick="openChatlogModal()" id="header-chatlog-btn"
-                class="p-2 md:px-2.5 md:py-1.5 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-amber-300 border border-amber-900/60 hover:border-amber-600/60 text-xs md:text-sm font-cinzel font-semibold transition flex items-center gap-1 shadow" 
+                class="p-1.5 sm:p-2 md:px-2.5 md:py-1.5 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-amber-300 border border-amber-900/60 hover:border-amber-600/60 text-xs md:text-sm font-cinzel font-semibold transition flex items-center gap-1 shadow" 
                 title="Biên Niên Sử & Lưu Trữ Triều Đình">
-          <span class="text-sm">📜</span>
+          <span class="text-xs sm:text-sm">📜</span>
           <span class="hidden lg:inline text-xs">Biên Niên Sử</span>
         </button>
 
         <!-- LAN / Online Share Link & QR Toggle -->
         <button onclick="openModal('network-modal')" 
-                class="p-2 md:px-2.5 md:py-1.5 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-amber-300 border border-stone-700 hover:border-amber-600/60 text-xs md:text-sm font-cinzel transition flex items-center gap-1 shadow" 
+                class="p-1.5 sm:p-2 md:px-2.5 md:py-1.5 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-amber-300 border border-stone-700 hover:border-amber-600/60 text-xs md:text-sm font-cinzel transition flex items-center gap-1 shadow" 
                 title="Mời Khách & Quét Mã QR">
-          <span class="text-sm">📱</span>
+          <span class="text-xs sm:text-sm">📱</span>
           <span class="hidden lg:inline text-xs">Mời Bạn</span>
         </button>
 
         <!-- Audio Mute Toggle -->
         <button onclick="toggleAudio()" id="audio-toggle-btn" 
-                class="p-2 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-stone-300 border border-stone-700 text-sm transition shadow" 
+                class="p-1.5 sm:p-2 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-stone-300 border border-stone-700 text-xs sm:text-sm transition shadow" 
                 title="Bật/Tắt Tiếng Đàn Lute & Hiệu Ứng Trung Cổ">
           🔊
         </button>
 
         <!-- Settings Toggle -->
         <button onclick="openModal('settings-modal')" 
-                class="p-2 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-stone-300 border border-stone-700 text-sm transition shadow" 
+                class="p-1.5 sm:p-2 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-stone-300 border border-stone-700 text-xs sm:text-sm transition shadow" 
                 title="Khóa API & Cài Đặt">
           ⚙️
         </button>
 
         <!-- Start Afresh / Reset Game Button -->
         <button onclick="confirmResetGame()" id="header-reset-btn"
-                class="p-2 md:px-2.5 md:py-1.5 rounded-lg bg-red-950/80 hover:bg-red-900 text-red-300 hover:text-red-100 border border-red-800/80 hover:border-red-500 text-xs md:text-sm font-cinzel font-semibold transition flex items-center gap-1 shadow" 
+                class="p-1.5 sm:p-2 md:px-2.5 md:py-1.5 rounded-lg bg-red-950/80 hover:bg-red-900 text-red-300 hover:text-red-100 border border-red-800/80 hover:border-red-500 text-xs md:text-sm font-cinzel font-semibold transition flex items-center gap-1 shadow" 
                 title="Bắt đầu lại lượt chơi mới (Xóa tiến trình ván hiện tại)">
-          <span class="text-sm">🔄</span>
+          <span class="text-xs sm:text-sm">🔄</span>
           <span class="hidden xl:inline text-xs">Lượt Mới</span>
         </button>
       </div>
@@ -355,7 +355,7 @@
           <div class="md:col-span-1 flex items-end gap-2">
             <button id="start-banquet-btn" onclick="startBanquet()" 
                     class="flex-1 py-2.5 px-3 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 text-stone-950 font-cinzel font-black rounded-lg shadow-xl transition tracking-wider flex items-center justify-center gap-1.5 gold-glow text-xs md:text-sm">
-              <span class="text-base">🍷</span> Khai Tiệc Dạ Yến
+              <span class="text-base">🍷</span> Khai Tiệc &amp; Vào Đại Sảnh
             </button>
             <button type="button" onclick="confirmResetGame()" 
                     class="py-2.5 px-3 bg-stone-900 hover:bg-red-950 text-stone-400 hover:text-red-300 border border-stone-700 hover:border-red-700 font-cinzel font-semibold rounded-lg transition shadow text-xs flex items-center justify-center gap-1"
@@ -375,6 +375,20 @@
         <div id="character-selection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
           <!-- Populated by JS -->
         </div>
+
+        <!-- Mobile Floating Lobby Join / Start Banner (Only visible on mobile when a character is chosen) -->
+        <div id="mobile-lobby-action-bar" class="hidden fixed bottom-3 left-3 right-3 z-50 sm:hidden bg-stone-950/95 border-2 border-amber-500 rounded-2xl p-3 shadow-2xl backdrop-blur-md flex items-center justify-between gap-3 animate-pulse">
+          <div class="flex items-center gap-2 min-w-0">
+            <span id="mobile-chosen-avatar" class="text-2xl shrink-0">👤</span>
+            <div class="min-w-0">
+              <div id="mobile-chosen-name" class="font-cinzel font-bold text-xs text-amber-300 truncate">Đã chọn nhân vật</div>
+              <div class="text-[10px] text-stone-400 font-serif truncate">Sẵn sàng bước vào Đại Sảnh</div>
+            </div>
+          </div>
+          <button type="button" onclick="startBanquet()" class="px-3.5 py-2 bg-gradient-to-r from-amber-600 to-amber-500 text-stone-950 font-cinzel font-black text-xs rounded-xl shadow-lg shrink-0 flex items-center gap-1">
+            <span>🍷</span> Vào Đại Sảnh
+          </button>
+        </div>
       </div>
     </div>
 
@@ -383,26 +397,26 @@
     <div id="game-view" class="hidden flex flex-col space-y-3.5">
       
       <!-- Stage Announcement Banner -->
-      <div id="stage-banner" class="parchment-card-gold rounded-xl p-3.5 md:p-4 border-amber-700/60 flex flex-wrap items-center justify-between gap-3 shadow-lg">
-        <div class="flex items-center space-x-3 min-w-0">
-          <span id="stage-banner-icon" class="text-2xl md:text-3xl shrink-0 filter drop-shadow">🎺</span>
+      <div id="stage-banner" class="parchment-card-gold rounded-xl p-2.5 sm:p-3 md:p-4 border-amber-700/60 flex flex-wrap items-center justify-between gap-2 md:gap-3 shadow-lg">
+        <div class="flex items-center space-x-2.5 md:space-x-3 min-w-0">
+          <span id="stage-banner-icon" class="text-xl sm:text-2xl md:text-3xl shrink-0 filter drop-shadow">🎺</span>
           <div class="min-w-0">
-            <div id="stage-banner-title" class="text-sm md:text-base font-cinzel font-bold text-amber-300 truncate">
+            <div id="stage-banner-title" class="text-xs sm:text-sm md:text-base font-cinzel font-bold text-amber-300 truncate">
               Giai đoạn 1: Tiếp Đón &amp; Tề Tựu
             </div>
-            <div id="stage-banner-desc" class="text-xs text-stone-300 font-serif line-clamp-2 md:line-clamp-none">
+            <div id="stage-banner-desc" class="text-[11px] sm:text-xs text-stone-300 font-serif line-clamp-1 md:line-clamp-none">
               Giao lưu cùng các vị khách, thăm dò về giải đấu, mở Phong bì A trong Hồ sơ Bí mật và tuân thủ Luật lệ Vương triều.
             </div>
           </div>
         </div>
-        <div class="flex items-center gap-2 shrink-0">
-          <button onclick="openModal('bribe-modal')" class="px-3 py-1.5 bg-gradient-to-r from-amber-800 to-amber-700 hover:from-amber-700 hover:to-amber-600 text-amber-100 rounded-lg text-xs font-cinzel font-bold border border-amber-500/40 shadow transition flex items-center gap-1.5">
-            <span>💰</span> Hối Lộ / Đưa Vàng
+        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <button onclick="openModal('bribe-modal')" class="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-amber-800 to-amber-700 hover:from-amber-700 hover:to-amber-600 text-amber-100 rounded-lg text-[11px] sm:text-xs font-cinzel font-bold border border-amber-500/40 shadow transition flex items-center gap-1">
+            <span>💰</span> Hối Lộ
           </button>
-          <button id="vote-nav-btn" onclick="switchTab('tab-vote')" class="hidden px-3 py-1.5 bg-red-900/90 hover:bg-red-800 text-red-100 rounded-lg text-xs font-cinzel font-bold border border-red-500/50 shadow transition flex items-center gap-1.5 crimson-glow">
-            <span>⚖️</span> Tố Cáo Kẻ Thủ Ác!
+          <button id="vote-nav-btn" onclick="switchTab('tab-vote')" class="hidden px-2.5 py-1 sm:px-3 sm:py-1.5 bg-red-900/90 hover:bg-red-800 text-red-100 rounded-lg text-[11px] sm:text-xs font-cinzel font-bold border border-red-500/50 shadow transition flex items-center gap-1 crimson-glow">
+            <span>⚖️</span> Tố Cáo
           </button>
-          <button onclick="confirmResetGame()" class="px-3 py-1.5 bg-stone-900/90 hover:bg-red-950 text-stone-300 hover:text-red-200 rounded-lg text-xs font-cinzel font-semibold border border-stone-700 hover:border-red-600 shadow transition flex items-center gap-1.5" title="Khởi tạo lại ván chơi mới từ Giai đoạn 1">
+          <button onclick="confirmResetGame()" class="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-stone-900/90 hover:bg-red-950 text-stone-300 hover:text-red-200 rounded-lg text-[11px] sm:text-xs font-cinzel font-semibold border border-stone-700 hover:border-red-600 shadow transition flex items-center gap-1" title="Khởi tạo lại ván chơi mới từ Giai đoạn 1">
             <span>🔄</span> Lượt Mới
           </button>
         </div>
@@ -433,30 +447,40 @@
       </div>
 
       <!-- ================= TAB 1: THE GREAT HALL ================= -->
-      <div id="tab-great-hall" class="tab-content flex flex-col md:flex-row gap-3.5 h-[68vh] md:h-[65vh]">
+      <div id="tab-great-hall" class="tab-content flex flex-col md:flex-row gap-2.5 md:gap-3.5 h-[74vh] md:h-[68vh]">
         
+        <!-- Mobile Switcher: Chat vs Guests (Visible exclusively on mobile screens) -->
+        <div class="flex md:hidden bg-stone-900/90 p-1 rounded-xl border border-stone-800 gap-1 text-xs font-cinzel font-bold shrink-0">
+          <button id="mobile-gh-tab-chat" type="button" onclick="setMobileGreatHallView('chat')" class="flex-1 py-1.5 px-3 rounded-lg bg-gradient-to-r from-amber-700 to-amber-600 text-stone-950 flex items-center justify-center gap-1.5 shadow font-bold transition">
+            <span>🏰</span> Lời Thoại Đại Sảnh
+          </button>
+          <button id="mobile-gh-tab-guests" type="button" onclick="setMobileGreatHallView('guests')" class="flex-1 py-1.5 px-3 rounded-lg text-stone-400 hover:text-stone-200 flex items-center justify-center gap-1.5 transition">
+            <span>👥</span> Khách Mời (<span id="mobile-guest-count-badge">12</span>)
+          </button>
+        </div>
+
         <!-- Chat Area -->
-        <div class="flex-1 parchment-card rounded-xl p-3 flex flex-col h-full border-[#3d2e20] shadow-md">
-          <div class="text-xs uppercase font-cinzel text-amber-400/90 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
+        <div id="great-hall-chat-card" class="flex-1 min-h-0 parchment-card rounded-xl p-2.5 sm:p-3 flex flex-col h-full border-[#3d2e20] shadow-md">
+          <div class="text-xs uppercase font-cinzel text-amber-400/90 pb-2 border-b border-[#3d2e20] flex justify-between items-center shrink-0">
             <span class="flex items-center gap-1.5">
               <span>🏰</span> Lời Tuyên Ngôn Nơi Đại Sảnh
             </span>
-            <span class="text-stone-400 text-[11px] font-serif italic">Dùng @Tên để trực tiếp đối thoại với các nhân vật AI</span>
+            <span class="text-stone-400 text-[11px] font-serif italic hidden sm:inline">Dùng @Tên để trực tiếp đối thoại với các nhân vật AI</span>
           </div>
 
           <!-- Messages Scrollable List -->
-          <div id="great-hall-messages-list" class="flex-1 overflow-y-auto space-y-3 py-3 pr-1 text-sm font-sans">
+          <div id="great-hall-messages-list" class="flex-1 min-h-0 overflow-y-auto space-y-3 py-3 pr-1 text-sm font-sans">
             <!-- Messages rendered by JS -->
           </div>
 
           <!-- Great Hall Live Typing Indicator -->
-          <div id="great-hall-typing-indicator" class="hidden text-xs text-amber-300 font-serif italic py-1 px-3 bg-stone-900/90 rounded border border-amber-900/40 mb-1.5 flex items-center gap-2 shadow-sm animate-pulse">
+          <div id="great-hall-typing-indicator" class="hidden text-xs text-amber-300 font-serif italic py-1 px-3 bg-stone-900/90 rounded border border-amber-900/40 mb-1.5 flex items-center gap-2 shadow-sm animate-pulse shrink-0">
             <span class="animate-spin text-xs">⏳</span>
             <span id="great-hall-typing-text">Ai đó đang soạn lời đáp...</span>
           </div>
 
           <!-- Chat Input -->
-          <div class="relative pt-2 border-t border-[#3d2e20]">
+          <div class="relative pt-2 border-t border-[#3d2e20] shrink-0">
             
             <!-- Quick Mention Pill Bar (1-tap on mobile) -->
             <div id="great-hall-quick-mentions" class="flex items-center gap-1.5 pb-2 overflow-x-auto text-[11px] font-cinzel">
@@ -475,15 +499,15 @@
                       onclick="toggleMentionAutocomplete()" 
                       title="Bấm để mở danh sách gắn thẻ nhân vật (@)" 
                       class="px-2.5 py-2 bg-stone-800 hover:bg-amber-950 text-amber-300 font-cinzel font-bold text-xs rounded-lg border border-amber-600/60 hover:border-amber-400 transition flex items-center gap-1 shrink-0 shadow">
-                <span class="text-sm">🏷️</span><span>@Thẻ</span>
+                <span class="text-sm">🏷️</span><span class="hidden sm:inline">@Thẻ</span>
               </button>
-              <input type="text" id="great-hall-input" placeholder="Lên tiếng trước đại sảnh hoặc gõ @ để gọi một quý tộc hay hầu cận..." 
+              <input type="text" id="great-hall-input" placeholder="Lên tiếng trước đại sảnh hoặc gõ @ để gọi ai đó..." 
                      autocomplete="off"
                      oninput="handleGreatHallInput(event)"
                      onkeyup="handleGreatHallInput(event)"
                      onkeydown="handleGreatHallKeydown(event)"
-                     class="flex-1 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
-              <button type="submit" class="px-4 py-2 bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-stone-950 font-cinzel font-bold text-xs md:text-sm rounded-lg border border-amber-400/40 transition shrink-0 shadow">
+                     class="flex-1 min-w-0 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
+              <button type="submit" class="px-3.5 sm:px-4 py-2 bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-stone-950 font-cinzel font-bold text-xs md:text-sm rounded-lg border border-amber-400/40 transition shrink-0 shadow">
                 Lên Tiếng
               </button>
             </form>
@@ -491,14 +515,14 @@
         </div>
 
         <!-- Sidebar: Castle Guests Directory -->
-        <div class="w-full md:w-80 lg:w-96 parchment-card rounded-xl p-3 border-[#3d2e20] flex flex-col h-auto md:h-full shrink-0 shadow-md">
-          <div class="text-xs uppercase font-cinzel text-amber-400/90 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
+        <div id="great-hall-guests-card" class="hidden md:flex w-full md:w-80 lg:w-96 parchment-card rounded-xl p-3 border-[#3d2e20] flex-col h-full shrink-0 min-h-0 shadow-md">
+          <div class="text-xs uppercase font-cinzel text-amber-400/90 pb-2 border-b border-[#3d2e20] flex justify-between items-center shrink-0">
             <span class="flex items-center gap-1.5">
               <span>👥</span> Khách Mời Tại Fernwood
             </span>
             <span id="guest-count-badge" class="text-xs text-amber-300 font-mono bg-stone-900 px-2 py-0.5 rounded border border-stone-800">12</span>
           </div>
-          <div id="guests-directory-list" class="flex-1 overflow-y-auto space-y-2 py-2 text-xs">
+          <div id="guests-directory-list" class="flex-1 min-h-0 overflow-y-auto space-y-2 py-2 text-xs">
             <!-- Populated by JS -->
           </div>
         </div>
@@ -1281,6 +1305,20 @@
             showGameDashboard();
           }
         } else {
+          // If not registered on server, still save the global game status & messages!
+          if (data.great_hall_messages) {
+            appState.greatHallMessages = data.great_hall_messages;
+          }
+          if (data.is_game_started !== undefined) {
+            appState.isGameStarted = data.is_game_started;
+          }
+          if (data.stage) {
+            appState.stage = data.stage;
+          }
+          if (data.human_players) {
+            appState.humanPlayers = data.human_players;
+          }
+
           // If not registered on server, automatically re-join with saved characterId
           const savedCid = appState.characterId || localStorage.getItem('knight_char_id');
           if (savedCid) {
@@ -1290,7 +1328,7 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                   player_id: appState.playerId,
-                  player_name: appState.playerName || 'Noble Sleuth',
+                  player_name: appState.playerName || 'Thám Tử Hoàng Gia',
                   character_id: savedCid
                 })
               });
@@ -1308,6 +1346,7 @@
           updatePersonaUI();
           if (appState.isGameStarted) {
             showGameDashboard();
+            switchTab('tab-great-hall');
           }
         }
       } catch (e) {
@@ -1327,9 +1366,20 @@
       };
       appState.ws.onclose = () => {
         console.log('WebSocket closed. Reconnecting in 3s...');
-        setTimeout(connectWebSocket, 3000);
+        setTimeout(() => {
+          connectWebSocket();
+          loadGameData();
+          restorePlayerState();
+        }, 3000);
       };
     }
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        loadGameData();
+        restorePlayerState();
+      }
+    });
 
     function handleWebSocketMessage(data) {
       console.log('WS event:', data.type);
@@ -1384,7 +1434,11 @@
       } else if (data.type === 'game_started') {
         appState.isGameStarted = true;
         appState.stage = data.stage;
+        if (data.messages) {
+          appState.greatHallMessages = data.messages;
+        }
         showGameDashboard();
+        switchTab('tab-great-hall');
         soundEngine.playFanfare();
       } else if (data.type === 'ready_toggled') {
         appState.humanPlayers = data.human_players;
@@ -1545,6 +1599,12 @@
       if (gameView) gameView.classList.add('hidden');
       if (lobbyView) lobbyView.classList.remove('hidden');
 
+      const mobileLobbyBar = document.getElementById('mobile-lobby-action-bar');
+      if (mobileLobbyBar) {
+        mobileLobbyBar.classList.add('hidden');
+        mobileLobbyBar.classList.remove('flex');
+      }
+
       // 4. Ẩn huy hiệu vàng và nút sẵn sàng ở thanh tiêu đề
       const goldPill = document.getElementById('header-gold-pill');
       if (goldPill) {
@@ -1680,11 +1740,31 @@
           renderCharacterSelectionGrid();
           updatePersonaUI();
           soundEngine.playCoinClink();
+
+          if (appState.isGameStarted) {
+            showGameDashboard();
+            switchTab('tab-great-hall');
+          } else {
+            updateLobbyChosenCharacterPrompt(data.character);
+          }
         } else {
           alert(data.detail || 'Không thể nhận nhân vật này.');
         }
       } catch (e) {
         alert('Lỗi kết nối khi chọn nhân vật.');
+      }
+    }
+
+    function updateLobbyChosenCharacterPrompt(char) {
+      if (!char) return;
+      const bar = document.getElementById('mobile-lobby-action-bar');
+      const avatar = document.getElementById('mobile-chosen-avatar');
+      const name = document.getElementById('mobile-chosen-name');
+      if (bar && avatar && name) {
+        avatar.innerText = char.avatar_icon || '👤';
+        name.innerText = `Đã chọn: ${char.name}`;
+        bar.classList.remove('hidden');
+        bar.classList.add('flex');
       }
     }
 
@@ -1721,6 +1801,13 @@
       updatePersonaUI();
       document.getElementById('lobby-view').classList.add('hidden');
       document.getElementById('game-view').classList.remove('hidden');
+
+      const mobileLobbyBar = document.getElementById('mobile-lobby-action-bar');
+      if (mobileLobbyBar) {
+        mobileLobbyBar.classList.add('hidden');
+        mobileLobbyBar.classList.remove('flex');
+      }
+
       document.getElementById('header-gold-pill').classList.remove('hidden');
       document.getElementById('header-gold-pill').classList.add('flex');
       document.getElementById('ready-stage-btn').classList.remove('hidden');
@@ -1732,6 +1819,49 @@
       renderDossierView();
       renderVoteFormOptions();
       renderQuickMentionsPillBar();
+      renderGreatHallMessages();
+      switchTab('tab-great-hall');
+    }
+
+    function setMobileGreatHallView(mode) {
+      const chatCard = document.getElementById('great-hall-chat-card');
+      const guestsCard = document.getElementById('great-hall-guests-card');
+      const btnChat = document.getElementById('mobile-gh-tab-chat');
+      const btnGuests = document.getElementById('mobile-gh-tab-guests');
+
+      if (mode === 'chat') {
+        if (chatCard) {
+          chatCard.classList.remove('hidden');
+          chatCard.classList.add('flex');
+        }
+        if (guestsCard) {
+          guestsCard.classList.add('hidden');
+          guestsCard.classList.remove('flex');
+        }
+        if (btnChat) {
+          btnChat.className = "flex-1 py-1.5 px-3 rounded-lg bg-gradient-to-r from-amber-700 to-amber-600 text-stone-950 flex items-center justify-center gap-1.5 shadow font-bold transition";
+        }
+        if (btnGuests) {
+          btnGuests.className = "flex-1 py-1.5 px-3 rounded-lg text-stone-400 hover:text-stone-200 flex items-center justify-center gap-1.5 transition";
+        }
+        const list = document.getElementById('great-hall-messages-list');
+        if (list) list.scrollTop = list.scrollHeight;
+      } else {
+        if (chatCard) {
+          chatCard.classList.add('hidden');
+          chatCard.classList.remove('flex');
+        }
+        if (guestsCard) {
+          guestsCard.classList.remove('hidden');
+          guestsCard.classList.add('flex');
+        }
+        if (btnGuests) {
+          btnGuests.className = "flex-1 py-1.5 px-3 rounded-lg bg-gradient-to-r from-amber-700 to-amber-600 text-stone-950 flex items-center justify-center gap-1.5 shadow font-bold transition";
+        }
+        if (btnChat) {
+          btnChat.className = "flex-1 py-1.5 px-3 rounded-lg text-stone-400 hover:text-stone-200 flex items-center justify-center gap-1.5 transition";
+        }
+      }
     }
 
     function updateHeaderGold() {
@@ -1892,7 +2022,13 @@
         activeBtn.classList.remove('border-transparent', 'text-stone-400');
       }
 
-      if (tabId === 'tab-private') {
+      if (tabId === 'tab-great-hall') {
+        if (window.innerWidth < 768) {
+          setMobileGreatHallView('chat');
+        }
+        const list = document.getElementById('great-hall-messages-list');
+        if (list) list.scrollTop = list.scrollHeight;
+      } else if (tabId === 'tab-private') {
         const unreadBadge = document.getElementById('unread-private-badge');
         if (unreadBadge) unreadBadge.classList.add('hidden');
 
@@ -2095,6 +2231,9 @@
 
     function mentionCharacterInGreatHall(characterName) {
       switchTab('tab-great-hall');
+      if (window.innerWidth < 768) {
+        setMobileGreatHallView('chat');
+      }
       const input = document.getElementById('great-hall-input');
       if (!input) return;
       const tag = `@${characterName} `;
@@ -2295,6 +2434,12 @@
       if (!list) return;
       list.innerHTML = '';
       if (bribeSelect) bribeSelect.innerHTML = '';
+
+      const totalGuests = (appState.allCharacters || []).length;
+      const guestBadge = document.getElementById('guest-count-badge');
+      if (guestBadge) guestBadge.innerText = totalGuests;
+      const mobileGuestBadge = document.getElementById('mobile-guest-count-badge');
+      if (mobileGuestBadge) mobileGuestBadge.innerText = totalGuests;
 
       appState.allCharacters.forEach(c => {
         if (appState.myCharacter && c.id === appState.myCharacter.id) return;
