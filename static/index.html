@@ -410,7 +410,21 @@
             </div>
           </div>
         </div>
-        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 flex-wrap">
+          <!-- Ready to advance button on Stage Banner -->
+          <button id="banner-ready-btn" onclick="toggleReady()" 
+                  class="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-lg text-[11px] sm:text-xs font-cinzel font-semibold border border-stone-600 shadow transition flex items-center gap-1"
+                  title="Bấm để xác nhận sẵn sàng bước sang giai đoạn tiếp theo">
+            <span id="banner-ready-icon">⚪</span>
+            <span id="banner-ready-text">Sẵn Sàng</span>
+            <span id="banner-ready-badge" class="bg-amber-900/80 text-amber-200 text-[9px] sm:text-[10px] px-1.5 py-0.2 rounded-full border border-amber-600/40">0/3</span>
+          </button>
+          <!-- Quick advance stage button for host/organizer -->
+          <button id="banner-advance-btn" onclick="forceAdvanceStage()" 
+                  class="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-amber-950/80 hover:bg-amber-900 text-amber-300 hover:text-amber-100 rounded-lg text-[11px] sm:text-xs font-cinzel font-semibold border border-amber-700/60 shadow transition flex items-center gap-1"
+                  title="Chuyển ngay sang giai đoạn kế tiếp (không cần đợi)">
+            <span>⏩</span> <span>Chuyển Màn</span>
+          </button>
           <button onclick="openModal('bribe-modal')" class="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-amber-800 to-amber-700 hover:from-amber-700 hover:to-amber-600 text-amber-100 rounded-lg text-[11px] sm:text-xs font-cinzel font-bold border border-amber-500/40 shadow transition flex items-center gap-1">
             <span>💰</span> Hối Lộ
           </button>
@@ -2149,18 +2163,24 @@
       const text = document.getElementById('ready-btn-text');
       const icon = document.getElementById('ready-status-icon');
       const badge = document.getElementById('ready-count-badge');
-      if (!btn) return;
+
+      const bannerBtn = document.getElementById('banner-ready-btn');
+      const bannerText = document.getElementById('banner-ready-text');
+      const bannerIcon = document.getElementById('banner-ready-icon');
+      const bannerBadge = document.getElementById('banner-ready-badge');
+      const bannerAdvanceBtn = document.getElementById('banner-advance-btn');
 
       if (appState.stage >= 5) {
-        btn.classList.add('hidden');
+        if (btn) btn.classList.add('hidden');
+        if (bannerBtn) bannerBtn.classList.add('hidden');
+        if (bannerAdvanceBtn) bannerAdvanceBtn.classList.add('hidden');
         return;
       }
 
       const nextStage = appState.stage + 1;
-      text.innerText = `Sẵn sàng cho Giai đoạn ${nextStage}`;
 
       // Count ready players
-      let totalHumans = Object.keys(appState.humanPlayers).length;
+      let totalHumans = Object.keys(appState.humanPlayers).length || 1;
       let readyHumans = 0;
       let amIReady = false;
 
@@ -2171,15 +2191,37 @@
         }
       }
 
-      badge.innerText = `${readyHumans}/${totalHumans} Sẵn Sàng`;
-      if (amIReady) {
-        icon.innerText = '🟢';
-        btn.classList.add('border-green-600', 'bg-green-950/70', 'text-green-200');
-        btn.classList.remove('border-stone-600', 'bg-stone-800');
-      } else {
-        icon.innerText = '⚪';
-        btn.classList.remove('border-green-600', 'bg-green-950/70', 'text-green-200');
-        btn.classList.add('border-stone-600', 'bg-stone-800');
+      // Update Header Button
+      if (btn) {
+        if (text) text.innerText = `Sang Giai đoạn ${nextStage}`;
+        if (badge) badge.innerText = `${readyHumans}/${totalHumans}`;
+        if (amIReady) {
+          if (icon) icon.innerText = '🟢';
+          btn.classList.add('border-emerald-500', 'bg-emerald-950/80', 'text-emerald-200');
+          btn.classList.remove('border-stone-600', 'bg-stone-800');
+        } else {
+          if (icon) icon.innerText = '⚪';
+          btn.classList.remove('border-emerald-500', 'bg-emerald-950/80', 'text-emerald-200');
+          btn.classList.add('border-stone-600', 'bg-stone-800');
+        }
+      }
+
+      // Update Stage Banner Button
+      if (bannerBtn) {
+        bannerBtn.classList.remove('hidden');
+        if (bannerText) bannerText.innerText = amIReady ? `Đã Sẵn Sàng (${nextStage})` : `Sẵn Sàng Sang Màn ${nextStage}`;
+        if (bannerBadge) bannerBadge.innerText = `${readyHumans}/${totalHumans} Sẵn Sàng`;
+        if (amIReady) {
+          if (bannerIcon) bannerIcon.innerText = '🟢';
+          bannerBtn.className = 'px-2.5 py-1 sm:px-3 sm:py-1.5 bg-emerald-950/90 hover:bg-emerald-900 text-emerald-200 rounded-lg text-[11px] sm:text-xs font-cinzel font-bold border border-emerald-500/80 shadow transition flex items-center gap-1 ring-1 ring-emerald-500/50';
+        } else {
+          if (bannerIcon) bannerIcon.innerText = '⚪';
+          bannerBtn.className = 'px-2.5 py-1 sm:px-3 sm:py-1.5 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-lg text-[11px] sm:text-xs font-cinzel font-semibold border border-stone-600 shadow transition flex items-center gap-1';
+        }
+      }
+
+      if (bannerAdvanceBtn) {
+        bannerAdvanceBtn.classList.remove('hidden');
       }
     }
 
@@ -2191,6 +2233,26 @@
           body: JSON.stringify({ player_id: appState.playerId })
         });
       } catch (e) {}
+    }
+
+    async function forceAdvanceStage() {
+      if (appState.stage >= 5) {
+        alert('Đã ở giai đoạn cuối cùng (Giai đoạn 5)!');
+        return;
+      }
+      const nextStage = appState.stage + 1;
+      if (!confirm(`Bạn có chắc muốn chuyển ngay sang Giai đoạn ${nextStage} không?`)) {
+        return;
+      }
+      try {
+        const res = await fetch('/api/advance-stage', { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          soundEngine.playFanfare();
+        }
+      } catch (e) {
+        alert('Lỗi kết nối khi chuyển giai đoạn.');
+      }
     }
 
     function showMedievalToast(senderName, avatar, text, onClick) {

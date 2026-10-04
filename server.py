@@ -1042,6 +1042,19 @@ async def toggle_ready_endpoint(payload: Dict[str, Any] = Body(...)):
 
     return {"status": "ok", "all_ready": all_ready}
 
+@app.post("/api/advance-stage")
+async def force_advance_stage_endpoint():
+    event = game_state.advance_stage()
+    await broadcast({
+        "type": "stage_advanced",
+        "stage": game_state.stage,
+        "event": event,
+        "messages": game_state.great_hall_messages,
+        "revealed_exhibits": list(game_state.revealed_exhibits),
+        "awards": game_state.awards
+    })
+    return {"status": "ok", "stage": game_state.stage, "event": event}
+
 @app.post("/api/bribe")
 async def transfer_gold_endpoint(payload: Dict[str, Any] = Body(...)):
     sender_id = payload.get("sender_id")
