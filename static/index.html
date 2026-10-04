@@ -367,10 +367,11 @@
 
         <!-- Character Selection Grid -->
         <div class="flex items-center justify-between mb-2.5">
-          <div class="text-xs uppercase font-cinzel text-amber-400 font-bold flex items-center gap-1.5">
-            <span>🎭</span> Chọn Nhân Vật Của Bạn (Hiệp sĩ Rufus khóa cho AI làm nạn nhân):
+          <div class="text-xs uppercase font-cinzel text-amber-400 font-bold flex items-center gap-1.5 flex-wrap">
+            <span>🎭</span> Chọn Nhân Vật Của Bạn:
+            <span id="lobby-human-count-badge" class="ml-2 px-2 py-0.5 rounded-full text-[10px] bg-amber-950 text-amber-300 border border-amber-600/60 font-mono">0/3 Thám Tử Người Thật</span>
           </div>
-          <span class="text-[11px] text-stone-400 font-serif italic hidden sm:inline">Bấm vào thẻ chân dung bất kỳ để nhận vai</span>
+          <span class="text-[11px] text-stone-400 font-serif italic hidden sm:inline">Tối đa 3 Thám tử Người Thật, các vai còn lại là Khách AI</span>
         </div>
         <div id="character-selection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
           <!-- Populated by JS -->
@@ -1207,8 +1208,9 @@
           return found;
         }
       }
-      // If still none, only auto-assign if game has already started
-      if (appState.isGameStarted && appState.allCharacters && appState.allCharacters.length > 0) {
+      // If still none, only auto-assign if game has already started AND human slots are not full (< 3)
+      const humanCount = Object.keys(appState.humanPlayers || {}).length;
+      if (appState.isGameStarted && humanCount < 3 && appState.allCharacters && appState.allCharacters.length > 0) {
         const available = appState.allCharacters.find(c => !c.is_victim && !c.is_human) || appState.allCharacters.find(c => !c.is_victim);
         if (available) {
           appState.characterId = available.id;
@@ -1238,13 +1240,25 @@
         if (pill) {
           pill.classList.remove('hidden');
           pill.classList.add('flex');
+          pill.title = 'Nhân vật của bạn - Bấm để xem Hồ sơ Mật';
         }
         if (avatarEl) avatarEl.innerText = char.avatar_icon || '👤';
         if (nameEl) nameEl.innerText = char.name;
       } else {
-        if (pill) {
-          pill.classList.add('hidden');
-          pill.classList.remove('flex');
+        const humanCount = Object.keys(appState.humanPlayers || {}).length;
+        if (appState.isGameStarted && humanCount >= 3) {
+          if (pill) {
+            pill.classList.remove('hidden');
+            pill.classList.add('flex');
+            pill.title = 'Chế độ Khán Giả quan sát (Đã đủ 3 Thám tử Người Thật)';
+          }
+          if (avatarEl) avatarEl.innerText = '👁️';
+          if (nameEl) nameEl.innerText = 'Khán Giả';
+        } else {
+          if (pill) {
+            pill.classList.add('hidden');
+            pill.classList.remove('flex');
+          }
         }
       }
     }
@@ -1293,6 +1307,9 @@
           appState.greatHallMessages = data.great_hall_messages || [];
           appState.privateChats = data.private_chats || {};
           appState.isGameStarted = data.is_game_started;
+          if (data.human_players) {
+            appState.humanPlayers = data.human_players;
+          }
           
           updateHeaderGold();
           updatePersonaUI();
@@ -1319,7 +1336,7 @@
             appState.humanPlayers = data.human_players;
           }
 
-          // If not registered on server, automatically re-join with saved characterId
+          // If not registered on server, automatically re-join with saved characterId if room is not full
           const savedCid = appState.characterId || localStorage.getItem('knight_char_id');
           if (savedCid) {
             try {
@@ -1337,6 +1354,10 @@
                 appState.characterId = savedCid;
                 appState.myCharacter = joinData.character;
                 appState.myGold = joinData.character.current_gold;
+              } else {
+                localStorage.removeItem('knight_char_id');
+                appState.characterId = null;
+                appState.myCharacter = null;
               }
             } catch (err) {
               console.warn('Auto re-join error:', err);
@@ -1429,8 +1450,12 @@
         }
       } else if (data.type === 'player_joined') {
         appState.humanPlayers = data.human_players;
+        if (data.characters) {
+          appState.allCharacters = data.characters;
+        }
         renderCharacterSelectionGrid();
         renderGuestsDirectory();
+        renderGreatHallMessages();
       } else if (data.type === 'game_started') {
         appState.isGameStarted = true;
         appState.stage = data.stage;
@@ -1655,9 +1680,25 @@
       if (!grid) return;
       grid.innerHTML = '';
 
+      const humanPlayersList = Object.values(appState.humanPlayers || {});
+      const humanCount = humanPlayersList.length;
+      const myHumanPlayer = humanPlayersList.find(p => p.player_id === appState.playerId);
+      const isMeRegistered = Boolean(myHumanPlayer);
+      const isCapacityFull = (humanCount >= 3) && !isMeRegistered;
+
+      const lobbyBadge = document.getElementById('lobby-human-count-badge');
+      if (lobbyBadge) {
+        lobbyBadge.innerText = `${humanCount}/3 Thám Tử Người Thật`;
+        if (humanCount >= 3) {
+          lobbyBadge.className = 'ml-2 px-2 py-0.5 rounded-full text-[10px] bg-red-950 text-red-300 border border-red-600/60 font-mono font-bold';
+        } else {
+          lobbyBadge.className = 'ml-2 px-2 py-0.5 rounded-full text-[10px] bg-amber-950 text-amber-300 border border-amber-600/60 font-mono';
+        }
+      }
+
       appState.allCharacters.forEach(c => {
         const isVictim = c.is_victim;
-        const isSelectedByMe = (c.id === appState.characterId);
+        const isSelectedByMe = (appState.characterId === c.id) || (myHumanPlayer && myHumanPlayer.character_id === c.id);
         
         let claimedByOther = false;
         let claimedName = '';
@@ -1669,28 +1710,46 @@
           }
         }
 
+        const isLockedForNewHumans = isCapacityFull && !isSelectedByMe && !claimedByOther && !isVictim;
+
         const card = document.createElement('div');
-        card.className = `p-3.5 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+        card.className = `p-3.5 rounded-xl border transition flex flex-col justify-between ${
           isSelectedByMe 
-            ? 'bg-amber-950/80 border-amber-400 gold-glow ring-2 ring-amber-500 scale-[1.02]' 
+            ? 'bg-amber-950/80 border-amber-400 gold-glow ring-2 ring-amber-500 scale-[1.02] cursor-pointer' 
             : claimedByOther 
-              ? 'bg-stone-900/60 border-stone-800 opacity-50 cursor-not-allowed'
+              ? 'bg-stone-900/60 border-stone-800 opacity-60 cursor-not-allowed'
               : isVictim
-                ? 'bg-stone-900/60 border-stone-800 opacity-60'
-                : 'bg-stone-900/80 border-[#3d2e20] hover:border-amber-600/80 hover:bg-stone-800/80 hover:scale-[1.01]'
+                ? 'bg-stone-900/60 border-stone-800 opacity-60 cursor-not-allowed'
+                : isLockedForNewHumans
+                  ? 'bg-stone-950/60 border-stone-800/80 opacity-70 cursor-not-allowed'
+                  : 'bg-stone-900/80 border-[#3d2e20] hover:border-amber-600/80 hover:bg-stone-800/80 hover:scale-[1.01] cursor-pointer'
         }`;
+
+        let statusBadgeHtml = '';
+        let actionButtonHtml = '';
+
+        if (isSelectedByMe) {
+          statusBadgeHtml = `<span class="text-[10px] font-cinzel font-bold px-2 py-0.5 rounded shadow-sm bg-amber-500 text-stone-950">👤 BẠN (Người Thật)</span>`;
+          actionButtonHtml = `<span class="text-xs font-cinzel font-bold text-amber-400">✓ Vai Của Bạn</span>`;
+        } else if (claimedByOther) {
+          statusBadgeHtml = `<span class="text-[10px] font-cinzel font-semibold px-2 py-0.5 rounded shadow-sm bg-blue-950 text-blue-300 border border-blue-800">👤 Người Thật: ${claimedName}</span>`;
+          actionButtonHtml = `<span class="text-[10px] text-stone-500">Đã có người chơi nhận</span>`;
+        } else if (isVictim) {
+          statusBadgeHtml = `<span class="text-[10px] font-cinzel font-semibold px-2 py-0.5 rounded shadow-sm bg-red-950 text-red-300 border border-red-800">💀 Đã Khóa (Nạn Nhân)</span>`;
+          actionButtonHtml = `<span class="text-[10px] text-red-400 italic">Khóa (Nạn nhân)</span>`;
+        } else if (isLockedForNewHumans) {
+          statusBadgeHtml = `<span class="text-[10px] font-cinzel font-semibold px-2 py-0.5 rounded shadow-sm bg-stone-900 text-stone-400 border border-stone-700">🤖 Nhân Vật AI</span>`;
+          actionButtonHtml = `<span class="text-[10px] text-stone-500 italic">Đã đủ 3 Thám tử Người Thật</span>`;
+        } else {
+          statusBadgeHtml = `<span class="text-[10px] font-cinzel font-semibold px-2 py-0.5 rounded shadow-sm bg-stone-800 text-stone-300 border border-stone-700">Có Thể Chọn</span>`;
+          actionButtonHtml = `<button class="text-xs font-cinzel font-bold text-amber-300 hover:text-amber-100 flex items-center gap-1">Nhận Vai Này →</button>`;
+        }
 
         card.innerHTML = `
           <div>
             <div class="flex items-center justify-between mb-2">
               <span class="text-3xl select-none filter drop-shadow">${c.avatar_icon || '👤'}</span>
-              <span class="text-[10px] font-cinzel font-semibold px-2 py-0.5 rounded shadow-sm ${
-                isSelectedByMe ? 'bg-amber-500 text-stone-950 font-bold' :
-                claimedByOther ? 'bg-stone-800 text-stone-400' :
-                isVictim ? 'bg-red-950 text-red-300 border border-red-800' : 'bg-stone-800 text-stone-300'
-              }">
-                ${isSelectedByMe ? 'BẠN' : claimedByOther ? `Đã Chọn (${claimedName})` : isVictim ? 'Đã Khóa (Nạn Nhân)' : 'Có Thể Chọn'}
-              </span>
+              ${statusBadgeHtml}
             </div>
             <h4 class="font-cinzel font-bold text-sm text-amber-200">${c.name}</h4>
             <div class="text-xs font-serif italic text-amber-400/80 mb-2">${c.title}</div>
@@ -1700,16 +1759,11 @@
             <span class="text-[11px] text-amber-300/80 font-cinzel flex items-center gap-1">
               <span>💰</span> ${c.coins || 12} Tiền Vàng
             </span>
-            ${
-              isVictim ? '<span class="text-[10px] text-red-400 italic">Khóa (Nạn nhân)</span>' :
-              claimedByOther ? '<span class="text-[10px] text-stone-500">Đã có người nhận</span>' :
-              isSelectedByMe ? '<span class="text-xs font-cinzel font-bold text-amber-400">✓ Vai Của Bạn</span>' :
-              '<button class="text-xs font-cinzel font-bold text-amber-300 hover:text-amber-100 flex items-center gap-1">Nhận Vai Này →</button>'
-            }
+            ${actionButtonHtml}
           </div>
         `;
 
-        if (!isVictim && !claimedByOther) {
+        if (!isVictim && !claimedByOther && !isLockedForNewHumans) {
           card.onclick = () => selectCharacter(c.id);
         }
         grid.appendChild(card);
@@ -1720,6 +1774,13 @@
       const nameInput = document.getElementById('player-name-input').value.trim() || 'Thám Tử Quý Tộc';
       appState.playerName = nameInput;
       localStorage.setItem('knight_player_name', nameInput);
+
+      const humanCount = Object.keys(appState.humanPlayers || {}).length;
+      const alreadyClaimedByMe = Object.values(appState.humanPlayers || {}).some(p => p.player_id === appState.playerId);
+      if (!alreadyClaimedByMe && humanCount >= 3) {
+        alert('Bàn tiệc đã đủ 3 Thám tử Người thật! Bạn có thể theo dõi ván chơi ở vai trò Khán Giả.');
+        return;
+      }
 
       try {
         const res = await fetch('/api/join', {
@@ -1748,7 +1809,7 @@
             updateLobbyChosenCharacterPrompt(data.character);
           }
         } else {
-          alert(data.detail || 'Không thể nhận nhân vật này.');
+          alert(data.detail || data.message || 'Không thể nhận nhân vật này.');
         }
       } catch (e) {
         alert('Lỗi kết nối khi chọn nhân vật.');
@@ -2106,22 +2167,32 @@
             <p class="text-amber-100/95 text-xs md:text-sm font-serif italic whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
           `;
         } else {
+          const humanSender = Object.values(appState.humanPlayers || {}).find(p => p.character_id === m.sender_id);
+          const isSenderHuman = Boolean(humanSender) || (appState.allCharacters || []).some(c => c.id === m.sender_id && c.is_human);
+
+          const senderBadge = isMe
+            ? `<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 font-normal">👤 BẠN (Người Thật)</span>`
+            : isSenderHuman
+              ? `<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-700/60 shrink-0 font-normal">👤 Người Thật${humanSender && humanSender.player_name ? ': ' + humanSender.player_name : ''}</span>`
+              : `<span class="text-[9px] px-1.5 py-0.2 rounded bg-stone-900 text-stone-400 border border-stone-700 shrink-0 font-normal">🤖 Khách AI</span>`;
+
           row.className = `flex gap-2.5 ${isMe ? 'justify-end' : 'justify-start'}`;
           row.innerHTML = `
-            ${!isMe ? `<span class="text-2xl select-none filter drop-shadow cursor-pointer" onclick="openPrivateChat('${m.sender_id}')" title="Nhấn để mật đàm riêng với ${m.sender_name}">${m.sender_avatar || '👤'}</span>` : ''}
+            ${!isMe ? `<span class="text-2xl select-none filter drop-shadow cursor-pointer shrink-0" onclick="openPrivateChat('${m.sender_id}')" title="Nhấn để mật đàm riêng với ${m.sender_name}">${m.sender_avatar || '👤'}</span>` : ''}
             <div class="max-w-[85%] sm:max-w-[75%] rounded-xl px-3.5 py-2.5 shadow-md ${
               isMe ? 'bg-amber-900/80 text-amber-100 border border-amber-500/50' : 'bg-stone-800/95 text-stone-200 border border-stone-700'
             }">
               <div class="flex items-center justify-between gap-3 text-[10px] font-cinzel font-bold ${isMe ? 'text-amber-300 text-right' : 'text-amber-400'} mb-1">
                 <div class="flex items-center gap-1.5 truncate">
                   <span>${m.sender_name}</span>
+                  ${senderBadge}
                   ${!isMe ? `<button type="button" onclick="openPrivateChat('${m.sender_id}')" class="text-[10px] text-amber-400/90 hover:text-amber-200 underline font-normal ml-1" title="Mở phòng mật đàm riêng">🗝️ Mật Đàm</button>` : ''}
                 </div>
                 <span class="text-[9px] text-stone-400 font-mono shrink-0">${timeStr}</span>
               </div>
               <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
             </div>
-            ${isMe ? `<span class="text-2xl select-none filter drop-shadow">${m.sender_avatar || '👤'}</span>` : ''}
+            ${isMe ? `<span class="text-2xl select-none filter drop-shadow shrink-0">${m.sender_avatar || '👤'}</span>` : ''}
           `;
         }
         container.appendChild(row);
@@ -2139,7 +2210,12 @@
 
       const char = ensureMyCharacter();
       if (!char) {
-        alert('Vui lòng chọn nhân vật trước khi phát biểu tại Đại Sảnh!');
+        const humanCount = Object.keys(appState.humanPlayers || {}).length;
+        if (humanCount >= 3) {
+          alert('Bàn tiệc đã đủ 3 Thám tử Người thật. Bạn đang ở chế độ Khán Giả quan sát cuộc tiệc!');
+        } else {
+          alert('Vui lòng chọn nhân vật trước khi phát biểu tại Đại Sảnh!');
+        }
         return;
       }
 
@@ -2447,7 +2523,15 @@
         const row = document.createElement('div');
         row.className = 'p-2.5 rounded-lg bg-stone-900/70 hover:bg-stone-800/80 border border-stone-800 transition flex flex-col gap-1.5 shadow-sm';
         const escapedName = c.name.replace(/'/g, "\\'");
-        const isHuman = c.is_human;
+        
+        const humanPlayer = Object.values(appState.humanPlayers || {}).find(p => p.character_id === c.id);
+        const isHuman = Boolean(humanPlayer) || Boolean(c.is_human);
+        const humanName = humanPlayer ? humanPlayer.player_name : (c.human_player_name || 'Thám Tử');
+
+        const roleBadge = isHuman 
+          ? `<span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-700/60 font-cinzel font-bold shrink-0">👤 Người Thật: ${humanName}</span>`
+          : `<span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-700 font-cinzel shrink-0">🤖 Khách AI</span>`;
+
         row.innerHTML = `
           <div class="flex items-start justify-between gap-2">
             <div class="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer" onclick="openPrivateChat('${c.id}')" title="Nhấn để mở phòng mật đàm riêng">
@@ -2457,7 +2541,7 @@
                 <div class="text-[11px] text-stone-400 font-serif italic leading-tight whitespace-normal break-words">${c.title}</div>
               </div>
             </div>
-            ${isHuman ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 font-mono shrink-0">Người Chơi Thật</span>' : '<span class="text-[9px] px-1.5 py-0.5 rounded bg-stone-800 text-stone-400 font-mono shrink-0">Khách AI</span>'}
+            ${roleBadge}
           </div>
           <div class="flex items-center justify-end gap-1.5 pt-1.5 border-t border-stone-800/60">
             <button onclick="mentionCharacterInGreatHall('${escapedName}')" 
@@ -2478,7 +2562,7 @@
         if (bribeSelect) {
           const opt = document.createElement('option');
           opt.value = c.id;
-          opt.innerText = `${c.name} (${c.title})`;
+          opt.innerText = `${c.name} (${c.title})${isHuman ? ' [Người Thật]' : ' [Khách AI]'}`;
           bribeSelect.appendChild(opt);
         }
       });
@@ -2502,6 +2586,9 @@
         const msgs = (chatKey && appState.privateChats[chatKey]) || appState.privateChats[c.id] || [];
         const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1] : null;
 
+        const humanPlayer = Object.values(appState.humanPlayers || {}).find(p => p.character_id === c.id);
+        const isHuman = Boolean(humanPlayer) || Boolean(c.is_human);
+
         btn.className = `w-full text-left p-2.5 rounded-lg border text-xs flex items-center justify-between gap-2 transition cursor-pointer select-none ${
           isActive 
             ? 'bg-amber-950/90 border-amber-500 text-amber-200 shadow-md ring-2 ring-amber-500/60' 
@@ -2511,7 +2598,12 @@
           <div class="flex items-center gap-2 min-w-0 flex-1 pointer-events-none">
             <span class="text-xl shrink-0">${c.avatar_icon}</span>
             <div class="min-w-0 flex-1">
-              <div class="font-cinzel font-bold text-xs truncate ${isActive ? 'text-amber-300' : 'text-stone-200'}">${c.name}</div>
+              <div class="flex items-center gap-1.5 truncate">
+                <span class="font-cinzel font-bold text-xs truncate ${isActive ? 'text-amber-300' : 'text-stone-200'}">${c.name}</span>
+                ${isHuman 
+                  ? `<span class="text-[8px] px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-800 font-cinzel shrink-0">👤 Người</span>` 
+                  : `<span class="text-[8px] px-1 py-0.2 rounded bg-stone-800 text-stone-400 font-cinzel shrink-0">🤖 AI</span>`}
+              </div>
               <div class="text-[10px] text-stone-400 italic font-serif truncate">
                 ${lastMsg ? (lastMsg.sender_id === (char ? char.id : '') ? 'Bạn: ' : '') + lastMsg.content : c.title}
               </div>
@@ -2571,18 +2663,27 @@
       const recipient = (appState.allCharacters || []).find(c => c.id === recipientId);
       const header = document.getElementById('active-private-header');
       if (header && recipient) {
+        const humanPlayer = Object.values(appState.humanPlayers || {}).find(p => p.character_id === recipient.id);
+        const isHuman = Boolean(humanPlayer) || Boolean(recipient.is_human);
+        const humanBadge = isHuman 
+          ? `<span class="text-[9px] px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-700/60 font-cinzel font-bold shrink-0">👤 Người Thật: ${humanPlayer ? humanPlayer.player_name : 'Thám tử'}</span>`
+          : `<span class="text-[9px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-700 font-cinzel shrink-0">🤖 Khách AI</span>`;
+
         header.innerHTML = `
-          <div class="flex items-center gap-2">
-            <button onclick="mobileBackToWhisperList()" class="md:hidden px-2 py-1 bg-stone-800 hover:bg-stone-700 rounded text-amber-300 text-xs font-cinzel">
-              ← Danh Sách Phòng
+          <div class="flex items-center gap-2 min-w-0">
+            <button onclick="mobileBackToWhisperList()" class="md:hidden px-2 py-1 bg-stone-800 hover:bg-stone-700 rounded text-amber-300 text-xs font-cinzel shrink-0">
+              ← Danh Sách
             </button>
-            <span class="text-xl filter drop-shadow">${recipient.avatar_icon || '👤'}</span>
-            <div>
-              <span class="font-cinzel font-bold text-amber-300 text-sm">${recipient.name}</span>
-              <span class="text-xs text-stone-400 font-serif italic ml-1">(${recipient.title})</span>
+            <span class="text-xl filter drop-shadow shrink-0">${recipient.avatar_icon || '👤'}</span>
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="font-cinzel font-bold text-amber-300 text-sm truncate">${recipient.name}</span>
+                ${humanBadge}
+              </div>
+              <div class="text-xs text-stone-400 font-serif italic truncate">${recipient.title}</div>
             </div>
           </div>
-          <button type="button" onclick="openModal('bribe-modal')" class="text-xs text-amber-400 hover:text-amber-300 hover:underline flex items-center gap-1 font-cinzel font-bold">
+          <button type="button" onclick="openModal('bribe-modal')" class="text-xs text-amber-400 hover:text-amber-300 hover:underline flex items-center gap-1 font-cinzel font-bold shrink-0">
             <span>💰</span> Tặng Tiền Vàng
           </button>
         `;
@@ -2625,7 +2726,14 @@
             isMe ? 'bg-amber-900/80 text-amber-100 border border-amber-500/50' : 'bg-stone-800/95 text-stone-200 border border-stone-700'
           }">
             <div class="flex items-center justify-between gap-3 text-[10px] font-cinzel font-bold ${isMe ? 'text-amber-300 text-right' : 'text-amber-400'} mb-1">
-              <span>${m.sender_name}</span>
+              <div class="flex items-center gap-1.5 truncate">
+                <span>${m.sender_name}</span>
+                ${isMe
+                  ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0 font-normal">👤 BẠN</span>' 
+                  : (Object.values(appState.humanPlayers || {}).some(p => p.character_id === m.sender_id) || (appState.allCharacters || []).some(c => c.id === m.sender_id && c.is_human))
+                    ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-700/60 shrink-0 font-normal">👤 Người Thật</span>'
+                    : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-stone-900 text-stone-400 border border-stone-700 shrink-0 font-normal">🤖 AI</span>'}
+              </div>
               <span class="text-[9px] text-stone-400 font-mono shrink-0">${timeStr}</span>
             </div>
             <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>

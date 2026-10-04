@@ -82,8 +82,16 @@ class GameStateManager:
         self.save_state()
 
     def get_active_characters(self) -> List[Dict[str, Any]]:
-        """Return list of active characters based on cast size."""
-        all_chars = list(self.characters.values())
+        """Return list of active characters based on cast size, with strict human/AI tags."""
+        human_map = {p["character_id"]: p.get("player_name", "Người chơi") for p in self.human_players.values() if p.get("character_id")}
+        all_chars = []
+        for c in self.characters.values():
+            cid = c["id"]
+            c_copy = dict(c)
+            c_copy["is_human"] = cid in human_map
+            c_copy["human_player_name"] = human_map.get(cid, "")
+            all_chars.append(c_copy)
+
         if self.cast_size == 8:
             # 8 character list excludes Jerry, Gwendolyn, Monica, and Charlamagne or Willie
             # Active 8: Queen Genevieve, Lord Taylor, Baron Bartholomew, Lady Diana, Maid Marilyn, Sir Cameron, Sir Rufus, Willie the Watchman
@@ -91,8 +99,17 @@ class GameStateManager:
             return [c for c in all_chars if c["id"] in keep_ids]
         return all_chars
 
+    def is_character_human(self, character_id: str) -> bool:
+        """Strict check: returns True if and only if character is currently held by a registered human player."""
+        if not character_id:
+            return False
+        for p in self.human_players.values():
+            if p.get("character_id") == character_id:
+                return True
+        return False
+
     def register_human_player(self, player_id: str, player_name: str, character_id: str) -> bool:
-        """Register or update a human player's chosen character."""
+        """Register or update a human player's chosen character. Strictly enforces max 3 human sleuths."""
         # Check if character is available and not Sir Rufus (locked to AI)
         if character_id == "sir_rufus":
             return False
@@ -101,6 +118,11 @@ class GameStateManager:
         for pid, pdata in self.human_players.items():
             if pid != player_id and pdata.get("character_id") == character_id:
                 return False
+
+        # Enforce maximum of 3 human sleuths!
+        if player_id not in self.human_players and len(self.human_players) >= 3:
+            logger.warning(f"Registration rejected for player {player_id}: maximum 3 human players already reached.")
+            return False
 
         # Release previous character if any
         if player_id in self.human_players:
@@ -642,6 +664,13 @@ class GameStateManager:
                         self.api_key = state["api_key"]
                     if state.get("llm_provider"):
                         self.llm_provider = state["llm_provider"]
-                    logger.info("Restored persisted game state.")
+
+                    # Ensure strict human vs AI synchronization upon load
+                    active_human_cids = {p.get("character_id") for p in self.human_players.values() if p.get("character_id")}
+                    for cid, c in self.characters.items():
+                        c["is_human"] = cid in active_human_cids
+                        if not c["is_human"]:
+                            c["player_id"] = None
+                    logger.info(f"Restored persisted game state with {len(active_human_cids)} human sleuths.")
             except Exception as e:
                 logger.error(f"Error loading state: {e}")

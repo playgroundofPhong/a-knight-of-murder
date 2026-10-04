@@ -63,11 +63,12 @@ def find_mentioned_character(content: str, active_chars: List[Dict[str, Any]], s
     def is_targetable_ai(c: Dict[str, Any]) -> bool:
         if sender_id and c["id"] == sender_id:
             return False
-        if not c.get("is_human"):
-            return True
-        # If marked as human, but player is disconnected or offline, AI will reply as proxy!
-        pid = c.get("player_id")
-        return not pid or (pid not in connected_websockets)
+        # STRICT CONTROL: If character is claimed by a human, AI NEVER replies on their behalf!
+        if game_state.is_character_human(c["id"]) or c.get("is_human"):
+            return False
+        if c.get("is_victim") and game_state.stage >= 3:
+            return False
+        return True
 
     # Step 1: Explicit @ mentions (e.g. @baron, @diana, @Lady Diana, @cameron)
     for c in active_chars:
@@ -943,7 +944,12 @@ async def join_room(payload: Dict[str, Any] = Body(...)):
 
     success = game_state.register_human_player(player_id, player_name, character_id)
     if not success:
-        raise HTTPException(status_code=400, detail="Character unavailable or locked to AI")
+        if player_id not in game_state.human_players and len(game_state.human_players) >= 3:
+            raise HTTPException(
+                status_code=403, 
+                detail="Bàn tiệc đã đủ 3 Thám tử Người thật! Tất cả các vai còn lại đều do AI hoàng gia đảm nhận. Bạn có thể theo dõi ván chơi với vai trò Khán giả triều đình."
+            )
+        raise HTTPException(status_code=400, detail="Nhân vật này đã có người chọn hoặc đang bị khóa (Sir Rufus).")
 
     await broadcast({
         "type": "player_joined",
@@ -1197,13 +1203,9 @@ async def process_incoming_message(chat_type: str, sender_id: str, content: str,
             "recipient_id": recipient_id
         })
 
-        # If recipient is an AI (or offline player), trigger immediate private reply!
+        # If recipient is genuinely an AI, trigger immediate private reply!
         recipient_char = game_state.characters.get(recipient_id)
-        is_target_ai = recipient_char and (
-            not recipient_char.get("is_human") or 
-            not recipient_char.get("player_id") or 
-            recipient_char.get("player_id") not in connected_websockets
-        )
+        is_target_ai = recipient_char and not game_state.is_character_human(recipient_id) and not recipient_char.get("is_human")
         if is_target_ai:
             asyncio.create_task(generate_ai_private_reply(recipient_char, sender_id, content))
         return msg
