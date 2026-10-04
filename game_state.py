@@ -126,7 +126,7 @@ class GameStateManager:
     def start_game(self):
         self.is_game_started = True
         self.stage = 1
-        # Add welcome announcement from Quản trò
+        # Add welcome announcement from Royal Herald
         intro_announcement = {
             "id": f"msg_{int(time.time()*1000)}",
             "sender_id": "game_master",
@@ -504,14 +504,14 @@ class GameStateManager:
 
         # 2. AI Undercover Whispers
         lines.append("-" * 80)
-        lines.append("         II. UNDERCOVER AI INTRIGUES (TƯƠNG TÁC CHÉO NGẦM GIỮA CÁC AI)")
-        lines.append("              [Secret dialogues exchanged covertly between AI guests]")
+        lines.append("         II. CLANDESTINE AI INTRIGUES (COVERT WHISPERS BETWEEN GUESTS)")
+        lines.append("              [Secret dialogues exchanged covertly between castle residents]")
         lines.append("-" * 80)
         if not data["can_view_all"]:
-            lines.append("  🔒 [SEALED WITH WAX / NIÊM PHONG BẢO MẬT]")
-            lines.append("  Bản ghi thì thầm và tương tác cơ mật giữa các khách mời AI đang được niêm phong")
-            lines.append("  để bảo đảm tính công bằng tuyệt đối trong quá trình phá án.")
-            lines.append("  -> Chỉ Quản trò (Host) mới có quyền mở trong màn chơi, hoặc sẽ mở công khai khi kết thúc (Stage 5).")
+            lines.append("  🔒 [SEALED WITH ROYAL WAX - CLASSIFIED ARCHIVES]")
+            lines.append("  Clandestine records and secret intrigues between castle residents are sealed")
+            lines.append("  to preserve absolute fairness and dramatic suspense during the investigation.")
+            lines.append("  -> Accessible only via Host Room Code, or unsealed publicly upon Stage 5 (Verdict).")
         elif not data["ai_undercover_whispers"]:
             lines.append("  (No covert meetings have transpired between AI guests as of yet.)")
         else:

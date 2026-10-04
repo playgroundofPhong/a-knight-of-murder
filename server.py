@@ -43,18 +43,18 @@ ai_engine = AIEngine(api_key=game_state.api_key, provider=game_state.llm_provide
 connected_websockets: Dict[str, WebSocket] = {}
 
 CHARACTER_ALIASES = {
-    "queen_genevieve": ["queen genevieve", "genevieve", "queen", "nữ hoàng", "nu hoang", "hoàng hậu", "hoang hau"],
-    "lord_taylor": ["lord taylor", "taylor", "lord", "lãnh chúa", "lanh chua"],
-    "lady_gwendolyn": ["lady gwendolyn", "gwendolyn", "quý bà", "quy ba", "phu nhân", "phu nhan"],
-    "baron_bartholomew": ["baron bartholomew", "bartholomew", "baron", "nam tước", "nam tuoc", "chú rể", "chu re"],
-    "lady_diana": ["lady diana of dunnsberry", "lady diana", "diana", "tiểu thư diana", "tieu thu", "cô dâu", "co dau"],
-    "maid_marilyn": ["maid marilyn", "marilyn", "hầu gái marilyn", "thị nữ marilyn"],
-    "sir_cameron": ["sir cameron", "cameron", "hiệp sĩ cameron", "hiep si cameron"],
-    "sir_rufus": ["sir rufus", "rufus", "hiệp sĩ rufus", "hiep si rufus"],
-    "willie_watchman": ["willie the watchman", "willie", "watchman", "bailiff", "thị vệ", "thi ve", "cai ngục", "cai nguc"],
-    "charlamagne": ["charlamagne", "chambermaid", "hầu phòng", "hau phong"],
-    "maid_monica": ["maid monica", "monica", "thị nữ monica", "thi nu monica"],
-    "joking_jerry": ["joking jerry", "jerry", "jester", "fool", "chàng hề", "chang he", "hề"],
+    "queen_genevieve": ["queen genevieve", "genevieve", "queen", "her majesty", "the queen"],
+    "lord_taylor": ["lord taylor", "taylor", "lord", "host", "the lord"],
+    "lady_gwendolyn": ["lady gwendolyn", "gwendolyn", "lady"],
+    "baron_bartholomew": ["baron bartholomew", "bartholomew", "baron", "groom", "the baron"],
+    "lady_diana": ["lady diana of dunnsberry", "lady diana", "diana", "bride", "dunnsberry"],
+    "maid_marilyn": ["maid marilyn", "marilyn", "maid", "handkerchief"],
+    "sir_cameron": ["sir cameron", "cameron", "knight"],
+    "sir_rufus": ["sir rufus", "rufus", "victim", "champion"],
+    "willie_watchman": ["willie the watchman", "willie", "watchman", "bailiff", "the watchman"],
+    "charlamagne": ["charlamagne", "chambermaid"],
+    "maid_monica": ["maid monica", "monica"],
+    "joking_jerry": ["joking jerry", "jerry", "jester", "fool", "the jester"],
 }
 
 def find_mentioned_character(content: str, active_chars: List[Dict[str, Any]], sender_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
@@ -88,8 +88,8 @@ def find_mentioned_character(content: str, active_chars: List[Dict[str, Any]], s
         cid = c["id"]
         aliases = sorted(CHARACTER_ALIASES.get(cid, [cid, c["name"].lower()]), key=len, reverse=True)
         for a in aliases:
-            if a in ["lord", "queen", "baron", "he", "hề"]:
-                continue # Do not match generic honorifics without @
+            if a in ["lord", "queen", "baron", "lady", "maid", "knight", "host", "bride", "groom", "victim", "fool"]:
+                continue # Do not match generic titles without @
             if re.search(r'\b' + re.escape(a) + r'\b', content_lower):
                 return c
 
@@ -168,11 +168,112 @@ DRAMA_TOPICS_STAGE_3_4 = [
     }
 ]
 
+PROACTIVE_HUMAN_INQUIRIES_STAGE_1_2 = [
+    {
+        "ai_id": "lord_taylor",
+        "question": "Welcome, honored guest @{name}! How fares thy journey to Fernwood? Thou art seated among the finest in the realm tonight—hast thou tasted our spiced venison?"
+    },
+    {
+        "ai_id": "baron_bartholomew",
+        "question": "A hearty greeting to thee, @{name}! What thinkest thou of my fair bride, Lady Diana? Doth not her beauty outshine every jewel in the realm?"
+    },
+    {
+        "ai_id": "sir_cameron",
+        "question": "Tell me truly, @{name}: didst thou observe the jousting lists this afternoon? Sir Rufus won by treacherous luck, yet he struts as though he vanquished a dragon!"
+    },
+    {
+        "ai_id": "joking_jerry",
+        "question": "A riddle for our noble guest, @{name}! What is sharper than a knight's lance, swifter than an arrow, and oft found in the bottom of a wine flagon?"
+    },
+    {
+        "ai_id": "queen_genevieve",
+        "question": "We observe thy presence, @{name}. In thy home lands, do subjects honor the Crown's justice with as much reverence as is sworn here in Fernwood?"
+    },
+    {
+        "ai_id": "maid_monica",
+        "question": "A quiet inquiry for thee, @{name}... Dost thou believe that marriages arranged in gold and land ever harbor true devotion in their hearts?"
+    }
+]
+
+PROACTIVE_HUMAN_INQUIRIES_STAGE_3_4 = [
+    {
+        "ai_id": "willie_watchman",
+        "question": "Hold where thou standest, @{name}! The watch must record every guest's testimony! Whom didst thou see near Sir Rufus's chair before the blackout?!"
+    },
+    {
+        "ai_id": "lady_diana",
+        "question": "In Heaven's mercy, @{name}, hear my plea! They look upon my grief with suspicion, yet my hands are innocent of blood! Dost thou believe their slander?!"
+    },
+    {
+        "ai_id": "sir_cameron",
+        "question": "Look upon Exhibit A, @{name}! A jeweled stiletto—a coward's tool! A knight wields cold steel in open combat. Who in this hall strikes from the shadows?"
+    },
+    {
+        "ai_id": "maid_marilyn",
+        "question": "Oh, @{name}, the manor is gripped with terror! No servant or noble is safe while Sir Rufus's killer walks free! What clues hast thou uncovered?"
+    },
+    {
+        "ai_id": "lord_taylor",
+        "question": "A dark tragedy stains my feast, @{name}! As an impartial guest of honor, what dost thou make of the evidence laid upon the court table?"
+    }
+]
+
+PROACTIVE_HUMAN_WHISPERS_STAGE_1_2 = [
+    {
+        "ai_id": "maid_monica",
+        "content": "*[Steps quietly into your alcove, glancing over her shoulder]* \"My Lord... a word in utmost confidence. I know things about Bartholomew's bride that would make your blood run cold. Keep your ears open tonight...\""
+    },
+    {
+        "ai_id": "joking_jerry",
+        "content": "*[Pops out from behind a heavy tapestry, jingling his bells]* \"Psst, noble friend! A single shiny gold coin tossed into a poor jester's purse, and I might whisper what I saw slipping through the courtyard before the feast! What say you?\""
+    },
+    {
+        "ai_id": "lady_diana",
+        "content": "*[Whispers with trembling urgency]* \"I sense a noble and trustworthy heart in you. Sir Rufus has been whispering venomous threats against me... If trouble should arise, I pray you will not judge me without hearing the truth.\""
+    },
+    {
+        "ai_id": "sir_cameron",
+        "content": "*[Leans close against the stone archway]* \"A true friend is rare in this gilded den of schemers. Rufus's victory was bought with trickery. Keep your dagger sharp and your wits sharper, comrade.\""
+    },
+    {
+        "ai_id": "charlamagne",
+        "content": "*[Approaching quietly with a goblet of wine]* \"Pardon, noble guest... A chambermaid notices what lords overlook. If you wish to know who visits whom after the candles are dimmed, I am willing to share... for a modest token of silver or gold.\""
+    },
+    {
+        "ai_id": "baron_bartholomew",
+        "content": "*[Pulls you aside into the private chamber]* \"I am glad you came to my feast, my friend. There is great tension between my father and the common folk. Can I rely on your counsel if tempers flare tonight?\""
+    }
+]
+
+PROACTIVE_HUMAN_WHISPERS_STAGE_3_4 = [
+    {
+        "ai_id": "willie_watchman",
+        "content": "*[Bars your path in the corridor with his iron-tipped staff]* \"Halt, noble guest! By order of the castle bailiff, all attendees must account for their whereabouts when the candles were snuffed! Where were your hands when Sir Rufus took his death blow?!\""
+    },
+    {
+        "ai_id": "lady_diana",
+        "content": "*[Wipes a tear, clutching your hand in desperation]* \"They speak of the dagger bearing Dunnsberry's crest! I swear upon all that is sacred, I am innocent! Someone is trying to destroy my life! Please... tell me you do not suspect me!\""
+    },
+    {
+        "ai_id": "maid_marilyn",
+        "content": "*[Whispering with trembling lips]* \"I found something near the fireplace... a silk favor soaked in oil. I am terrified of what Willie will do if he finds it. What ought I do with it, noble guest?\""
+    },
+    {
+        "ai_id": "sir_cameron",
+        "content": "*[Clenches his gauntlets in fury]* \"Willie eyes me like a common butcher simply because my horse was poisoned! Look at Exhibit A—a jeweled lady's stiletto, not a knight's arming blade! Help me clear my honor!\""
+    },
+    {
+        "ai_id": "maid_monica",
+        "content": "*[Smiles with cold calculation]* \"Sir Rufus is dead, and the realm trembles! I saw someone lingering near his goblet moments before the darkness fell. For two pieces of gold, I shall whisper their name into your ear...\""
+    }
+]
+
 async def autonomous_mingling_loop():
-    """Periodically triggers dramatic AI-to-AI exchanges in the Great Hall if quiet."""
+    """Periodically triggers dramatic AI-to-AI exchanges or addresses human players in the Great Hall if quiet."""
     used_drama_indices = set()
+    used_human_inquiry_indices = set()
     while True:
-        await asyncio.sleep(40) # Check every 40 seconds
+        await asyncio.sleep(35) # Check every 35 seconds
         try:
             if not game_state.is_game_started or game_state.stage >= 5:
                 continue
@@ -181,13 +282,46 @@ async def autonomous_mingling_loop():
             now = time.time()
             if game_state.great_hall_messages:
                 last_msg_time = game_state.great_hall_messages[-1]["timestamp"]
-                if now - last_msg_time < 35:
+                if now - last_msg_time < 30:
                     continue # Not quiet yet
 
-            # Select appropriate topic pool
+            human_players = [p for p in game_state.human_players.values() if p.get("character_id")]
+            import random
+
+            # 40% chance to proactively address a human player in the Great Hall if present!
+            if human_players and random.random() < 0.40:
+                target_human = random.choice(human_players)
+                target_char = game_state.characters.get(target_human["character_id"])
+                target_name = target_char["name"] if target_char else target_human.get("player_name", "Noble Guest")
+
+                pool = PROACTIVE_HUMAN_INQUIRIES_STAGE_1_2 if game_state.stage in [1, 2] else PROACTIVE_HUMAN_INQUIRIES_STAGE_3_4
+                valid_inquiries = []
+                for idx, inq in enumerate(pool):
+                    speaker = game_state.characters.get(inq["ai_id"])
+                    if not speaker or speaker.get("is_human"):
+                        continue
+                    if speaker.get("is_victim") and game_state.stage >= 3:
+                        continue
+                    if speaker["id"] == target_human["character_id"]:
+                        continue
+                    valid_inquiries.append((idx, inq, speaker))
+
+                if valid_inquiries:
+                    fresh = [x for x in valid_inquiries if x[0] not in used_human_inquiry_indices]
+                    if not fresh:
+                        used_human_inquiry_indices.clear()
+                        fresh = valid_inquiries
+                    c_idx, chosen_inq, speaker_ai = random.choice(fresh)
+                    used_human_inquiry_indices.add(c_idx)
+
+                    question_text = chosen_inq["question"].replace("{name}", target_name)
+                    msg = game_state.add_message(speaker_ai["id"], question_text, chat_type="public")
+                    await broadcast({"type": "new_message", "message": msg})
+                    continue
+
+            # Otherwise, AI-to-AI dramatic exchange
             topic_pool = DRAMA_TOPICS_STAGE_1_2 if game_state.stage in [1, 2] else DRAMA_TOPICS_STAGE_3_4
 
-            # Find valid drama topics where both characters are active AI and alive
             valid_dramas = []
             for idx, drama in enumerate(topic_pool):
                 c1_id, c2_id = drama["pair"]
@@ -207,7 +341,6 @@ async def autonomous_mingling_loop():
                     used_drama_indices.clear()
                     fresh_dramas = valid_dramas
 
-                import random
                 chosen_idx, chosen_drama, char_a, char_b = random.choice(fresh_dramas)
                 used_drama_indices.add(chosen_idx)
 
@@ -458,14 +591,86 @@ async def autonomous_undercover_loop():
         except Exception as e:
             logger.error(f"Error in undercover whisper loop: {e}")
 
+last_human_proactive_whisper_time = 0
+
+async def autonomous_human_whisper_loop():
+    """Periodically triggers an AI character to autonomously reach out and whisper directly to a human player."""
+    global last_human_proactive_whisper_time
+    used_whisper_indices = set()
+
+    while True:
+        await asyncio.sleep(25) # Check every 25s
+        try:
+            if not game_state.is_game_started or game_state.stage >= 5:
+                continue
+
+            human_players = [p for p in game_state.human_players.values() if p.get("character_id")]
+            if not human_players:
+                continue
+
+            now = time.time()
+            if now - last_human_proactive_whisper_time < 45:
+                continue # 45-second cooldown between proactive whispers to avoid overwhelming the player
+
+            pool = PROACTIVE_HUMAN_WHISPERS_STAGE_1_2 if game_state.stage in [1, 2] else PROACTIVE_HUMAN_WHISPERS_STAGE_3_4
+
+            import random
+            target_human = random.choice(human_players)
+            human_cid = target_human["character_id"]
+
+            valid_items = []
+            for idx, item in enumerate(pool):
+                ai_char = game_state.characters.get(item["ai_id"])
+                if not ai_char or ai_char.get("is_human"):
+                    continue
+                if ai_char.get("is_victim") and game_state.stage >= 3:
+                    continue
+                if ai_char["id"] == human_cid:
+                    continue
+                valid_items.append((idx, item, ai_char))
+
+            if not valid_items:
+                continue
+
+            fresh = [x for x in valid_items if x[0] not in used_whisper_indices]
+            if not fresh:
+                used_whisper_indices.clear()
+                fresh = valid_items
+
+            chosen_idx, chosen_item, sender_ai = random.choice(fresh)
+            used_whisper_indices.add(chosen_idx)
+
+            # Send proactive private whisper from AI to the Human Player
+            msg = game_state.add_message(
+                sender_ai["id"],
+                chosen_item["content"],
+                chat_type="private",
+                recipient_id=human_cid,
+                is_undercover=False
+            )
+            chat_key = game_state.get_private_chat_key(sender_ai["id"], human_cid)
+            await broadcast({
+                "type": "new_private_message",
+                "chat_key": chat_key,
+                "message": msg,
+                "recipient_id": human_cid,
+                "is_undercover": False
+            })
+            last_human_proactive_whisper_time = now
+            logger.info(f"AI {sender_ai['name']} proactively whispered to human player {human_cid}")
+        except Exception as e:
+            logger.error(f"Error in autonomous_human_whisper_loop: {e}")
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Start background mingling task and undercover AI whisper task
+    # Start background mingling task, undercover AI whisper task, and proactive human whisper task
     mingle_task = asyncio.create_task(autonomous_mingling_loop())
     undercover_task = asyncio.create_task(autonomous_undercover_loop())
+    human_whisper_task = asyncio.create_task(autonomous_human_whisper_loop())
     yield
     mingle_task.cancel()
     undercover_task.cancel()
+    human_whisper_task.cancel()
 
 app = FastAPI(title="A Knight of Murder", lifespan=lifespan)
 
@@ -687,6 +892,9 @@ async def join_room(payload: Dict[str, Any] = Body(...)):
 
     if not player_id or not character_id:
         raise HTTPException(status_code=400, detail="Missing player_id or character_id")
+
+    if character_id not in game_state.characters:
+        raise HTTPException(status_code=400, detail=f"Invalid character ID '{character_id}'")
 
     success = game_state.register_human_player(player_id, player_name, character_id)
     if not success:
@@ -919,6 +1127,19 @@ async def process_incoming_message(chat_type: str, sender_id: str, content: str,
         mentioned_ai = find_mentioned_character(content, active_chars, sender_id=sender_id)
         if mentioned_ai and not (mentioned_ai.get("is_victim") and game_state.stage >= 3):
             asyncio.create_task(generate_ai_great_hall_reply(mentioned_ai, sender_id, content))
+        else:
+            # If a human player spoke publicly, but didn't tag any specific AI,
+            # an active AI noble/servant will autonomously react so the human is never ignored!
+            sender_char = game_state.characters.get(sender_id)
+            if sender_char and sender_char.get("is_human"):
+                valid_ais = [
+                    c for c in active_chars
+                    if not c.get("is_human") and not (c.get("is_victim") and game_state.stage >= 3)
+                ]
+                if valid_ais:
+                    import random
+                    responding_ai = random.choice(valid_ais)
+                    asyncio.create_task(generate_ai_great_hall_reply(responding_ai, sender_id, content, is_general_speech=True))
         return msg
 
     elif chat_type == "private" and recipient_id:
@@ -946,7 +1167,7 @@ async def process_incoming_message(chat_type: str, sender_id: str, content: str,
 
 @app.post("/api/message")
 async def send_message_http_endpoint(payload: Dict[str, Any] = Body(...)):
-    chat_type = payload.get("type", "public")
+    chat_type = payload.get("type") or payload.get("chat_type") or "public"
     content = payload.get("content", "").strip()
     sender_id = payload.get("sender_id")
     recipient_id = payload.get("recipient_id")
@@ -985,9 +1206,12 @@ async def websocket_endpoint(websocket: WebSocket, player_id: str):
         logger.error(f"WebSocket error: {e}")
         connected_websockets.pop(player_id, None)
 
-async def generate_ai_great_hall_reply(ai_char: Dict[str, Any], sender_cid: str, user_content: str):
+async def generate_ai_great_hall_reply(ai_char: Dict[str, Any], sender_cid: str, user_content: str, is_general_speech: bool = False):
     sender_char = game_state.characters.get(sender_cid)
     sender_name = sender_char["name"] if sender_char else sender_cid
+
+    # Short delay to simulate natural human-like pacing
+    await asyncio.sleep(2.0)
 
     sys_prompt = build_character_system_prompt(
         ai_char,
@@ -1001,10 +1225,16 @@ async def generate_ai_great_hall_reply(ai_char: Dict[str, Any], sender_cid: str,
         {"role": "model" if m["sender_id"] == ai_char["id"] else "user", "content": m["content"] if m["sender_id"] == ai_char["id"] else f"{m['sender_name']}: {m['content']}"}
         for m in game_state.great_hall_messages[-16:]
     ]
-    mention_instruction = (
-        f"You are {ai_char['name']}. {sender_name} just addressed you directly in the Great Hall with: \"{user_content}\". "
-        "Reply directly to them aloud before the banquet in your authentic medieval voice fitting your rank. Deliver 2 to 3 complete sentences."
-    )
+    if is_general_speech:
+        mention_instruction = (
+            f"You are {ai_char['name']}. {sender_name} just spoke aloud to everyone in the Great Hall: \"{user_content}\". "
+            "React directly to what they said in your authentic medieval voice fitting your rank and secret objectives. Address them politely or challenge them as your station warrants. Deliver 2 to 3 complete sentences."
+        )
+    else:
+        mention_instruction = (
+            f"You are {ai_char['name']}. {sender_name} just addressed you directly in the Great Hall with: \"{user_content}\". "
+            "Reply directly to them aloud before the banquet in your authentic medieval voice fitting your rank. Deliver 2 to 3 complete sentences."
+        )
     history.append({"role": "user", "content": mention_instruction})
 
     reply = await ai_engine.generate_response(sys_prompt, history, max_tokens=500)
