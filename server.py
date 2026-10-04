@@ -906,13 +906,22 @@ async def update_settings(payload: Dict[str, Any] = Body(...)):
 
 @app.post("/api/reset")
 async def reset_game():
+    global last_drama_time, last_human_proactive_whisper_time
+    last_drama_time = 0
+    last_human_proactive_whisper_time = 0
     game_state.reset()
     await broadcast({
         "type": "game_reset",
         "stage": game_state.stage,
-        "characters": game_state.get_active_characters()
+        "characters": game_state.get_active_characters(),
+        "human_players": game_state.human_players
     })
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "stage": game_state.stage,
+        "characters": game_state.get_active_characters(),
+        "human_players": game_state.human_players
+    }
 
 @app.post("/api/join")
 async def join_room(payload: Dict[str, Any] = Body(...)):

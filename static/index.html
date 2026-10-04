@@ -217,6 +217,14 @@
                 title="Khóa API & Cài Đặt">
           ⚙️
         </button>
+
+        <!-- Start Afresh / Reset Game Button -->
+        <button onclick="confirmResetGame()" id="header-reset-btn"
+                class="p-2 md:px-2.5 md:py-1.5 rounded-lg bg-red-950/80 hover:bg-red-900 text-red-300 hover:text-red-100 border border-red-800/80 hover:border-red-500 text-xs md:text-sm font-cinzel font-semibold transition flex items-center gap-1 shadow" 
+                title="Bắt đầu lại lượt chơi mới (Xóa tiến trình ván hiện tại)">
+          <span class="text-sm">🔄</span>
+          <span class="hidden xl:inline text-xs">Lượt Mới</span>
+        </button>
       </div>
     </div>
 
@@ -344,10 +352,15 @@
               <option value="8">8 Khách Mời (Các nghi phạm &amp; Manh mối cốt lõi)</option>
             </select>
           </div>
-          <div class="md:col-span-1 flex items-end">
+          <div class="md:col-span-1 flex items-end gap-2">
             <button id="start-banquet-btn" onclick="startBanquet()" 
-                    class="w-full py-2.5 px-4 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 text-stone-950 font-cinzel font-black rounded-lg shadow-xl transition tracking-wider flex items-center justify-center gap-2 gold-glow">
+                    class="flex-1 py-2.5 px-3 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 text-stone-950 font-cinzel font-black rounded-lg shadow-xl transition tracking-wider flex items-center justify-center gap-1.5 gold-glow text-xs md:text-sm">
               <span class="text-base">🍷</span> Khai Tiệc Dạ Yến
+            </button>
+            <button type="button" onclick="confirmResetGame()" 
+                    class="py-2.5 px-3 bg-stone-900 hover:bg-red-950 text-stone-400 hover:text-red-300 border border-stone-700 hover:border-red-700 font-cinzel font-semibold rounded-lg transition shadow text-xs flex items-center justify-center gap-1"
+                    title="Làm mới phòng chơi và đưa game về Giai đoạn 1">
+              <span>🔄</span> Làm Mới
             </button>
           </div>
         </div>
@@ -388,6 +401,9 @@
           </button>
           <button id="vote-nav-btn" onclick="switchTab('tab-vote')" class="hidden px-3 py-1.5 bg-red-900/90 hover:bg-red-800 text-red-100 rounded-lg text-xs font-cinzel font-bold border border-red-500/50 shadow transition flex items-center gap-1.5 crimson-glow">
             <span>⚖️</span> Tố Cáo Kẻ Thủ Ác!
+          </button>
+          <button onclick="confirmResetGame()" class="px-3 py-1.5 bg-stone-900/90 hover:bg-red-950 text-stone-300 hover:text-red-200 rounded-lg text-xs font-cinzel font-semibold border border-stone-700 hover:border-red-600 shadow transition flex items-center gap-1.5" title="Khởi tạo lại ván chơi mới từ Giai đoạn 1">
+            <span>🔄</span> Lượt Mới
           </button>
         </div>
       </div>
@@ -897,6 +913,14 @@
           Lưu Cài Đặt
         </button>
       </form>
+
+      <div class="mt-5 pt-4 border-t border-stone-800 space-y-2">
+        <label class="block text-xs uppercase text-red-400 font-cinzel font-bold">Khu Vực Quản Trò (Game Master):</label>
+        <button type="button" onclick="confirmResetGame()" class="w-full py-2.5 bg-red-950/90 hover:bg-red-900 text-red-200 border border-red-700/80 rounded-lg text-xs font-cinzel font-bold transition flex items-center justify-center gap-1.5 shadow">
+          <span>🔄</span> Bắt Đầu Lại Lượt Chơi Mới (Start Afresh)
+        </button>
+        <p class="text-[11px] text-stone-500 font-sans">Đưa toàn bộ tiến trình về Giai đoạn 1, làm mới danh sách khách mời và xóa các tin nhắn của ván hiện tại.</p>
+      </div>
     </div>
   </div>
 
@@ -962,7 +986,10 @@
           </div>
         </div>
 
-        <div class="text-center pt-4">
+        <div class="text-center pt-4 flex flex-wrap items-center justify-center gap-3">
+          <button onclick="confirmResetGame()" class="px-6 py-2.5 bg-gradient-to-r from-red-800 to-red-700 hover:from-red-700 hover:to-red-600 text-amber-100 font-cinzel font-bold rounded-xl shadow-lg transition flex items-center gap-2 crimson-glow">
+            <span>🔄</span> Bắt Đầu Lượt Chơi Mới
+          </button>
           <button onclick="closeModal('solution-modal')" class="px-6 py-2.5 bg-[#4a341c] hover:bg-[#332311] text-amber-100 font-cinzel font-bold rounded-xl shadow-lg transition">
             Đóng Bản Án &amp; Trở Lại Lâu Đài
           </button>
@@ -1156,8 +1183,8 @@
           return found;
         }
       }
-      // If still none, assign first available non-victim character
-      if (appState.allCharacters && appState.allCharacters.length > 0) {
+      // If still none, only auto-assign if game has already started
+      if (appState.isGameStarted && appState.allCharacters && appState.allCharacters.length > 0) {
         const available = appState.allCharacters.find(c => !c.is_victim && !c.is_human) || appState.allCharacters.find(c => !c.is_victim);
         if (available) {
           appState.characterId = available.id;
@@ -1168,7 +1195,7 @@
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
               player_id: appState.playerId,
-              player_name: appState.playerName || 'Noble Sleuth',
+              player_name: appState.playerName || 'Thám Tử Hoàng Gia',
               character_id: available.id
             })
           }).catch(err => console.warn('Auto join failed:', err));
@@ -1179,7 +1206,7 @@
     }
 
     function updatePersonaUI() {
-      const char = ensureMyCharacter();
+      const char = appState.myCharacter;
       const pill = document.getElementById('header-persona-pill');
       const avatarEl = document.getElementById('header-persona-avatar');
       const nameEl = document.getElementById('header-persona-name');
@@ -1190,6 +1217,11 @@
         }
         if (avatarEl) avatarEl.innerText = char.avatar_icon || '👤';
         if (nameEl) nameEl.innerText = char.name;
+      } else {
+        if (pill) {
+          pill.classList.add('hidden');
+          pill.classList.remove('flex');
+        }
       }
     }
 
@@ -1389,6 +1421,9 @@
           appState.greatHallMessages.push(data.message);
           renderGreatHallMessages();
         }
+      } else if (data.type === 'game_reset') {
+        soundEngine.playFanfare();
+        handleGameResetSync(data);
       }
 
       // Auto-refresh chatlog modal if it is currently open
@@ -1450,6 +1485,107 @@
       } catch (e) {
         console.error('Error requesting hint:', e);
       }
+    }
+
+    async function confirmResetGame() {
+      const confirmed = confirm(
+        "⚔️ CẢNH BÁO TÁI THIẾT HOÀNG GIA ⚔️\n\n" +
+        "Bạn có chắc chắn muốn BẮT ĐẦU LẠI LƯỢT CHƠI MỚI (Start Afresh)?\n\n" +
+        "• Toàn bộ tiến trình điều tra sẽ quay về Giai đoạn 1 (Lễ đón tiếp).\n" +
+        "• Lịch sử trò chuyện Đại Sảnh và mật đàm riêng sẽ được xóa sạch.\n" +
+        "• Số phiếu bình chọn, tang vật và danh hiệu sẽ được đặt lại.\n" +
+        "• Tất cả thám tử sẽ trở về sảnh chờ để chọn lại nhân vật."
+      );
+      if (!confirmed) return;
+
+      try {
+        const res = await fetch('/api/reset', { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          soundEngine.playFanfare();
+          handleGameResetSync({
+            stage: data.stage || 1,
+            characters: data.characters || [],
+            human_players: data.human_players || {}
+          });
+          await loadGameData();
+        } else {
+          alert('Không thể bắt đầu lại: ' + (data.detail || 'Lỗi bất định.'));
+        }
+      } catch (err) {
+        console.error('Reset error:', err);
+        alert('Lỗi kết nối khi gửi yêu cầu bắt đầu lại.');
+      }
+    }
+
+    function handleGameResetSync(data) {
+      // 1. Xóa thông tin nhân vật của người chơi này & xóa bộ nhớ lưu trữ trình duyệt
+      localStorage.removeItem('knight_char_id');
+      appState.characterId = null;
+      appState.myCharacter = null;
+      appState.myGold = 0;
+      appState.stage = data.stage || 1;
+      appState.isGameStarted = false;
+      appState.greatHallMessages = [];
+      appState.privateChats = {};
+      appState.revealedExhibits = [];
+      if (data.characters) appState.allCharacters = data.characters;
+      if (data.human_players) appState.humanPlayers = data.human_players;
+
+      // 2. Đóng tất cả các hộp thoại đang mở
+      const modalIds = ['network-modal', 'bribe-modal', 'chatlog-modal', 'settings-modal', 'blackout-modal', 'solution-modal'];
+      modalIds.forEach(id => {
+        const m = document.getElementById(id);
+        if (m) m.classList.add('hidden');
+      });
+
+      // 3. Chuyển màn hình từ game-view về lobby-view
+      const gameView = document.getElementById('game-view');
+      const lobbyView = document.getElementById('lobby-view');
+      if (gameView) gameView.classList.add('hidden');
+      if (lobbyView) lobbyView.classList.remove('hidden');
+
+      // 4. Ẩn huy hiệu vàng và nút sẵn sàng ở thanh tiêu đề
+      const goldPill = document.getElementById('header-gold-pill');
+      if (goldPill) {
+        goldPill.classList.add('hidden');
+        goldPill.classList.remove('flex');
+      }
+      const readyBtn = document.getElementById('ready-stage-btn');
+      if (readyBtn) {
+        readyBtn.classList.add('hidden');
+        readyBtn.classList.remove('flex');
+        readyBtn.innerText = "Sẵn Sàng Sang Màn";
+        readyBtn.classList.remove('bg-emerald-700', 'border-emerald-500');
+        readyBtn.classList.add('bg-amber-700', 'border-amber-500');
+      }
+
+      // 5. Đặt lại form cáo trạng whodunnit
+      const voteBtn = document.getElementById('vote-submit-btn');
+      if (voteBtn) {
+        voteBtn.innerText = 'Gửi Bản Cáo Trạng Hoàng Gia';
+        voteBtn.disabled = false;
+      }
+      const voteForm = document.getElementById('whodunnit-form');
+      if (voteForm) {
+        voteForm.reset();
+      }
+
+      // 6. Đưa tab về Đại Sảnh
+      switchTab('tab-great-hall');
+
+      // 7. Cập nhật Persona UI & vàng
+      updatePersonaUI();
+      updateHeaderGold();
+
+      // 8. Vẽ lại danh sách nhân vật và giao diện sảnh
+      renderCharacterSelectionGrid();
+      renderGreatHallMessages();
+      renderPrivateConversationsList();
+      renderVoteFormOptions();
+
+      // 9. Thông báo cho người chơi
+      showMedievalToast("Lượt Chơi Đã Được Làm Mới", "🔄", "Quản trò đã bắt đầu lại một ván chơi hoàn toàn mới! Mời quý vị lựa chọn lại nhân vật để sẵn sàng khai tiệc.");
     }
 
     // --- UI Renderers ---
