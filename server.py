@@ -39,8 +39,8 @@ def get_lan_ip() -> str:
 game_state = GameStateManager()
 ai_engine = AIEngine(api_key=game_state.api_key, provider=game_state.llm_provider)
 
-# Active WebSocket connections: player_id -> WebSocket
-connected_websockets: Dict[str, WebSocket] = {}
+# Active WebSocket connections: player_id -> Set[WebSocket]
+connected_websockets: Dict[str, set] = {}
 
 CHARACTER_ALIASES = {
     "queen_genevieve": ["queen genevieve", "genevieve", "queen", "her majesty", "the queen", "nữ hoàng genevieve", "nữ hoàng", "hoàng hậu", "bệ hạ"],
@@ -100,13 +100,17 @@ async def broadcast(message_data: Dict[str, Any]):
     """Broadcast JSON message to all connected clients."""
     payload = json.dumps(message_data)
     disconnected = []
-    for pid, ws in connected_websockets.items():
-        try:
-            await ws.send_text(payload)
-        except Exception:
-            disconnected.append(pid)
-    for pid in disconnected:
-        connected_websockets.pop(pid, None)
+    for pid, sockets in list(connected_websockets.items()):
+        for ws in list(sockets):
+            try:
+                await ws.send_text(payload)
+            except Exception:
+                disconnected.append((pid, ws))
+    for pid, ws in disconnected:
+        if pid in connected_websockets:
+            connected_websockets[pid].discard(ws)
+            if not connected_websockets[pid]:
+                connected_websockets.pop(pid, None)
 
 DRAMA_TOPICS_STAGE_1_2 = [
     {
@@ -889,6 +893,49 @@ async def get_player_state(player_id: str):
         "human_players": game_state.human_players
     }
 
+@app.get("/api/sync/{player_id}")
+async def sync_game_state(player_id: str, hall_count: int = 0):
+    pdata = game_state.human_players.get(player_id)
+    cid = pdata.get("character_id") if pdata else None
+
+    total_hall = len(game_state.great_hall_messages)
+    if hall_count < total_hall:
+        new_hall = game_state.great_hall_messages[hall_count:]
+        all_hall = None
+    elif hall_count > total_hall:
+        new_hall = []
+        all_hall = game_state.great_hall_messages
+    else:
+        new_hall = []
+        all_hall = None
+
+    player_privates = {}
+    if cid:
+        for key, msgs in game_state.private_chats.items():
+            if cid in key.split("__"):
+                parts = key.split("__")
+                other_id = parts[1] if parts[0] == cid else parts[0]
+                player_privates[other_id] = msgs
+                player_privates[key] = msgs
+
+    my_gold = None
+    if cid and cid in game_state.characters:
+        my_gold = game_state.characters[cid].get("current_gold")
+
+    return {
+        "status": "ok",
+        "stage": game_state.stage,
+        "is_game_started": game_state.is_game_started,
+        "total_hall": total_hall,
+        "new_hall_messages": new_hall,
+        "all_hall_messages": all_hall,
+        "private_chats": player_privates,
+        "human_players": game_state.human_players,
+        "my_gold": my_gold,
+        "revealed_exhibits": list(game_state.revealed_exhibits),
+        "awards": game_state.awards
+    }
+
 @app.post("/api/settings")
 async def update_settings(payload: Dict[str, Any] = Body(...)):
     api_key = payload.get("api_key", "").strip()
@@ -1293,7 +1340,7 @@ async def get_herald_hint_endpoint(payload: Dict[str, Any] = Body(...)):
 @app.websocket("/ws/{player_id}")
 async def websocket_endpoint(websocket: WebSocket, player_id: str):
     await websocket.accept()
-    connected_websockets[player_id] = websocket
+    connected_websockets.setdefault(player_id, set()).add(websocket)
     logger.info(f"WebSocket connected for player: {player_id}")
 
     try:
@@ -1302,7 +1349,11 @@ async def websocket_endpoint(websocket: WebSocket, player_id: str):
             data = json.loads(raw_text)
             action = data.get("action")
 
-            if action == "send_message":
+            if action == "ping":
+                await websocket.send_text(json.dumps({"type": "pong", "time": time.time()}))
+                continue
+
+            elif action == "send_message":
                 chat_type = data.get("type", "public")
                 content = data.get("content", "").strip()
                 sender_id = data.get("sender_id")
@@ -1312,11 +1363,15 @@ async def websocket_endpoint(websocket: WebSocket, player_id: str):
                 await get_herald_hint_endpoint({"player_id": player_id})
 
     except WebSocketDisconnect:
-        connected_websockets.pop(player_id, None)
-        logger.info(f"WebSocket disconnected: {player_id}")
+        pass
     except Exception as e:
-        logger.error(f"WebSocket error: {e}")
-        connected_websockets.pop(player_id, None)
+        logger.error(f"WebSocket error for {player_id}: {e}")
+    finally:
+        if player_id in connected_websockets:
+            connected_websockets[player_id].discard(websocket)
+            if not connected_websockets[player_id]:
+                connected_websockets.pop(player_id, None)
+        logger.info(f"WebSocket disconnected for player: {player_id}")
 
 async def generate_ai_great_hall_reply(ai_char: Dict[str, Any], sender_cid: str, user_content: str, is_general_speech: bool = False):
     sender_char = game_state.characters.get(sender_cid)

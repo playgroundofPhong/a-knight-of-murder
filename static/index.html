@@ -1375,38 +1375,201 @@
       }
     }
 
+    let wsPingInterval = null;
+    let wsReconnectTimeout = null;
+
     function connectWebSocket() {
+      if (wsReconnectTimeout) {
+        clearTimeout(wsReconnectTimeout);
+        wsReconnectTimeout = null;
+      }
+      if (appState.ws && (appState.ws.readyState === WebSocket.OPEN || appState.ws.readyState === WebSocket.CONNECTING)) {
+        return;
+      }
+
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const wsUrl = `${protocol}//${window.location.host}/ws/${appState.playerId}`;
-      appState.ws = new WebSocket(wsUrl);
+      try {
+        appState.ws = new WebSocket(wsUrl);
+      } catch (e) {
+        console.warn('WebSocket init error:', e);
+        scheduleWsReconnect();
+        return;
+      }
 
-      appState.ws.onopen = () => console.log('WebSocket connected.');
+      appState.ws.onopen = () => {
+        console.log('WebSocket connected.');
+        startWsHeartbeat();
+        pollSync();
+      };
+
       appState.ws.onmessage = (event) => {
-        const msg = JSON.parse(event.data);
-        handleWebSocketMessage(msg);
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.type === 'pong') return;
+          handleWebSocketMessage(msg);
+        } catch (err) {
+          console.error('WS message parse error:', err);
+        }
       };
+
       appState.ws.onclose = () => {
-        console.log('WebSocket closed. Reconnecting in 3s...');
-        setTimeout(() => {
-          connectWebSocket();
-          loadGameData();
-          restorePlayerState();
-        }, 3000);
+        console.log('WebSocket closed. Reconnecting in 2s...');
+        stopWsHeartbeat();
+        scheduleWsReconnect();
       };
+
+      appState.ws.onerror = () => {
+        try { appState.ws.close(); } catch (e) {}
+      };
+    }
+
+    function startWsHeartbeat() {
+      stopWsHeartbeat();
+      wsPingInterval = setInterval(() => {
+        if (appState.ws && appState.ws.readyState === WebSocket.OPEN) {
+          appState.ws.send(JSON.stringify({ action: 'ping' }));
+        } else if (!appState.ws || appState.ws.readyState === WebSocket.CLOSED) {
+          connectWebSocket();
+        }
+      }, 15000);
+    }
+
+    function stopWsHeartbeat() {
+      if (wsPingInterval) {
+        clearInterval(wsPingInterval);
+        wsPingInterval = null;
+      }
+    }
+
+    function scheduleWsReconnect() {
+      if (wsReconnectTimeout) return;
+      wsReconnectTimeout = setTimeout(() => {
+        wsReconnectTimeout = null;
+        connectWebSocket();
+        pollSync();
+      }, 2000);
+    }
+
+    function checkConnectionAndResync() {
+      if (!appState.ws || appState.ws.readyState !== WebSocket.OPEN) {
+        connectWebSocket();
+      }
+      pollSync();
     }
 
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) {
-        loadGameData();
-        restorePlayerState();
+        checkConnectionAndResync();
       }
     });
+    window.addEventListener('focus', checkConnectionAndResync);
+    window.addEventListener('online', checkConnectionAndResync);
+
+    // Continuous smart sync polling keeps all devices 100% updated without reload
+    let isSyncing = false;
+    async function pollSync() {
+      if (isSyncing || !appState.playerId) return;
+      isSyncing = true;
+      try {
+        const hallCount = (appState.greatHallMessages || []).length;
+        const res = await fetch(`/api/sync/${appState.playerId}?hall_count=${hallCount}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.status !== 'ok') return;
+
+        // 1. Sync Great Hall Messages
+        if (data.all_hall_messages) {
+          appState.greatHallMessages = data.all_hall_messages;
+          renderGreatHallMessages();
+        } else if (data.new_hall_messages && data.new_hall_messages.length > 0) {
+          let hasNew = false;
+          let hasBlackout = false;
+          data.new_hall_messages.forEach(m => {
+            if (!appState.greatHallMessages.some(existing => existing.id === m.id)) {
+              appState.greatHallMessages.push(m);
+              hasNew = true;
+              if (m.is_blackout) hasBlackout = true;
+            }
+          });
+          if (hasNew) {
+            renderGreatHallMessages();
+            if (hasBlackout) triggerBlackoutAnimation();
+            const lastM = data.new_hall_messages[data.new_hall_messages.length - 1];
+            if (appState.myCharacter && lastM.sender_id !== appState.myCharacter.id) {
+              soundEngine.playParchmentOpen();
+            }
+          }
+        }
+
+        // 2. Sync Private Chats
+        if (data.private_chats) {
+          let hasNewPrivate = false;
+          for (const key in data.private_chats) {
+            const serverMsgs = data.private_chats[key] || [];
+            const localMsgs = appState.privateChats[key] || [];
+            if (serverMsgs.length > localMsgs.length) {
+              hasNewPrivate = true;
+              appState.privateChats[key] = serverMsgs;
+            }
+          }
+          if (hasNewPrivate) {
+            renderPrivateMessages();
+            renderPrivateConversationsList();
+            soundEngine.playCoinClink();
+          }
+        }
+
+        // 3. Stage advance detection
+        if (data.stage && data.stage !== appState.stage) {
+          appState.stage = data.stage;
+          if (data.revealed_exhibits) appState.revealedExhibits = data.revealed_exhibits;
+          updateStageUI();
+          renderExhibitsGrid();
+          renderDossierView();
+          soundEngine.playFanfare();
+          if (data.stage === 5 && data.awards) {
+            showSolutionAwards(data.awards);
+          }
+        }
+
+        // 4. Game started detection
+        if (data.is_game_started && !appState.isGameStarted) {
+          appState.isGameStarted = true;
+          showGameDashboard();
+          switchTab('tab-great-hall');
+          soundEngine.playFanfare();
+        }
+
+        // 5. Human players updates
+        if (data.human_players && JSON.stringify(data.human_players) !== JSON.stringify(appState.humanPlayers)) {
+          appState.humanPlayers = data.human_players;
+          renderCharacterSelectionGrid();
+          renderGuestsDirectory();
+        }
+
+        // 6. Gold sync
+        if (data.my_gold !== null && data.my_gold !== undefined && data.my_gold !== appState.myGold) {
+          appState.myGold = data.my_gold;
+          updateHeaderGold();
+        }
+      } catch (err) {
+        // Silently ignore transient network blip
+      } finally {
+        isSyncing = false;
+      }
+    }
+
+    // Auto-sync polling every 2.5 seconds
+    setInterval(pollSync, 2500);
 
     function handleWebSocketMessage(data) {
       console.log('WS event:', data.type);
       if (data.type === 'new_message') {
-        appState.greatHallMessages.push(data.message);
-        renderGreatHallMessages();
+        if (!appState.greatHallMessages.some(m => m.id === data.message.id)) {
+          appState.greatHallMessages.push(data.message);
+          renderGreatHallMessages();
+        }
         if (data.message.is_blackout) {
           triggerBlackoutAnimation();
         }
@@ -2222,49 +2385,30 @@
       // Clear input immediately so user gets instant feedback
       input.value = '';
 
-      const payload = {
-        action: 'send_message',
-        type: 'public',
-        sender_id: char.id,
-        content: content
-      };
-
-      let sent = false;
-      // 1. Try WebSocket if OPEN
-      if (appState.ws && appState.ws.readyState === WebSocket.OPEN) {
-        try {
-          appState.ws.send(JSON.stringify(payload));
-          sent = true;
-        } catch (wsErr) {
-          console.warn('WS send failed, switching to HTTP fallback:', wsErr);
-        }
-      }
-
-      // 2. HTTP Fallback if WS not open or failed
-      if (!sent) {
-        try {
-          const res = await fetch('/api/message', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              type: 'public',
-              sender_id: char.id,
-              content: content
-            })
-          });
-          const resData = await res.json();
-          if (resData.status === 'ok') {
-            sent = true;
-            if (!appState.ws || appState.ws.readyState !== WebSocket.OPEN) {
-              appState.greatHallMessages.push(resData.message);
-              renderGreatHallMessages();
-            }
+      try {
+        const res = await fetch('/api/message', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            type: 'public',
+            sender_id: char.id,
+            content: content
+          })
+        });
+        const resData = await res.json();
+        if (resData.status === 'ok' && resData.message) {
+          if (!appState.greatHallMessages.some(m => m.id === resData.message.id)) {
+            appState.greatHallMessages.push(resData.message);
+            renderGreatHallMessages();
           }
-        } catch (httpErr) {
-          console.error('HTTP send error:', httpErr);
+        } else {
           input.value = content;
-          alert('Không thể gửi lời thoại. Vui lòng thử lại!');
+          alert('Không thể gửi lời thoại: ' + (resData.detail || 'Lỗi gửi tin.'));
         }
+      } catch (httpErr) {
+        console.error('HTTP send error:', httpErr);
+        input.value = content;
+        alert('Không thể gửi lời thoại. Vui lòng kiểm tra kết nối mạng và thử lại!');
       }
     }
 
@@ -2791,24 +2935,7 @@
       const char = ensureMyCharacter();
       if (!char || !appState.activePrivateRecipientId || !content) return;
 
-      const payload = {
-        action: 'send_message',
-        type: 'private',
-        sender_id: char.id,
-        recipient_id: appState.activePrivateRecipientId,
-        content: content
-      };
-
-      let sent = false;
-      if (appState.ws && appState.ws.readyState === WebSocket.OPEN) {
-        try {
-          appState.ws.send(JSON.stringify(payload));
-          sent = true;
-        } catch (e) {}
-      }
-
-      if (!sent) {
-        try {
+      try {
           const res = await fetch('/api/message', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -2828,7 +2955,6 @@
             renderPrivateConversationsList();
           }
         } catch (e) {}
-      }
     }
 
     async function sendPrivateMessage(e) {
