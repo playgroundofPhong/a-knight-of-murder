@@ -1,134 +1,265 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Knight of Murder - Medieval Mystery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>A Knight of Murder - Đại Tiệc Án Mạng Lâu Đài Fernwood</title>
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: MedievalSharp & Cinzel -->
+  
+  <!-- Google Fonts: MedievalSharp, Cinzel & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=MedievalSharp&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=MedievalSharp&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
+    :root {
+      --bg-dark: #0f0d0b;
+      --card-bg: #1a1512;
+      --gold: #d4af37;
+      --gold-light: #f5d77f;
+      --gold-dark: #8c6d1f;
+      --crimson: #8b1e1e;
+      --border-dark: #3a2c20;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #12100e;
-      color: #e6dfd5;
-      background-image: radial-gradient(#261d17 1px, transparent 1px), radial-gradient(#261d17 1px, #12100e 1px);
-      background-size: 40px 40px;
-      background-position: 0 0, 20px 20px;
+      background-color: var(--bg-dark);
+      color: #eae3d9;
+      background-image: 
+        radial-gradient(#261d17 1px, transparent 1px), 
+        radial-gradient(#201712 1px, var(--bg-dark) 1px);
+      background-size: 36px 36px;
+      background-position: 0 0, 18px 18px;
+      overflow-x: hidden;
     }
+
     .font-medieval {
       font-family: 'MedievalSharp', cursive;
     }
+
     .font-cinzel {
       font-family: 'Cinzel', serif;
     }
+
+    /* Gothic & Medieval Cards */
     .parchment-card {
-      background: linear-gradient(135deg, #2a221b 0%, #1c1612 100%);
-      border: 1px solid #4a3b2c;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
+      background: linear-gradient(145deg, #221b16 0%, #15110e 100%);
+      border: 1px solid #4a3828;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(212, 175, 55, 0.1);
     }
+
+    .parchment-card-gold {
+      background: linear-gradient(145deg, #261e18 0%, #17120e 100%);
+      border: 1px solid #785a2b;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.15);
+    }
+
     .parchment-inner {
       background: #dfd3be;
-      color: #2b1f14;
-      background-image: radial-gradient(#d3c4a8 1px, transparent 1px);
-      background-size: 20px 20px;
+      color: #26190e;
+      background-image: radial-gradient(#d3c3a4 1px, transparent 1px);
+      background-size: 18px 18px;
     }
+
     .gold-glow {
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.35);
     }
-    .gold-text {
-      color: #e5c158;
+
+    .crimson-glow {
+      box-shadow: 0 0 20px rgba(180, 40, 40, 0.4);
     }
-    .gold-border {
-      border-color: #d4af37;
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fff2c6 0%, #e5c158 50%, #997321 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
+
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #1a1511;
+      background: #140f0c;
     }
     ::-webkit-scrollbar-thumb {
-      background: #4a3b2c;
+      background: #4a3623;
       border-radius: 3px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: #735c44;
+      background: #7a5834;
     }
-    /* Blackout overlay animation */
+
+    /* Animations */
     @keyframes lightning {
       0%, 100% { opacity: 0; }
-      10%, 12% { opacity: 0.9; }
+      10%, 12% { opacity: 0.95; }
       14%, 20% { opacity: 0; }
-      22%, 25% { opacity: 0.8; }
+      22%, 25% { opacity: 0.85; }
       30% { opacity: 0; }
     }
     .lightning-flash {
-      animation: lightning 2s ease-out;
+      animation: lightning 2.2s ease-out;
+    }
+
+    @keyframes pulse-subtle {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.03); opacity: 0.9; }
+    }
+    .animate-pulse-subtle {
+      animation: pulse-subtle 3s infinite ease-in-out;
+    }
+
+    /* Prevent iOS auto zoom on input focus */
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+    @media (min-width: 768px) {
+      input, select, textarea {
+        font-size: 14px !important;
+      }
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-amber-800 selection:text-amber-100">
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-900 selection:text-amber-100">
 
   <!-- ================= TOP HEADER ================= -->
-  <header class="bg-[#1a1410] border-b border-[#3d2e20] sticky top-0 z-40 px-4 py-3 shadow-xl">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <span class="text-3xl">⚔️</span>
-        <div>
-          <h1 class="text-lg md:text-xl font-cinzel font-bold text-[#e5c158] tracking-wider flex items-center gap-2">
-            A KNIGHT OF MURDER
-            <span id="header-stage-badge" class="hidden md:inline-block text-xs font-normal font-sans bg-[#3b2a1a] text-amber-200 px-2 py-0.5 rounded border border-amber-900/50">Stage 1</span>
-          </h1>
-          <p class="text-xs text-stone-400 font-serif italic hidden sm:block">Fernwood Manor • Medieval Mystery Party</p>
-        </div>
+  <header class="bg-[#17120e]/95 backdrop-blur-md border-b border-[#3d2e20] sticky top-0 z-40 px-3 md:px-6 py-2.5 shadow-2xl">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+      
+      <!-- Brand & Castle Seal -->
+      <div class="flex items-center space-x-2.5 md:space-x-3.5 shrink-0">
+        <a href="/" class="flex items-center gap-2 group">
+          <span class="text-2xl md:text-3xl filter drop-shadow group-hover:scale-110 transition duration-200">⚔️</span>
+          <div>
+            <h1 class="text-base md:text-lg font-cinzel font-black tracking-wider flex items-center gap-2">
+              <span class="gold-gradient-text">A KNIGHT OF MURDER</span>
+              <span id="header-stage-badge" class="text-[10px] md:text-xs font-semibold font-cinzel bg-amber-950/90 text-amber-300 px-2 py-0.5 rounded border border-amber-600/60 shadow-sm">
+                Stage 1
+              </span>
+            </h1>
+            <p class="text-[10px] md:text-xs text-stone-400 font-serif italic hidden sm:block">
+              Fernwood Manor • Vụ Án Mạng Lâu Đài Trung Cổ
+            </p>
+          </div>
+        </a>
       </div>
 
-      <!-- In-Game Controls & Status -->
-      <div class="flex items-center space-x-2 md:space-x-4">
+      <!-- Header Controls & Actions -->
+      <div class="flex items-center space-x-1.5 md:space-x-3">
+        
         <!-- Player Persona Indicator -->
-        <div id="header-persona-pill" class="hidden items-center bg-stone-900/90 border border-amber-600/60 rounded-full px-3 py-1 shadow text-xs font-cinzel text-amber-200 gap-1.5" title="Nhân vật của bạn">
+        <div id="header-persona-pill" class="hidden items-center bg-stone-900/90 border border-amber-600/60 rounded-full px-2.5 py-1 shadow text-xs font-cinzel text-amber-200 gap-1.5 cursor-pointer hover:border-amber-400 transition" 
+             onclick="switchTab('tab-dossier')" title="Bấm để xem Hồ Sơ & Bí Mật nhân vật của bạn">
           <span id="header-persona-avatar" class="text-base select-none">👤</span>
-          <span id="header-persona-name" class="font-bold truncate max-w-[110px] sm:max-w-[180px]">Guest</span>
+          <span id="header-persona-name" class="font-bold truncate max-w-[85px] sm:max-w-[140px] md:max-w-[180px]">Guest</span>
         </div>
 
         <!-- Gold Counter (when in game) -->
-        <div id="header-gold-pill" class="hidden items-center bg-amber-950/70 border border-amber-600/50 rounded-full px-3 py-1 shadow-inner">
-          <span class="text-amber-400 mr-1.5 text-base">💰</span>
-          <span id="player-gold-display" class="font-bold text-amber-200 text-sm">12</span>
-          <span class="text-xs text-amber-400/80 ml-1 hidden sm:inline">Gold</span>
+        <div id="header-gold-pill" class="hidden items-center bg-amber-950/80 border border-amber-500/60 rounded-full px-2.5 py-1 shadow-inner cursor-pointer hover:border-amber-400 transition"
+             onclick="openModal('bribe-modal')" title="Bấm để mở kho vàng & gửi hối lộ">
+          <span class="text-amber-400 mr-1 text-sm md:text-base">💰</span>
+          <span id="player-gold-display" class="font-bold text-amber-200 text-xs md:text-sm">12</span>
+          <span class="text-[11px] text-amber-400/90 ml-1 hidden sm:inline font-cinzel">Vàng</span>
         </div>
 
         <!-- Stage Ready Button -->
-        <button id="ready-stage-btn" onclick="toggleReady()" class="hidden items-center gap-1.5 px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-lg border border-stone-600 text-xs md:text-sm font-cinzel font-semibold transition">
+        <button id="ready-stage-btn" onclick="toggleReady()" 
+                class="hidden items-center gap-1.5 px-2.5 md:px-3 py-1 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-lg border border-stone-600 text-xs md:text-sm font-cinzel font-semibold transition shadow">
           <span id="ready-status-icon">⚪</span>
-          <span id="ready-btn-text">Ready for Stage 2</span>
-          <span id="ready-count-badge" class="bg-amber-900/80 text-amber-200 text-xs px-1.5 py-0.2 rounded-full border border-amber-600/40">0/2</span>
+          <span id="ready-btn-text" class="hidden md:inline">Ready</span>
+          <span id="ready-count-badge" class="bg-amber-900/80 text-amber-200 text-[10px] md:text-xs px-1.5 py-0.2 rounded-full border border-amber-600/40">0/2</span>
+        </button>
+
+        <!-- Court Archives (Nhật Ký) Button -->
+        <button onclick="openChatlogModal()" id="header-chatlog-btn"
+                class="p-2 md:px-2.5 md:py-1.5 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-amber-300 border border-amber-900/60 hover:border-amber-600/60 text-xs md:text-sm font-cinzel font-semibold transition flex items-center gap-1 shadow" 
+                title="Xem Nhật Ký Lâu Đài & Bản Ghi Tòa Án">
+          <span class="text-sm">📜</span>
+          <span class="hidden lg:inline text-xs">Nhật Ký</span>
+        </button>
+
+        <!-- LAN / Online Share Link & QR Toggle -->
+        <button onclick="openModal('network-modal')" 
+                class="p-2 md:px-2.5 md:py-1.5 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-amber-300 border border-stone-700 hover:border-amber-600/60 text-xs md:text-sm font-cinzel transition flex items-center gap-1 shadow" 
+                title="Mời Bạn Bè & Mã QR">
+          <span class="text-sm">📱</span>
+          <span class="hidden lg:inline text-xs">Mời Bạn</span>
         </button>
 
         <!-- Audio Mute Toggle -->
-        <button onclick="toggleAudio()" id="audio-toggle-btn" class="p-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 text-stone-300 border border-stone-700 text-sm transition" title="Toggle Medieval Music & FX">
+        <button onclick="toggleAudio()" id="audio-toggle-btn" 
+                class="p-2 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-stone-300 border border-stone-700 text-sm transition shadow" 
+                title="Bật/Tắt Nhạc Cầm & Hiệu Ứng Trung Cổ">
           🔊
         </button>
 
-        <!-- LAN / QR Code Popup Toggle -->
-        <button onclick="openModal('network-modal')" class="p-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 text-amber-300 border border-stone-700 text-sm transition" title="Invite Friend / QR Code">
-          📱
-        </button>
-
         <!-- Settings Toggle -->
-        <button onclick="openModal('settings-modal')" class="p-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 text-stone-300 border border-stone-700 text-sm transition" title="API Settings">
+        <button onclick="openModal('settings-modal')" 
+                class="p-2 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-stone-300 border border-stone-700 text-sm transition shadow" 
+                title="Cài Đặt API Key">
           ⚙️
         </button>
       </div>
     </div>
+
+    <!-- ================= MEDIEVAL STAGE TIMELINE STEPPER ================= -->
+    <div id="header-timeline-bar" class="max-w-7xl mx-auto mt-2 pt-2 border-t border-[#312419] hidden sm:block">
+      <div class="grid grid-cols-5 gap-1.5 md:gap-3 text-center">
+        
+        <!-- Step 1 -->
+        <div id="timeline-step-1" class="timeline-step flex items-center gap-1.5 p-1.5 rounded-lg border border-amber-500/70 bg-amber-950/40 text-amber-300">
+          <span class="text-sm">🏰</span>
+          <div class="text-left min-w-0">
+            <div class="text-[10px] font-cinzel font-bold uppercase truncate">Giai đoạn 1</div>
+            <div class="text-[9px] text-stone-300 font-serif truncate">Tiệc Đón Tiếp</div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="timeline-step-2" class="timeline-step flex items-center gap-1.5 p-1.5 rounded-lg border border-stone-800 bg-stone-900/40 text-stone-400">
+          <span class="text-sm">🍷</span>
+          <div class="text-left min-w-0">
+            <div class="text-[10px] font-cinzel font-bold uppercase truncate">Giai đoạn 2</div>
+            <div class="text-[9px] text-stone-400 font-serif truncate">Đại Yến Khai Màn</div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="timeline-step-3" class="timeline-step flex items-center gap-1.5 p-1.5 rounded-lg border border-stone-800 bg-stone-900/40 text-stone-400">
+          <span class="text-sm">⚡</span>
+          <div class="text-left min-w-0">
+            <div class="text-[10px] font-cinzel font-bold uppercase truncate">Giai đoạn 3</div>
+            <div class="text-[9px] text-stone-400 font-serif truncate">Án Mạng Rufus</div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div id="timeline-step-4" class="timeline-step flex items-center gap-1.5 p-1.5 rounded-lg border border-stone-800 bg-stone-900/40 text-stone-400">
+          <span class="text-sm">🔍</span>
+          <div class="text-left min-w-0">
+            <div class="text-[10px] font-cinzel font-bold uppercase truncate">Giai đoạn 4</div>
+            <div class="text-[9px] text-stone-400 font-serif truncate">Công Bố Tang Vật</div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div id="timeline-step-5" class="timeline-step flex items-center gap-1.5 p-1.5 rounded-lg border border-stone-800 bg-stone-900/40 text-stone-400">
+          <span class="text-sm">👑</span>
+          <div class="text-left min-w-0">
+            <div class="text-[10px] font-cinzel font-bold uppercase truncate">Giai đoạn 5</div>
+            <div class="text-[9px] text-stone-400 font-serif truncate">Phán Quyết Triều Đình</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </header>
+
 
   <!-- ================= MAIN CONTENT CONTAINER ================= -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-2 sm:p-4">
@@ -137,59 +268,78 @@
     <div id="lobby-view" class="space-y-6">
       
       <!-- Welcome Hero Banner -->
-      <div class="parchment-card rounded-2xl p-6 md:p-8 text-center border-amber-900/60 relative overflow-hidden">
-        <div class="absolute -right-8 -bottom-8 opacity-10 text-9xl pointer-events-none">🏰</div>
-        <h2 class="text-3xl md:text-5xl font-cinzel font-black text-amber-300 mb-2 tracking-wide drop-shadow-md">
-          Hear Ye! Hear Ye!
+      <div class="parchment-card-gold rounded-2xl p-6 md:p-8 text-center relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 opacity-10 text-9xl pointer-events-none select-none">🏰</div>
+        <div class="absolute -left-8 -top-8 opacity-10 text-9xl pointer-events-none select-none">👑</div>
+
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-600/60 text-amber-300 text-xs font-cinzel font-semibold mb-3">
+          <span>⚜️</span> Lâu Đài Fernwood • Dạ Tiệc Hoàng Gia & Án Mạng Bí Ẩn <span>⚜️</span>
+        </div>
+
+        <h2 class="text-2xl md:text-5xl font-cinzel font-black tracking-wide drop-shadow-md mb-3">
+          <span class="gold-gradient-text">Lời Tuyên Triệu Của Triều Đình!</span>
         </h2>
-        <p class="text-amber-100/90 text-sm md:text-base max-w-2xl mx-auto font-serif">
-          A glorious tournament celebration is planned to honor the noble marriage of <strong class="text-amber-300">Baron Bartholomew</strong> to <strong class="text-amber-300">Lady Diana of Dunnsberry</strong> in Fernwood Manor. Choose your noble identity to enter the banquet hall!
+        <p class="text-amber-100/90 text-xs md:text-base max-w-3xl mx-auto font-serif leading-relaxed">
+          Đại hôn lễ giữa <strong class="text-amber-300 font-cinzel">Nam Tước Bartholomew</strong> và tiểu thư kiều diễm <strong class="text-amber-300 font-cinzel">Lady Diana of Dunnsberry</strong> đang được tổ chức trọng thể. Hãy chọn thân phận quý tộc hoặc tôi tớ của bạn để bước vào phòng tiệc!
         </p>
 
-        <!-- Quick LAN URL Banner for 2nd Player -->
-        <div class="mt-6 max-w-lg mx-auto bg-black/40 border border-amber-700/40 rounded-xl p-3 flex items-center justify-between gap-3 text-left">
-          <div class="truncate">
-            <div class="text-xs uppercase tracking-wider text-amber-400/90 font-cinzel font-semibold">Join via Phone / 2nd Device</div>
-            <div id="lan-url-display" class="text-sm font-mono text-stone-200 truncate">Loading network link...</div>
+        <!-- Quick Share & Join Box -->
+        <div class="mt-5 max-w-xl mx-auto bg-black/60 border border-amber-600/50 rounded-xl p-3 md:p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-left shadow-lg">
+          <div class="min-w-0 w-full sm:w-auto">
+            <div class="text-[11px] uppercase tracking-wider text-amber-400 font-cinzel font-bold flex items-center gap-1.5">
+              <span>🏰</span> Mã Phòng: <span class="bg-amber-950 px-2 py-0.5 rounded text-amber-300 font-mono text-xs border border-amber-700/60">FERNWOOD</span>
+            </div>
+            <div id="lan-url-display" class="text-xs md:text-sm font-mono text-stone-300 truncate mt-0.5">
+              Đang tải liên kết phòng...
+            </div>
           </div>
-          <button onclick="copyLanUrl()" class="px-3 py-1.5 bg-amber-900/70 hover:bg-amber-800 text-amber-200 text-xs rounded-lg border border-amber-600/50 font-cinzel whitespace-nowrap transition">
-            📋 Copy Link
-          </button>
-          <button onclick="openModal('network-modal')" class="px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-amber-300 text-xs rounded-lg border border-stone-600 font-cinzel whitespace-nowrap transition">
-            📱 QR Code
-          </button>
+          <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
+            <button onclick="copyLanUrl()" class="flex-1 sm:flex-none px-3 py-1.5 bg-amber-900/80 hover:bg-amber-800 text-amber-200 text-xs rounded-lg border border-amber-600/50 font-cinzel whitespace-nowrap transition shadow flex items-center justify-center gap-1">
+              <span>📋</span> Copy Link
+            </button>
+            <button onclick="openModal('network-modal')" class="flex-1 sm:flex-none px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-amber-300 text-xs rounded-lg border border-stone-600 font-cinzel whitespace-nowrap transition shadow flex items-center justify-center gap-1">
+              <span>📱</span> Mã QR
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- Player Registration Box -->
       <div class="parchment-card rounded-xl p-5 border-[#3d2e20]">
-        <h3 class="text-lg font-cinzel font-bold text-amber-300 mb-3 flex items-center gap-2">
-          <span>👑</span> Step 1: Enter Your Name & Choose Your Character
+        <h3 class="text-base md:text-lg font-cinzel font-bold text-amber-300 mb-3 flex items-center gap-2">
+          <span>👑</span> Bước 1: Đặt Tên / Biệt Danh &amp; Khai Màn
         </h3>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
           <div class="md:col-span-1">
-            <label class="block text-xs uppercase font-cinzel text-stone-400 mb-1">Your Name / Alias</label>
-            <input type="text" id="player-name-input" placeholder="e.g. Lord Alex" value="Player 1" 
-                   class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+            <label class="block text-xs uppercase font-cinzel text-stone-400 mb-1">Tên Người Chơi (Hiển thị cho bạn bè)</label>
+            <input type="text" id="player-name-input" placeholder="Ví dụ: Hiệp Sĩ Phong, Lady Sarah..." value="Thám Tử Quý Tộc" 
+                   class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3.5 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
           </div>
           <div class="md:col-span-1">
-            <label class="block text-xs uppercase font-cinzel text-stone-400 mb-1">Guest Cast Size</label>
-            <select id="cast-size-select" onchange="changeCastSize()" class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
-              <option value="12" selected>12 Characters (Full Manor Drama)</option>
-              <option value="8">8 Characters (Core Suspects)</option>
+            <label class="block text-xs uppercase font-cinzel text-stone-400 mb-1">Quy Mô Khách Mời (Cast Size)</label>
+            <select id="cast-size-select" onchange="changeCastSize()" 
+                    class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3.5 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
+              <option value="12" selected>12 Nhân Vật (Toàn Bộ Kịch Tính Lâu Đài)</option>
+              <option value="8">8 Nhân Vật (Cốt Truyện Trọng Tâm Cốt Lõi)</option>
             </select>
           </div>
           <div class="md:col-span-1 flex items-end">
-            <button id="start-banquet-btn" onclick="startBanquet()" class="w-full py-2.5 px-4 bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-600 text-amber-950 font-cinzel font-black rounded-lg shadow-lg transition tracking-wider flex items-center justify-center gap-2">
-              <span>🍷</span> Start Banquet
+            <button id="start-banquet-btn" onclick="startBanquet()" 
+                    class="w-full py-2.5 px-4 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 text-stone-950 font-cinzel font-black rounded-lg shadow-xl transition tracking-wider flex items-center justify-center gap-2 gold-glow">
+              <span class="text-base">🍷</span> Khai Tiệc Banquet
             </button>
           </div>
         </div>
 
         <!-- Character Selection Grid -->
-        <div class="text-xs uppercase font-cinzel text-stone-400 mb-2">Select your suspect persona (Sir Rufus is locked to AI as the victim):</div>
-        <div id="character-selection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div class="flex items-center justify-between mb-2.5">
+          <div class="text-xs uppercase font-cinzel text-amber-400 font-bold flex items-center gap-1.5">
+            <span>🎭</span> Chọn Thân Phận Của Bạn (Sir Rufus là nạn nhân - mặc định do AI đóng):
+          </div>
+          <span class="text-[11px] text-stone-400 font-serif italic hidden sm:inline">Nhấp vào thẻ để nhận vai</span>
+        </div>
+        <div id="character-selection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
           <!-- Populated by JS -->
         </div>
       </div>
@@ -197,53 +347,65 @@
 
 
     <!-- ================= VIEW 2: ACTIVE GAME DASHBOARD ================= -->
-    <div id="game-view" class="hidden flex flex-col space-y-4">
+    <div id="game-view" class="hidden flex flex-col space-y-3.5">
       
       <!-- Stage Announcement Banner -->
-      <div id="stage-banner" class="parchment-card rounded-xl p-3 md:p-4 border-amber-900/60 flex flex-wrap items-center justify-between gap-3">
-        <div class="flex items-center space-x-3">
-          <span id="stage-banner-icon" class="text-2xl md:text-3xl">🎺</span>
-          <div>
-            <div id="stage-banner-title" class="text-sm md:text-base font-cinzel font-bold text-amber-300">Stage 1: Arrival & Reception</div>
-            <div id="stage-banner-desc" class="text-xs text-stone-300 font-serif">Mingle with fellow nobles, investigate rumors, and review your Secret Dossier.</div>
+      <div id="stage-banner" class="parchment-card-gold rounded-xl p-3.5 md:p-4 border-amber-700/60 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center space-x-3 min-w-0">
+          <span id="stage-banner-icon" class="text-2xl md:text-3xl shrink-0 filter drop-shadow">🎺</span>
+          <div class="min-w-0">
+            <div id="stage-banner-title" class="text-sm md:text-base font-cinzel font-bold text-amber-300 truncate">
+              Stage 1: Arrival & Reception
+            </div>
+            <div id="stage-banner-desc" class="text-xs text-stone-300 font-serif line-clamp-2 md:line-clamp-none">
+              Hãy giao lưu với các nhân vật khác, dò la tin đồn, nghiên cứu phong bì bí mật Envelope A và tuân thủ luật lệ lâu đài.
+            </div>
           </div>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 shrink-0">
           <button onclick="openModal('bribe-modal')" class="px-3 py-1.5 bg-gradient-to-r from-amber-800 to-amber-700 hover:from-amber-700 hover:to-amber-600 text-amber-100 rounded-lg text-xs font-cinzel font-bold border border-amber-500/40 shadow transition flex items-center gap-1.5">
-            <span>💰</span> Send Bribe / Gold
+            <span>💰</span> Gửi Vàng / Hối Lộ
           </button>
-          <button id="vote-nav-btn" onclick="switchTab('tab-vote')" class="hidden px-3 py-1.5 bg-red-900/80 hover:bg-red-800 text-red-100 rounded-lg text-xs font-cinzel font-bold border border-red-500/50 shadow transition flex items-center gap-1.5">
-            <span>⚖️</span> Who Dunnit?
+          <button id="vote-nav-btn" onclick="switchTab('tab-vote')" class="hidden px-3 py-1.5 bg-red-900/90 hover:bg-red-800 text-red-100 rounded-lg text-xs font-cinzel font-bold border border-red-500/50 shadow transition flex items-center gap-1.5 crimson-glow">
+            <span>⚖️</span> Tố Cáo Hung Thủ!
           </button>
         </div>
       </div>
 
       <!-- Navigation Tabs -->
-      <div class="flex border-b border-[#3d2e20] space-x-1 overflow-x-auto text-xs md:text-sm font-cinzel items-center">
-        <button id="nav-btn-great-hall" onclick="switchTab('tab-great-hall')" class="tab-btn active px-4 py-2.5 font-bold border-b-2 border-amber-500 text-amber-300 bg-stone-900/60 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
-          <span>🏰</span> The Great Hall
+      <div class="flex border-b border-[#3d2e20] space-x-1 overflow-x-auto text-xs md:text-sm font-cinzel items-center pb-0.5">
+        <button id="nav-btn-great-hall" onclick="switchTab('tab-great-hall')" 
+                class="tab-btn active px-3.5 py-2.5 font-bold border-b-2 border-amber-500 text-amber-300 bg-stone-900/70 rounded-t-lg transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>🏰</span> Đại Sảnh (Great Hall)
         </button>
-        <button id="nav-btn-private" onclick="switchTab('tab-private')" class="tab-btn px-4 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
-          <span>🗝️</span> Private Whispers <span id="unread-private-badge" class="hidden bg-amber-500 text-amber-950 font-bold px-1.5 py-0.2 rounded-full text-xs">!</span>
+        <button id="nav-btn-private" onclick="switchTab('tab-private')" 
+                class="tab-btn px-3.5 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>🗝️</span> Mật Đàm Riêng <span id="unread-private-badge" class="hidden bg-amber-500 text-amber-950 font-bold px-1.5 py-0.2 rounded-full text-[10px]">!</span>
         </button>
-        <button id="nav-btn-dossier" onclick="switchTab('tab-dossier')" class="tab-btn px-4 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
-          <span>📜</span> Secret Dossier (Envelopes)
+        <button id="nav-btn-dossier" onclick="switchTab('tab-dossier')" 
+                class="tab-btn px-3.5 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>📜</span> Hồ Sơ Bí Mật (Envelopes)
         </button>
-        <button id="nav-btn-evidence" onclick="switchTab('tab-evidence')" class="tab-btn px-4 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
-          <span>🔍</span> Evidence &amp; Laws
+        <button id="nav-btn-evidence" onclick="switchTab('tab-evidence')" 
+                class="tab-btn px-3.5 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>🔍</span> Tang Vật &amp; Luật Lệ
         </button>
-        <button id="nav-btn-vote" onclick="switchTab('tab-vote')" class="tab-btn px-4 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
-          <span>⚖️</span> Accusation Ballot
+        <button id="nav-btn-vote" onclick="switchTab('tab-vote')" 
+                class="tab-btn px-3.5 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>⚖️</span> Phiếu Kết Án
         </button>
       </div>
 
       <!-- ================= TAB 1: THE GREAT HALL ================= -->
-      <div id="tab-great-hall" class="tab-content flex flex-col md:flex-row gap-4 h-[65vh]">
+      <div id="tab-great-hall" class="tab-content flex flex-col md:flex-row gap-3.5 h-[68vh] md:h-[65vh]">
+        
         <!-- Chat Area -->
-        <div class="flex-1 parchment-card rounded-xl p-3 flex flex-col h-full border-[#3d2e20]">
-          <div class="text-xs uppercase font-cinzel text-amber-400/80 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
-            <span>Banquet Room Conversation (Use @Name to address AI characters directly)</span>
-            <span class="text-stone-400 text-xs">Public</span>
+        <div class="flex-1 parchment-card rounded-xl p-3 flex flex-col h-full border-[#3d2e20] shadow-md">
+          <div class="text-xs uppercase font-cinzel text-amber-400/90 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
+            <span class="flex items-center gap-1.5">
+              <span>🏰</span> Phát Ngôn Công Khai Tại Đại Sảnh
+            </span>
+            <span class="text-stone-400 text-[11px] font-serif italic">Gõ @ để trò chuyện trực tiếp với AI</span>
           </div>
 
           <!-- Messages Scrollable List -->
@@ -253,6 +415,13 @@
 
           <!-- Chat Input -->
           <div class="relative pt-2 border-t border-[#3d2e20]">
+            
+            <!-- Quick Mention Pill Bar (1-tap on mobile) -->
+            <div id="great-hall-quick-mentions" class="flex items-center gap-1.5 pb-2 overflow-x-auto text-[11px] font-cinzel">
+              <span class="text-stone-400 text-[10px] whitespace-nowrap">Nhắc nhanh:</span>
+              <!-- Dynamically populated or rendered -->
+            </div>
+
             <!-- Mention Autocomplete Popup -->
             <div id="mention-autocomplete-popup" 
                  style="z-index: 9999;"
@@ -262,28 +431,30 @@
             <form onsubmit="sendGreatHallMessage(event)" class="flex gap-2 items-center">
               <button type="button" 
                       onclick="toggleMentionAutocomplete()" 
-                      title="Bấm để chọn nhanh nhân vật muốn tag (@)" 
+                      title="Bấm để mở danh sách chọn nhanh nhân vật (@)" 
                       class="px-2.5 py-2 bg-stone-800 hover:bg-amber-950 text-amber-300 font-cinzel font-bold text-xs rounded-lg border border-amber-600/60 hover:border-amber-400 transition flex items-center gap-1 shrink-0 shadow">
                 <span class="text-sm">🏷️</span><span>@Tag</span>
               </button>
-              <input type="text" id="great-hall-input" placeholder="Address the banquet or type @ to tag a character..." 
+              <input type="text" id="great-hall-input" placeholder="Phát biểu trước toàn thể đại yến hoặc gõ @ để gọi ai đó..." 
                      autocomplete="off"
                      oninput="handleGreatHallInput(event)"
                      onkeyup="handleGreatHallInput(event)"
                      onkeydown="handleGreatHallKeydown(event)"
-                     class="flex-1 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
-              <button type="submit" class="px-4 py-2 bg-amber-800 hover:bg-amber-700 text-amber-100 font-cinzel font-bold text-xs md:text-sm rounded-lg border border-amber-600/50 transition shrink-0">
-                Speak
+                     class="flex-1 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
+              <button type="submit" class="px-4 py-2 bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-stone-950 font-cinzel font-bold text-xs md:text-sm rounded-lg border border-amber-400/40 transition shrink-0 shadow">
+                Phát Biểu
               </button>
             </form>
           </div>
         </div>
 
         <!-- Sidebar: Castle Guests Directory -->
-        <div class="w-full md:w-80 lg:w-96 parchment-card rounded-xl p-3 border-[#3d2e20] flex flex-col h-auto md:h-full shrink-0">
-          <div class="text-xs uppercase font-cinzel text-amber-400/80 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
-            <span>Guests in Manor</span>
-            <span id="guest-count-badge" class="text-xs text-stone-400 font-mono">12</span>
+        <div class="w-full md:w-80 lg:w-96 parchment-card rounded-xl p-3 border-[#3d2e20] flex flex-col h-auto md:h-full shrink-0 shadow-md">
+          <div class="text-xs uppercase font-cinzel text-amber-400/90 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
+            <span class="flex items-center gap-1.5">
+              <span>👥</span> Khách Mời Trong Lâu Đài
+            </span>
+            <span id="guest-count-badge" class="text-xs text-amber-300 font-mono bg-stone-900 px-2 py-0.5 rounded border border-stone-800">12</span>
           </div>
           <div id="guests-directory-list" class="flex-1 overflow-y-auto space-y-2 py-2 text-xs">
             <!-- Populated by JS -->
@@ -292,11 +463,15 @@
       </div>
 
       <!-- ================= TAB 2: PRIVATE WHISPERS ================= -->
-      <div id="tab-private" class="tab-content hidden flex flex-col md:flex-row gap-4 h-[65vh]">
+      <div id="tab-private" class="tab-content hidden flex flex-col md:flex-row gap-3.5 h-[68vh] md:h-[65vh]">
+        
         <!-- Conversations List -->
-        <div class="w-full md:w-80 lg:w-96 parchment-card rounded-xl p-3 border-[#3d2e20] flex flex-col shrink-0">
-          <div class="text-xs uppercase font-cinzel text-amber-400/80 pb-2 border-b border-[#3d2e20]">
-            Private Chambers
+        <div id="private-conversations-container" class="w-full md:w-80 lg:w-96 parchment-card rounded-xl p-3 border-[#3d2e20] flex flex-col shrink-0 shadow-md">
+          <div class="text-xs uppercase font-cinzel text-amber-400/90 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
+            <span class="flex items-center gap-1.5">
+              <span>🗝️</span> Phòng Mật Đàm Riêng
+            </span>
+            <span class="text-[10px] text-stone-400 font-serif italic">1-on-1 Bí Mật</span>
           </div>
           <div id="private-conversations-list" class="flex-1 overflow-y-auto space-y-1.5 py-2">
             <!-- Populated by JS -->
@@ -304,25 +479,50 @@
         </div>
 
         <!-- Active Private Chat Window -->
-        <div class="flex-1 parchment-card rounded-xl p-3 flex flex-col h-full border-[#3d2e20]">
-          <div id="active-private-header" class="text-xs uppercase font-cinzel text-amber-400/80 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
-            <span>Select a character to whisper secretly</span>
-            <button onclick="openModal('bribe-modal')" class="text-xs text-amber-400 hover:underline">Send Gold</button>
+        <div id="private-chat-window" class="flex-1 parchment-card rounded-xl p-3 flex flex-col h-full border-[#3d2e20] shadow-md">
+          
+          <!-- Chat Header -->
+          <div id="active-private-header" class="text-xs uppercase font-cinzel text-amber-400/90 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
+            <div class="flex items-center gap-2">
+              <button id="mobile-back-whispers-btn" onclick="mobileBackToWhisperList()" class="md:hidden px-2 py-1 bg-stone-800 rounded text-amber-300 text-xs">
+                ← Trở lại
+              </button>
+              <span>Chọn một nhân vật để bắt đầu mật đàm</span>
+            </div>
+            <button onclick="openModal('bribe-modal')" class="text-xs text-amber-400 hover:underline flex items-center gap-1">
+              <span>💰</span> Gửi Vàng
+            </button>
           </div>
 
+          <!-- Messages List -->
           <div id="private-messages-list" class="flex-1 overflow-y-auto space-y-3 py-3 pr-1 text-sm font-sans">
             <div class="text-center text-stone-500 italic py-10 font-serif">
-              Choose a lord, lady, knight or servant from the left to begin a secluded, private conversation.
+              Hãy chọn một quý tộc hoặc người hầu từ danh sách bên trái để mở cuộc trò chuyện bí mật trong góc khuất.
             </div>
           </div>
 
-          <form onsubmit="sendPrivateMessage(event)" class="pt-2 border-t border-[#3d2e20] flex gap-2">
-            <input type="text" id="private-input" placeholder="Whisper in confidence..." disabled
-                   class="flex-1 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 disabled:opacity-50">
-            <button type="submit" id="private-send-btn" disabled class="px-4 py-2 bg-amber-800 hover:bg-amber-700 disabled:opacity-50 text-amber-100 font-cinzel font-bold text-xs md:text-sm rounded-lg border border-amber-600/50 transition">
-              Whisper
-            </button>
-          </form>
+          <!-- Quick Bribe Bar & Input -->
+          <div class="pt-2 border-t border-[#3d2e20]">
+            <!-- Quick Bribe Bar -->
+            <div class="flex items-center gap-1.5 pb-2 text-xs overflow-x-auto">
+              <span class="text-amber-400/90 font-cinzel font-semibold text-[11px] whitespace-nowrap">Hối lộ nhanh:</span>
+              <button type="button" onclick="quickBribe(1)" class="px-2 py-0.5 rounded bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-700/60 font-mono text-xs transition">+1 💰</button>
+              <button type="button" onclick="quickBribe(2)" class="px-2 py-0.5 rounded bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-700/60 font-mono text-xs transition">+2 💰</button>
+              <button type="button" onclick="quickBribe(3)" class="px-2 py-0.5 rounded bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-700/60 font-mono text-xs transition">+3 💰</button>
+              <button type="button" onclick="quickBribe(5)" class="px-2 py-0.5 rounded bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-700/60 font-mono text-xs transition">+5 💰</button>
+              <button type="button" onclick="openModal('bribe-modal')" class="px-2 py-0.5 rounded bg-stone-800 hover:bg-stone-700 text-stone-300 border border-stone-700 text-xs ml-auto transition">Kèm Lời Nhắn...</button>
+            </div>
+
+            <form onsubmit="sendPrivateMessage(event)" class="flex gap-2">
+              <input type="text" id="private-input" placeholder="Thì thầm mật đàm trong góc khuất..." disabled
+                     class="flex-1 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 disabled:opacity-50 shadow-inner">
+              <button type="submit" id="private-send-btn" disabled 
+                      class="px-4 py-2 bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 disabled:opacity-50 text-stone-950 font-cinzel font-bold text-xs md:text-sm rounded-lg border border-amber-400/40 transition shadow">
+                Thì Thầm
+              </button>
+            </form>
+          </div>
+
         </div>
       </div>
 
@@ -331,24 +531,24 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           
           <!-- Character Background & Identity Card -->
-          <div class="parchment-inner rounded-xl p-6 shadow-2xl border-4 border-[#523d27]">
+          <div class="parchment-inner rounded-xl p-6 shadow-2xl border-4 border-[#523d27] relative">
             <div class="flex items-center space-x-3 mb-4 border-b-2 border-[#826645] pb-3">
               <span id="dossier-avatar" class="text-4xl">👑</span>
               <div>
-                <h3 id="dossier-name" class="text-2xl font-cinzel font-black text-[#3d2b17]">Your Character</h3>
-                <div id="dossier-title" class="text-sm font-serif italic text-[#5e452a]">Title / Occupation</div>
+                <h3 id="dossier-name" class="text-xl md:text-2xl font-cinzel font-black text-[#3d2b17]">Your Character</h3>
+                <div id="dossier-title" class="text-xs md:text-sm font-serif italic text-[#5e452a]">Title / Occupation</div>
               </div>
             </div>
 
-            <div class="space-y-4 text-sm font-serif leading-relaxed text-[#261a0d]">
+            <div class="space-y-4 text-xs md:text-sm font-serif leading-relaxed text-[#261a0d]">
               <div>
-                <h4 class="font-cinzel font-bold uppercase text-xs tracking-wider text-[#63492b] mb-1">Background Biography</h4>
-                <p id="dossier-bio" class="whitespace-pre-line">Loading your character biography...</p>
+                <h4 class="font-cinzel font-bold uppercase text-xs tracking-wider text-[#63492b] mb-1">Tiểu Sử Thân Thế</h4>
+                <p id="dossier-bio" class="whitespace-pre-line leading-relaxed">Đang tải tiểu sử nhân vật...</p>
               </div>
 
               <div>
-                <h4 class="font-cinzel font-bold uppercase text-xs tracking-wider text-[#63492b] mb-1">Manner & Costume Tips</h4>
-                <p id="dossier-acting" class="whitespace-pre-line italic">Costume & manner advice...</p>
+                <h4 class="font-cinzel font-bold uppercase text-xs tracking-wider text-[#63492b] mb-1">Phong Cách &amp; Lời Khuyên Nhập Vai</h4>
+                <p id="dossier-acting" class="whitespace-pre-line italic">Lời khuyên trang phục và diễn xuất...</p>
               </div>
             </div>
           </div>
@@ -357,36 +557,46 @@
           <div class="space-y-4">
             
             <!-- Envelope A: Start of Party -->
-            <div class="parchment-card rounded-xl p-5 border-amber-800/60">
+            <div class="parchment-card rounded-xl p-5 border-amber-700/60 shadow-lg">
               <div class="flex items-center justify-between border-b border-amber-900/60 pb-2 mb-3">
-                <h4 class="font-cinzel font-bold text-amber-300 text-base flex items-center gap-2">
-                  <span>✉️</span> ENVELOPE (A): Secret Knowledge & Start Objectives
+                <h4 class="font-cinzel font-bold text-amber-300 text-sm md:text-base flex items-center gap-2">
+                  <span>✉️</span> ENVELOPE (A): Điều Bạn Biết &amp; Nhiệm Vụ Đầu Tiệc
                 </h4>
-                <span class="text-xs bg-amber-950 text-amber-200 border border-amber-800 px-2 py-0.5 rounded">Active</span>
+                <span class="text-xs bg-amber-950 text-amber-200 border border-amber-800 px-2 py-0.5 rounded font-cinzel">Active</span>
               </div>
 
-              <div class="text-xs font-cinzel text-amber-400 mb-1.5 uppercase font-semibold">Things You Know (Keep safe or sell):</div>
-              <ul id="dossier-tyk-list" class="space-y-1 text-xs text-stone-300 font-serif mb-4 list-disc list-inside">
+              <div class="text-xs font-cinzel text-amber-400 mb-1.5 uppercase font-semibold">Bí Mật Đã Biết (Giữ kín hoặc đem bán đổi vàng):</div>
+              <ul id="dossier-tyk-list" class="space-y-1.5 text-xs text-stone-300 font-serif mb-4 list-disc list-inside leading-relaxed">
                 <!-- TYK items -->
               </ul>
 
-              <div class="text-xs font-cinzel text-amber-400 mb-1.5 uppercase font-semibold">Start of Party Objectives (Tick when completed):</div>
+              <!-- Objective Progress Bar -->
+              <div class="mb-2">
+                <div class="flex items-center justify-between text-[11px] font-cinzel text-amber-400 font-semibold mb-1">
+                  <span>Mục Tiêu Tiệc Khởi Đầu:</span>
+                  <span id="dossier-obj-progress-text" class="text-amber-300">0%</span>
+                </div>
+                <div class="w-full bg-stone-900 rounded-full h-1.5 overflow-hidden border border-stone-800">
+                  <div id="dossier-obj-progress-bar" class="bg-gradient-to-r from-amber-600 to-amber-400 h-full w-0 transition-all duration-300"></div>
+                </div>
+              </div>
+
               <div id="dossier-start-obj-list" class="space-y-2">
                 <!-- Checklist items -->
               </div>
             </div>
 
             <!-- Envelope B: Post-Murder -->
-            <div id="envelope-b-container" class="parchment-card rounded-xl p-5 border-red-950/60 opacity-60">
+            <div id="envelope-b-container" class="parchment-card rounded-xl p-5 border-red-950/60 opacity-60 shadow-lg transition-all duration-300">
               <div class="flex items-center justify-between border-b border-red-900/60 pb-2 mb-3">
-                <h4 class="font-cinzel font-bold text-red-300 text-base flex items-center gap-2">
-                  <span>📜</span> ENVELOPE (B): Post-Murder Directives
+                <h4 class="font-cinzel font-bold text-red-300 text-sm md:text-base flex items-center gap-2">
+                  <span>📜</span> ENVELOPE (B): Chỉ Dẫn Sau Khi Có Án Mạng
                 </h4>
-                <span id="envelope-b-badge" class="text-xs bg-stone-900 text-stone-400 border border-stone-800 px-2 py-0.5 rounded">SEALED (Stage 3)</span>
+                <span id="envelope-b-badge" class="text-xs bg-stone-900 text-stone-400 border border-stone-800 px-2 py-0.5 rounded font-cinzel">SEALED (Stage 3)</span>
               </div>
 
-              <div id="envelope-b-content" class="text-xs text-stone-400 italic font-serif">
-                This envelope is strictly sealed by order of Willie the Watchman. It shall be opened automatically upon the tragic occurrence of the murder at Stage 3.
+              <div id="envelope-b-content" class="text-xs text-stone-400 italic font-serif leading-relaxed">
+                Phong bì này được niêm phong nghiêm ngặt theo lệnh của Thị Vệ Willie. Nó sẽ tự động được mở niêm phong khi án mạng xảy ra ở Giai Đoạn 3 (Stage 3).
               </div>
             </div>
 
@@ -400,8 +610,8 @@
         
         <!-- Exhibits Grid -->
         <div>
-          <h3 class="text-lg font-cinzel font-bold text-amber-300 mb-3 flex items-center gap-2">
-            <span>🔍</span> Tangible Crime Scene Exhibits (Presented in Stage 4)
+          <h3 class="text-base md:text-lg font-cinzel font-bold text-amber-300 mb-3 flex items-center gap-2">
+            <span>🔍</span> Tang Vật Vụ Án (Exhibits A – F) (Công bố chính thức tại Stage 4)
           </h3>
           <div id="exhibits-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Exhibits populated by JS -->
@@ -409,11 +619,11 @@
         </div>
 
         <!-- Laws of the Land -->
-        <div class="parchment-inner rounded-xl p-6 border-4 border-[#523d27]">
-          <h3 class="text-xl font-cinzel font-black text-[#3d2b17] border-b-2 border-[#826645] pb-2 mb-4 flex items-center gap-2">
-            <span>📜</span> Laws of the Land (As Decreed by Queen Genevieve)
+        <div class="parchment-inner rounded-xl p-6 border-4 border-[#523d27] shadow-xl">
+          <h3 class="text-lg md:text-xl font-cinzel font-black text-[#3d2b17] border-b-2 border-[#826645] pb-2 mb-4 flex items-center gap-2">
+            <span>📜</span> Luật Lệ Lâu Đài (Ban Hành Bởi Nữ Hoàng Genevieve)
           </h3>
-          <div id="laws-of-the-land-body" class="text-sm font-serif leading-relaxed text-[#261a0d] whitespace-pre-line">
+          <div id="laws-of-the-land-body" class="text-xs md:text-sm font-serif leading-relaxed text-[#261a0d] whitespace-pre-line">
             <!-- Populated by JS -->
           </div>
         </div>
@@ -421,51 +631,51 @@
       </div>
 
       <!-- ================= TAB 5: ACCUSATION & VOTE (WHO DUNNIT) ================= -->
-      <div id="tab-vote" class="tab-content hidden max-w-2xl mx-auto parchment-card rounded-xl p-6 border-amber-900/70">
-        <h3 class="text-2xl font-cinzel font-black text-amber-300 mb-2 text-center">
-          Who Dunnit? Official Accusation Ballot
+      <div id="tab-vote" class="tab-content hidden max-w-2xl mx-auto parchment-card-gold rounded-xl p-6 border-amber-700/70 shadow-2xl">
+        <h3 class="text-xl md:text-2xl font-cinzel font-black text-amber-300 mb-2 text-center">
+          Phiếu Bỏ Bầu Kết Án (Who Dunnit?)
         </h3>
         <p class="text-xs text-stone-300 text-center font-serif mb-6">
-          Submit your official accusation before Willie the Watchman delivers the royal solution. All guests must vote!
+          Hãy nộp bản tố cáo chính thức của bạn trước khi Thị Vệ Willie công bố phán quyết hoàng gia. Mọi vị khách đều phải bỏ phiếu!
         </p>
 
         <form onsubmit="submitWhoDunnitVote(event)" class="space-y-4 text-sm font-cinzel">
           <div>
-            <label class="block text-xs uppercase text-amber-400 mb-1">I firmly accuse:</label>
-            <select id="vote-accused-select" required class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
-              <option value="" disabled selected>-- Select the Murderer --</option>
+            <label class="block text-xs uppercase text-amber-400 mb-1">Tôi quả quyết kẻ thủ ác là:</label>
+            <select id="vote-accused-select" required class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
+              <option value="" disabled selected>-- Chọn Hung Thủ Sát Hại Sir Rufus --</option>
             </select>
           </div>
 
           <div>
-            <label class="block text-xs uppercase text-amber-400 mb-1">Their Motive for the Murder:</label>
-            <textarea id="vote-motive-input" rows="2" placeholder="Why did they strike Sir Rufus down in cold blood?" required
-                      class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500"></textarea>
+            <label class="block text-xs uppercase text-amber-400 mb-1">Động cơ gây án của kẻ thủ ác:</label>
+            <textarea id="vote-motive-input" rows="2" placeholder="Tại sao hung thủ lại ra tay đâm chết Sir Rufus?" required
+                      class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner"></textarea>
           </div>
 
           <div>
-            <label class="block text-xs uppercase text-amber-400 mb-1">The Crucial Evidence / Murder Weapon:</label>
-            <textarea id="vote-evidence-input" rows="2" placeholder="Which exhibit or clue proves their guilt beyond doubt?" required
-                      class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500"></textarea>
+            <label class="block text-xs uppercase text-amber-400 mb-1">Manh mối / Hung khí then chốt chứng minh:</label>
+            <textarea id="vote-evidence-input" rows="2" placeholder="Tang vật hay chứng cứ nào vạch trần tội ác của hung thủ?" required
+                      class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner"></textarea>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-stone-800">
             <div>
-              <label class="block text-xs uppercase text-stone-400 mb-1">Best Dressed Guest:</label>
+              <label class="block text-xs uppercase text-stone-400 mb-1">Khách ăn mặc đẹp nhất:</label>
               <select id="vote-dressed-select" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-xs focus:outline-none focus:border-amber-500">
                 <!-- Options -->
               </select>
             </div>
             <div>
-              <label class="block text-xs uppercase text-stone-400 mb-1">Best Performance / Liar:</label>
+              <label class="block text-xs uppercase text-stone-400 mb-1">Diễn xuất / Kẻ dối trá tài ba nhất:</label>
               <select id="vote-perf-select" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-xs focus:outline-none focus:border-amber-500">
                 <!-- Options -->
               </select>
             </div>
           </div>
 
-          <button type="submit" id="vote-submit-btn" class="w-full py-3 bg-gradient-to-r from-red-800 to-amber-700 hover:from-red-700 hover:to-amber-600 text-amber-100 font-cinzel font-black rounded-lg shadow-lg border border-red-500/40 transition tracking-wider">
-            ⚖️ Seal and Submit Accusation
+          <button type="submit" id="vote-submit-btn" class="w-full py-3 bg-gradient-to-r from-red-800 via-amber-700 to-red-800 hover:from-red-700 hover:to-amber-600 text-amber-100 font-cinzel font-black rounded-lg shadow-xl border border-red-500/40 transition tracking-wider crimson-glow">
+            ⚖️ Đóng Dấu Sáp &amp; Nộp Phiếu Kết Án
           </button>
         </form>
       </div>
@@ -475,82 +685,82 @@
   </main>
 
   <!-- ================= FOOTER ================= -->
-  <footer class="bg-[#140f0c] border-t border-[#291e15] py-2 px-4 text-center text-xs text-stone-500 font-serif">
-    A Knight of Murder • Designed for 2 Human Sleuths &amp; Living Medieval AI Agents • Fernwood Manor
+  <footer class="bg-[#140f0c] border-t border-[#291e15] py-2.5 px-4 text-center text-xs text-stone-500 font-serif">
+    A Knight of Murder • Dành Cho 2 Người Chơi Trực Tuyến &amp; Các Tác Nhân AI Trung Cổ Độc Lập • Lâu Đài Fernwood
   </footer>
 
 
   <!-- ================= MODALS ================= -->
 
   <!-- Modal 1: LAN Network & QR Code Modal -->
-  <div id="network-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-    <div class="parchment-card rounded-2xl max-w-md w-full p-6 border-amber-800/80 shadow-2xl relative text-center">
+  <div id="network-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="parchment-card-gold rounded-2xl max-w-md w-full p-6 border-amber-600/80 shadow-2xl relative text-center">
       <button onclick="closeModal('network-modal')" class="absolute top-4 right-4 text-stone-400 hover:text-stone-100 text-xl font-bold">✕</button>
-      <span class="text-4xl">📱</span>
-      <h3 class="text-xl font-cinzel font-bold text-amber-300 mt-2 mb-1">Join Banquet on 2nd Device</h3>
-      <p class="text-xs text-stone-300 font-serif mb-4">Scan this QR code with your phone camera or connect via the local network URL:</p>
+      <span class="text-4xl filter drop-shadow">📱</span>
+      <h3 class="text-lg md:text-xl font-cinzel font-bold text-amber-300 mt-2 mb-1">Mời Bạn Bè Tham Gia Phòng</h3>
+      <p class="text-xs text-stone-300 font-serif mb-4">Quét mã QR bằng camera điện thoại hoặc copy đường dẫn dưới đây gửi cho bạn bè:</p>
       
       <!-- QR Code Image -->
-      <div class="bg-white p-4 rounded-xl inline-block mx-auto mb-4 shadow-inner">
+      <div class="bg-white p-3 rounded-xl inline-block mx-auto mb-4 shadow-inner">
         <img id="network-qr-image" src="" alt="QR Code" class="w-48 h-48 mx-auto">
       </div>
 
-      <div class="bg-black/50 p-2.5 rounded-lg border border-amber-900/50 mb-4 flex items-center justify-between text-left">
-        <div id="network-modal-url" class="font-mono text-xs text-amber-200 truncate mr-2">http://192.168.x.x:8000</div>
-        <button onclick="copyLanUrl()" class="px-2.5 py-1 bg-amber-900 hover:bg-amber-800 text-amber-200 text-xs rounded font-cinzel">Copy</button>
+      <div class="bg-black/60 p-2.5 rounded-lg border border-amber-900/50 mb-4 flex items-center justify-between text-left">
+        <div id="network-modal-url" class="font-mono text-xs text-amber-200 truncate mr-2">Đang tải URL...</div>
+        <button onclick="copyLanUrl()" class="px-2.5 py-1 bg-amber-900 hover:bg-amber-800 text-amber-200 text-xs rounded font-cinzel transition">Copy</button>
       </div>
-      <p class="text-[11px] text-stone-400 italic">Both devices must be connected to the same Wi-Fi network.</p>
+      <p class="text-[11px] text-stone-400 italic">Mọi người chơi có thể tham gia từ xa qua điện thoại hoặc máy tính!</p>
     </div>
   </div>
 
   <!-- Modal 2: Bribe / Transfer Gold Modal -->
-  <div id="bribe-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-    <div class="parchment-card rounded-2xl max-w-md w-full p-6 border-amber-800/80 shadow-2xl relative">
+  <div id="bribe-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="parchment-card-gold rounded-2xl max-w-md w-full p-6 border-amber-600/80 shadow-2xl relative">
       <button onclick="closeModal('bribe-modal')" class="absolute top-4 right-4 text-stone-400 hover:text-stone-100 text-xl font-bold">✕</button>
       <div class="flex items-center gap-2 mb-4">
         <span class="text-3xl">💰</span>
         <div>
-          <h3 class="text-lg font-cinzel font-bold text-amber-300">Offer Bribe or Transfer Gold</h3>
-          <p class="text-xs text-stone-400 font-serif">Gold buys secrets, loyalties, and favors in Fernwood.</p>
+          <h3 class="text-lg font-cinzel font-bold text-amber-300">Gửi Hối Lộ / Tặng Đồng Vàng</h3>
+          <p class="text-xs text-stone-400 font-serif">Đồng vàng có thể mua chuộc lòng trung thành, bí mật và đồng minh.</p>
         </div>
       </div>
 
       <!-- Laws of Castle Bribery (Tiered Guide) -->
-      <div class="bg-black/50 p-3 rounded-xl border border-amber-900/50 text-[11px] font-serif text-stone-300 space-y-1 mb-4">
+      <div class="bg-black/60 p-3 rounded-xl border border-amber-900/50 text-[11px] font-serif text-stone-300 space-y-1 mb-4 shadow-inner">
         <div class="text-amber-400 font-cinzel font-bold text-xs uppercase flex items-center gap-1.5">
-          <span>⚖️</span> Laws of Castle Bribery &amp; Status
+          <span>⚖️</span> Quy Luật Hối Lộ &amp; Địa Vị Quý Tộc
         </div>
-        <p class="text-stone-400 italic">Not all lords and vassals value coin equally:</p>
+        <p class="text-stone-400 italic">Không phải ai cũng nhận số tiền như nhau:</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1 text-[11px]">
-          <div>👑 <strong class="text-amber-200">The Queen:</strong> Cannot be bribed! (Treasonous to try)</div>
-          <div>⚔️ <strong class="text-amber-200">Nobles &amp; Knights:</strong> Expect 3+ coins for respect.</div>
-          <div>🧹 <strong class="text-amber-200">Servants &amp; Jesters:</strong> Eager for 1–2 coins.</div>
-          <div>🗝️ <strong class="text-amber-200">The Watchman:</strong> Accepts support, never corruption!</div>
+          <div>👑 <strong class="text-amber-200">Nữ Hoàng:</strong> Tuyệt đối không thể hối lộ!</div>
+          <div>⚔️ <strong class="text-amber-200">Quý Tộc &amp; Kỵ Sĩ:</strong> Cần từ 3+ đồng vàng để nể mặt.</div>
+          <div>🧹 <strong class="text-amber-200">Thị Nữ &amp; Chàng Hề:</strong> Dễ mua chuộc bằng 1–2 đồng.</div>
+          <div>🗝️ <strong class="text-amber-200">Thị Vệ Willie:</strong> Nhận quỹ hỗ trợ, không nhận hối lộ!</div>
         </div>
       </div>
 
       <form onsubmit="submitBribe(event)" class="space-y-4 text-sm font-cinzel">
         <div>
-          <label class="block text-xs uppercase text-amber-400 mb-1">Recipient Character:</label>
-          <select id="bribe-recipient-select" required class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+          <label class="block text-xs uppercase text-amber-400 mb-1">Nhân Vật Nhận Vàng:</label>
+          <select id="bribe-recipient-select" required class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
             <!-- Populated by JS -->
           </select>
         </div>
 
         <div>
-          <label class="block text-xs uppercase text-amber-400 mb-1">Amount to Transfer (You have <span id="bribe-modal-gold" class="text-amber-300 font-bold">12</span>):</label>
+          <label class="block text-xs uppercase text-amber-400 mb-1">Số Lượng Đồng Vàng (Bạn đang có <span id="bribe-modal-gold" class="text-amber-300 font-bold">12</span>):</label>
           <input type="number" id="bribe-amount-input" min="1" max="100" value="2" required 
-                 class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+                 class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
         </div>
 
         <div>
-          <label class="block text-xs uppercase text-amber-400 mb-1">Discreet Note or Demand:</label>
-          <input type="text" id="bribe-message-input" placeholder="e.g. Tell me what you know about the dagger..." 
-                 class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+          <label class="block text-xs uppercase text-amber-400 mb-1">Lời Nhắn Kín Đáo Hoặc Yêu Cầu:</label>
+          <input type="text" id="bribe-message-input" placeholder="Ví dụ: Nói cho tôi biết ai đã đến chuồng ngựa tối qua..." 
+                 class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
         </div>
 
-        <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-amber-950 font-cinzel font-black rounded-lg shadow-lg border border-amber-400/40 transition">
-          Hand Over Gold Coins
+        <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 text-stone-950 font-cinzel font-black rounded-lg shadow-xl border border-amber-400/40 transition">
+          Trao Túi Vàng Kín Đáo
         </button>
       </form>
     </div>
@@ -558,17 +768,18 @@
 
   <!-- Modal 3: Court Archives & Chat Log Modal -->
   <div id="chatlog-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 md:p-6">
-    <div class="parchment-card rounded-2xl max-w-4xl w-full h-[85vh] p-5 border-amber-800/80 shadow-2xl relative flex flex-col">
+    <div class="parchment-card-gold rounded-2xl max-w-4xl w-full h-[85vh] p-5 border-amber-700/80 shadow-2xl relative flex flex-col">
+      
       <!-- Modal Header -->
       <div class="flex items-center justify-between pb-3 border-b border-amber-900/60 shrink-0">
         <div class="flex items-center gap-2.5">
           <span class="text-3xl select-none">📜</span>
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <h3 class="text-lg md:text-xl font-cinzel font-bold text-amber-300">Court Archives &amp; Chat Logs</h3>
+              <h3 class="text-lg md:text-xl font-cinzel font-bold text-amber-300">Nhật Ký Lâu Đài &amp; Bản Ghi Tòa Án</h3>
               <span id="chatlog-access-badge" class="px-2 py-0.5 rounded text-[10px] font-mono"></span>
             </div>
-            <p class="text-xs text-stone-400 font-serif">Comprehensive records of all Great Hall speeches, private whispers, and clandestine AI intrigues.</p>
+            <p class="text-xs text-stone-400 font-serif">Hồ sơ lưu trữ toàn bộ phát ngôn Đại Sảnh, mật đàm riêng và tương tác ngầm giữa các AI.</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
@@ -585,10 +796,10 @@
       <!-- Sub-tabs within Chat Log Modal -->
       <div class="flex border-b border-stone-800 space-x-1 pt-2 pb-2 text-xs font-cinzel shrink-0 overflow-x-auto">
         <button id="chatlog-tab-btn-greathall" onclick="switchChatlogTab('greathall')" class="px-3 py-1.5 rounded-lg font-bold bg-amber-950/80 text-amber-300 border border-amber-700/60 transition flex items-center gap-1.5 whitespace-nowrap">
-          <span>🏰</span> Great Hall (<span id="chatlog-count-greathall">0</span>)
+          <span>🏰</span> Đại Sảnh (<span id="chatlog-count-greathall">0</span>)
         </button>
         <button id="chatlog-tab-btn-undercover" onclick="switchChatlogTab('undercover')" class="px-3 py-1.5 rounded-lg font-bold text-stone-400 hover:text-amber-300 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap">
-          <span>🕵️</span> Tương Tác Chéo Ngầm AI (<span id="chatlog-count-undercover">0</span>)
+          <span>🕵️</span> Tương Tác Ngầm AI (<span id="chatlog-count-undercover">0</span>)
         </button>
         <button id="chatlog-tab-btn-human" onclick="switchChatlogTab('human')" class="px-3 py-1.5 rounded-lg font-bold text-stone-400 hover:text-amber-300 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap">
           <span>🗝️</span> Mật Đàm Người Chơi (<span id="chatlog-count-human">0</span>)
@@ -624,101 +835,101 @@
   </div>
 
   <!-- Modal 4: Settings Modal -->
-  <div id="settings-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+  <div id="settings-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="parchment-card rounded-2xl max-w-md w-full p-6 border-stone-700 shadow-2xl relative">
       <button onclick="closeModal('settings-modal')" class="absolute top-4 right-4 text-stone-400 hover:text-stone-100 text-xl font-bold">✕</button>
       <h3 class="text-lg font-cinzel font-bold text-amber-300 mb-4 flex items-center gap-2">
-        <span>⚙️</span> Game &amp; AI Settings
+        <span>⚙️</span> Cài Đặt AI &amp; Khóa API
       </h3>
 
       <form onsubmit="saveSettings(event)" class="space-y-4 text-sm font-cinzel">
         <div>
-          <label class="block text-xs uppercase text-stone-400 mb-1">AI Provider:</label>
-          <select id="settings-provider-select" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+          <label class="block text-xs uppercase text-stone-400 mb-1">Mô Hình AI (Provider):</label>
+          <select id="settings-provider-select" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
             <option value="gemini">Google Gemini API (gemini-2.5-flash)</option>
             <option value="openai">OpenAI API (gpt-4o-mini)</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-xs uppercase text-stone-400 mb-1">API Key (Gemini or OpenAI):</label>
-          <input type="password" id="settings-key-input" placeholder="Paste your API key here..." 
-                 class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
-          <p class="text-[11px] text-stone-500 font-sans mt-1">Key is stored locally for this game session.</p>
+          <label class="block text-xs uppercase text-stone-400 mb-1">API Key (Gemini hoặc OpenAI):</label>
+          <input type="password" id="settings-key-input" placeholder="Dán mã API key của bạn vào đây..." 
+                 class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
+          <p class="text-[11px] text-stone-500 font-sans mt-1">Key được bảo mật trong phiên chơi hiện tại.</p>
         </div>
 
-        <button type="submit" class="w-full py-2.5 bg-stone-800 hover:bg-stone-700 text-amber-300 font-cinzel font-bold rounded-lg border border-stone-600 transition">
-          Save Settings
+        <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-stone-950 font-cinzel font-bold rounded-lg border border-amber-500/40 transition shadow">
+          Lưu Cài Đặt
         </button>
       </form>
     </div>
   </div>
 
-  <!-- Modal 4: Dramatic Blackout Overlay (Stage 3) -->
+  <!-- Modal 5: Dramatic Blackout Overlay (Stage 3) -->
   <div id="blackout-modal" class="hidden fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-6 text-center">
     <div id="lightning-fx" class="absolute inset-0 bg-white opacity-0 pointer-events-none"></div>
     <div class="relative z-10 max-w-lg space-y-4">
       <div class="text-6xl animate-bounce">⚡</div>
-      <h2 class="text-3xl md:text-5xl font-cinzel font-black text-red-600 tracking-wider">A MURDER IN THE MANOR!</h2>
+      <h2 class="text-2xl md:text-5xl font-cinzel font-black text-red-600 tracking-wider">ÁN MẠNG TẠI ĐẠI YẾN!</h2>
       <p class="text-stone-300 font-serif text-sm md:text-base leading-relaxed">
-        The torches were snuffed in darkness! A terrible cry echoed through the Great Hall!
-        <br><strong class="text-amber-400">Sir Rufus lies slain upon the floor with a dagger in his heart!</strong>
+        Những ngọn đuốc trong Đại Sảnh đột ngột vụt tắt trong bóng đêm! Một tiếng thét kinh hoàng vang lên xé toạc màn sương!
+        <br><strong class="text-amber-400">Hiệp sĩ Sir Rufus gục chết trên sàn tiệc với một nhát dao găm thấu tim!</strong>
       </p>
       <div class="pt-4">
-        <button onclick="dismissBlackout()" class="px-6 py-2.5 bg-red-950 hover:bg-red-900 text-red-200 border border-red-700 font-cinzel font-bold rounded-xl transition">
-          Examine the Crime Scene
+        <button onclick="dismissBlackout()" class="px-6 py-2.5 bg-red-950 hover:bg-red-900 text-red-200 border border-red-700 font-cinzel font-bold rounded-xl transition shadow-lg crimson-glow">
+          Khám Nghiệm Hiện Trường Ngay
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Modal 5: Grand Solution & Awards Modal (Stage 5) -->
+  <!-- Modal 6: Grand Solution & Awards Modal (Stage 5) -->
   <div id="solution-modal" class="hidden fixed inset-0 z-50 bg-black/90 overflow-y-auto flex items-center justify-center p-4">
     <div class="parchment-inner rounded-2xl max-w-2xl w-full p-6 md:p-8 border-8 border-[#523d27] shadow-2xl relative my-8">
       <button onclick="closeModal('solution-modal')" class="absolute top-4 right-4 text-[#5e452a] hover:text-[#261a0d] text-2xl font-black">✕</button>
       <div class="text-center mb-6">
-        <span class="text-5xl">🏆</span>
-        <h2 class="text-3xl font-cinzel font-black text-[#3d2b17] mt-2">The Royal Solution Revealed!</h2>
-        <div class="text-sm font-serif italic text-[#63492b]">As Declared by Willie the Watchman</div>
+        <span class="text-5xl filter drop-shadow">🏆</span>
+        <h2 class="text-2xl md:text-3xl font-cinzel font-black text-[#3d2b17] mt-2">Phán Quyết Triều Đình Được Công Bố!</h2>
+        <div class="text-sm font-serif italic text-[#63492b]">Tuyên cáo bởi Thị Vệ Willie the Watchman</div>
       </div>
 
       <div class="space-y-6 text-sm font-serif leading-relaxed text-[#261a0d]">
-        <div class="bg-amber-100/60 p-4 rounded-xl border border-amber-900/30">
-          <h4 class="font-cinzel font-bold text-base text-[#4a341c] mb-1">The True Murderer:</h4>
-          <p id="solution-killer-text" class="text-lg font-cinzel font-black text-red-800">Lady Diana of Dunnsberry</p>
-          <p id="solution-motive-text" class="mt-2 text-xs">Diana is an escaped serf from Dunnsberry seeking freedom after living 1 year + 1 day in Fernwood. Sir Rufus recognized her and threatened her freedom.</p>
+        <div class="bg-amber-100/70 p-4 rounded-xl border border-amber-900/40 shadow-sm">
+          <h4 class="font-cinzel font-bold text-base text-[#4a341c] mb-1">Kẻ Sát Nhân Đích Thực:</h4>
+          <p id="solution-killer-text" class="text-lg md:text-xl font-cinzel font-black text-red-800">Lady Diana of Dunnsberry</p>
+          <p id="solution-motive-text" class="mt-2 text-xs md:text-sm">Diana là một nông nô trốn chạy từ thái ấp Dunnsberry, tìm kiếm tự do sau khi sống đủ 1 năm + 1 ngày tại Fernwood. Sir Rufus đã nhận ra thân phận của nàng và đe dọa tước đi tự do ấy.</p>
         </div>
 
         <!-- Awards Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="p-3 bg-white/50 rounded-lg border border-[#826645]/40">
+          <div class="p-3 bg-white/60 rounded-lg border border-[#826645]/40 shadow-sm">
             <span class="text-xl">🎯</span>
-            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Smoking Gun Award (Sleuths)</h5>
-            <p id="award-smoking-gun" class="font-bold text-sm text-[#261a0d]">Calculating...</p>
+            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Thám Tử Xuất Sắc Nhất (Smoking Gun)</h5>
+            <p id="award-smoking-gun" class="font-bold text-sm text-[#261a0d]">Đang tính điểm...</p>
           </div>
 
-          <div class="p-3 bg-white/50 rounded-lg border border-[#826645]/40">
+          <div class="p-3 bg-white/60 rounded-lg border border-[#826645]/40 shadow-sm">
             <span class="text-xl">💰</span>
-            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Wealthiest Guest</h5>
-            <p id="award-wealthiest" class="font-bold text-sm text-[#261a0d]">Calculating...</p>
+            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Quý Tộc Giàu Có Nhất</h5>
+            <p id="award-wealthiest" class="font-bold text-sm text-[#261a0d]">Đang tính điểm...</p>
           </div>
 
-          <div class="p-3 bg-white/50 rounded-lg border border-[#826645]/40">
+          <div class="p-3 bg-white/60 rounded-lg border border-[#826645]/40 shadow-sm">
             <span class="text-xl">👗</span>
-            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Best Dressed Guest</h5>
-            <p id="award-dressed" class="font-bold text-sm text-[#261a0d]">Calculating...</p>
+            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Trang Phục Đẹp Nhất</h5>
+            <p id="award-dressed" class="font-bold text-sm text-[#261a0d]">Đang tính điểm...</p>
           </div>
 
-          <div class="p-3 bg-white/50 rounded-lg border border-[#826645]/40">
+          <div class="p-3 bg-white/60 rounded-lg border border-[#826645]/40 shadow-sm">
             <span class="text-xl">🎭</span>
-            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Best Acting / Cunning Liar</h5>
-            <p id="award-perf" class="font-bold text-sm text-[#261a0d]">Calculating...</p>
+            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Diễn Xuất / Kẻ Dối Trá Tài Ba Nhất</h5>
+            <p id="award-perf" class="font-bold text-sm text-[#261a0d]">Đang tính điểm...</p>
           </div>
         </div>
 
         <div class="text-center pt-4">
           <button onclick="closeModal('solution-modal')" class="px-6 py-2.5 bg-[#4a341c] hover:bg-[#332311] text-amber-100 font-cinzel font-bold rounded-xl shadow-lg transition">
-            Close Verdict &amp; Review Manor
+            Đóng Phán Quyết &amp; Xem Lại Lâu Đài
           </button>
         </div>
       </div>
@@ -854,18 +1065,35 @@
       }
     }
 
+    // Helper: Determine public vs LAN shareable link
+    function getShareableUrl() {
+      const host = window.location.hostname;
+      if (host && host !== 'localhost' && host !== '127.0.0.1' && !host.startsWith('192.168.') && !host.startsWith('10.')) {
+        return window.location.origin;
+      }
+      return appState.lanUrl || window.location.origin;
+    }
+
     // --- Networking & API Communication ---
     async function initApp() {
       try {
         const netRes = await fetch('/api/network-info');
         const netData = await netRes.json();
         appState.lanUrl = netData.lan_url;
-        document.getElementById('lan-url-display').innerText = netData.lan_url;
-        document.getElementById('network-modal-url').innerText = netData.lan_url;
-        // Generate QR code using reliable public QR API
-        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(netData.lan_url)}`;
-        document.getElementById('network-qr-image').src = qrUrl;
-      } catch (e) {}
+      } catch (e) {
+        appState.lanUrl = window.location.origin;
+      }
+
+      const shareUrl = getShareableUrl();
+      const lanDisplay = document.getElementById('lan-url-display');
+      const netModalUrl = document.getElementById('network-modal-url');
+      if (lanDisplay) lanDisplay.innerText = shareUrl;
+      if (netModalUrl) netModalUrl.innerText = shareUrl;
+
+      // Generate QR code using reliable public QR API
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(shareUrl)}`;
+      const qrImg = document.getElementById('network-qr-image');
+      if (qrImg) qrImg.src = qrUrl;
 
       await loadGameData();
       await restorePlayerState();
@@ -947,6 +1175,7 @@
         renderCharacterSelectionGrid();
         renderExhibitsGrid();
         renderVoteFormOptions();
+        renderQuickMentionsPillBar();
         document.getElementById('laws-of-the-land-body').innerText = appState.lawsOfTheLand;
 
         ensureMyCharacter();
@@ -1130,38 +1359,41 @@
         }
 
         const card = document.createElement('div');
-        card.className = `p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+        card.className = `p-3.5 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
           isSelectedByMe 
-            ? 'bg-amber-950/80 border-amber-400 gold-glow ring-2 ring-amber-500' 
+            ? 'bg-amber-950/80 border-amber-400 gold-glow ring-2 ring-amber-500 scale-[1.02]' 
             : claimedByOther 
               ? 'bg-stone-900/60 border-stone-800 opacity-50 cursor-not-allowed'
               : isVictim
                 ? 'bg-stone-900/60 border-stone-800 opacity-60'
-                : 'bg-stone-900/80 border-[#3d2e20] hover:border-amber-700/60 hover:bg-stone-800/80'
+                : 'bg-stone-900/80 border-[#3d2e20] hover:border-amber-600/80 hover:bg-stone-800/80 hover:scale-[1.01]'
         }`;
 
         card.innerHTML = `
           <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="text-2xl">${c.avatar_icon || '👤'}</span>
-              <span class="text-[10px] font-cinzel font-semibold px-2 py-0.5 rounded ${
-                isSelectedByMe ? 'bg-amber-500 text-amber-950' :
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-3xl select-none filter drop-shadow">${c.avatar_icon || '👤'}</span>
+              <span class="text-[10px] font-cinzel font-semibold px-2 py-0.5 rounded shadow-sm ${
+                isSelectedByMe ? 'bg-amber-500 text-stone-950 font-bold' :
                 claimedByOther ? 'bg-stone-800 text-stone-400' :
-                isVictim ? 'bg-red-950 text-red-300' : 'bg-stone-800 text-stone-300'
+                isVictim ? 'bg-red-950 text-red-300 border border-red-800' : 'bg-stone-800 text-stone-300'
               }">
-                ${isSelectedByMe ? 'YOU' : claimedByOther ? `Taken (${claimedName})` : isVictim ? 'Locked to AI' : 'Available'}
+                ${isSelectedByMe ? 'BẠN ĐÃ CHỌN' : claimedByOther ? `Đã nhận (${claimedName})` : isVictim ? 'Khóa (Nạn nhân)' : 'Khả Dụng'}
               </span>
             </div>
             <h4 class="font-cinzel font-bold text-sm text-amber-200">${c.name}</h4>
-            <div class="text-xs font-serif italic text-stone-400 mb-2">${c.title}</div>
-            <p class="text-[11px] text-stone-300/90 font-serif leading-tight line-clamp-3">${c.brief}</p>
+            <div class="text-xs font-serif italic text-amber-400/80 mb-2">${c.title}</div>
+            <p class="text-[11px] text-stone-300 font-serif leading-relaxed line-clamp-3">${c.brief}</p>
           </div>
-          <div class="mt-3 pt-2 border-t border-stone-800/80 text-right">
+          <div class="mt-3 pt-2.5 border-t border-stone-800/80 flex items-center justify-between text-xs">
+            <span class="text-[11px] text-amber-300/80 font-cinzel flex items-center gap-1">
+              <span>💰</span> ${c.coins || 12} vàng
+            </span>
             ${
-              isVictim ? '<span class="text-[10px] text-red-400 italic">Locked as victim</span>' :
-              claimedByOther ? '<span class="text-[10px] text-stone-500">Occupied</span>' :
-              isSelectedByMe ? '<span class="text-xs font-cinzel font-bold text-amber-400">✓ Chosen Role</span>' :
-              '<button class="text-xs font-cinzel font-bold text-amber-300 hover:text-amber-100">Select Role →</button>'
+              isVictim ? '<span class="text-[10px] text-red-400 italic">Khóa vai nạn nhân</span>' :
+              claimedByOther ? '<span class="text-[10px] text-stone-500">Đã có người chơi</span>' :
+              isSelectedByMe ? '<span class="text-xs font-cinzel font-bold text-amber-400">✓ Vai Của Bạn</span>' :
+              '<button class="text-xs font-cinzel font-bold text-amber-300 hover:text-amber-100 flex items-center gap-1">Nhận vai này →</button>'
             }
           </div>
         `;
@@ -1174,7 +1406,7 @@
     }
 
     async function selectCharacter(cid) {
-      const nameInput = document.getElementById('player-name-input').value.trim() || 'Noble Sleuth';
+      const nameInput = document.getElementById('player-name-input').value.trim() || 'Thám Tử Quý Tộc';
       appState.playerName = nameInput;
       localStorage.setItem('knight_player_name', nameInput);
 
@@ -1195,12 +1427,13 @@
           appState.myGold = data.character.current_gold;
           localStorage.setItem('knight_char_id', cid);
           renderCharacterSelectionGrid();
+          updatePersonaUI();
           soundEngine.playCoinClink();
         } else {
-          alert(data.detail || 'Could not select this role.');
+          alert(data.detail || 'Không thể chọn nhân vật này.');
         }
       } catch (e) {
-        alert('Network error joining game.');
+        alert('Lỗi kết nối khi chọn nhân vật.');
       }
     }
 
@@ -1218,7 +1451,7 @@
       soundEngine.init();
       soundEngine.startAmbientLute();
       if (!appState.characterId) {
-        alert('Please select a character persona first before starting the banquet!');
+        alert('Vui lòng chọn một nhân vật quý tộc trước khi khai tiệc!');
         return;
       }
       try {
@@ -1228,7 +1461,7 @@
           showGameDashboard();
         }
       } catch (e) {
-        alert('Failed to start banquet.');
+        alert('Không thể bắt đầu dạ tiệc.');
       }
     }
 
@@ -1247,6 +1480,7 @@
       renderGuestsDirectory();
       renderDossierView();
       renderVoteFormOptions();
+      renderQuickMentionsPillBar();
     }
 
     function updateHeaderGold() {
@@ -1258,18 +1492,18 @@
 
     function updateStageUI() {
       const stageTitles = {
-        1: "Stage 1: Arrival & Reception",
-        2: "Stage 2: The Banquet & Festivities",
-        3: "Stage 3: The Foul Murder of Sir Rufus",
-        4: "Stage 4: Presentation of Evidence & Accusations",
-        5: "Stage 5: The Grand Climax & Solution"
+        1: "Stage 1: Arrival & Reception (Đón Tiếp Khách Mời)",
+        2: "Stage 2: The Banquet & Festivities (Đại Yến Khai Màn)",
+        3: "Stage 3: The Foul Murder of Sir Rufus (Án Mạng Trong Đêm)",
+        4: "Stage 4: Presentation of Evidence & Accusations (Công Bố Tang Vật)",
+        5: "Stage 5: The Grand Climax & Royal Solution (Phán Quyết Triều Đình)"
       };
       const stageDescs = {
-        1: "Review your Envelope A in your Secret Dossier, observe the Laws of the Land, and seek whispers.",
-        2: "Lord Taylor opens the feast! Mingle, bribe guards or servants, and complete your start objectives.",
-        3: "Sir Rufus is dead! Willie investigates. Envelope B is now unlocked in your Secret Dossier!",
-        4: "Willie lays Exhibits A through F upon the table! Review the clues and submit your Who Dunnit ballot!",
-        5: "Willie delivers the final solution! The cold-blooded killer is unmasked!"
+        1: "Hãy xem phong bì Envelope A trong Hồ Sơ Bí Mật, tuân thủ Luật Lệ Lâu Đài và bắt đầu mật đàm với các nhân vật.",
+        2: "Lãnh chúa Taylor chính thức khai tiệc! Hãy trò chuyện, hối lộ thị vệ hoặc người hầu và hoàn thành các mục tiêu tiệc tùng.",
+        3: "Sir Rufus đã bị đâm chết! Thị vệ Willie vào cuộc điều tra. Phong bì Envelope B trong Hồ Sơ của bạn đã được mở niêm phong!",
+        4: "Thị vệ Willie bày các Tang Vật từ Exhibit A đến F lên bàn tiệc! Hãy tra xét manh mối và nộp Phiếu Kết Án!",
+        5: "Willie công bố phán quyết tối hậu! Kẻ thủ ác máu lạnh chính thức lộ diện trước toàn thể quý tộc!"
       };
 
       document.getElementById('header-stage-badge').innerText = `Stage ${appState.stage}`;
@@ -1283,6 +1517,23 @@
         document.getElementById('vote-nav-btn').classList.remove('hidden');
       } else if (appState.stage === 5) {
         document.getElementById('stage-banner-icon').innerText = '👑';
+      }
+
+      // Update Header Timeline Stepper
+      for (let s = 1; s <= 5; s++) {
+        const stepEl = document.getElementById(`timeline-step-${s}`);
+        if (!stepEl) continue;
+        if (s < appState.stage) {
+          stepEl.className = 'timeline-step flex items-center gap-1.5 p-1.5 rounded-lg border border-stone-700 bg-stone-900/60 text-stone-400';
+          const titleEl = stepEl.querySelector('.text-\\[10px\\]');
+          if (titleEl) titleEl.innerText = `Giai đoạn ${s} ✓`;
+        } else if (s === appState.stage) {
+          stepEl.className = 'timeline-step flex items-center gap-1.5 p-1.5 rounded-lg border border-amber-500 bg-amber-950/80 text-amber-200 gold-glow ring-1 ring-amber-400/60 animate-pulse-subtle';
+          const titleEl = stepEl.querySelector('.text-\\[10px\\]');
+          if (titleEl) titleEl.innerText = `Giai đoạn ${s} (Hiện tại)`;
+        } else {
+          stepEl.className = 'timeline-step flex items-center gap-1.5 p-1.5 rounded-lg border border-stone-800 bg-stone-900/30 text-stone-500 opacity-60';
+        }
       }
 
       updateReadyButton();
@@ -1301,7 +1552,7 @@
       }
 
       const nextStage = appState.stage + 1;
-      text.innerText = `Advance to Stage ${nextStage}`;
+      text.innerText = `Sẵn Sàng Qua Stage ${nextStage}`;
 
       // Count ready players
       let totalHumans = Object.keys(appState.humanPlayers).length;
@@ -1318,10 +1569,12 @@
       badge.innerText = `${readyHumans}/${totalHumans} Ready`;
       if (amIReady) {
         icon.innerText = '🟢';
-        btn.classList.add('border-green-600', 'bg-green-950/60');
+        btn.classList.add('border-green-600', 'bg-green-950/70', 'text-green-200');
+        btn.classList.remove('border-stone-600', 'bg-stone-800');
       } else {
         icon.innerText = '⚪';
-        btn.classList.remove('border-green-600', 'bg-green-950/60');
+        btn.classList.remove('border-green-600', 'bg-green-950/70', 'text-green-200');
+        btn.classList.add('border-stone-600', 'bg-stone-800');
       }
     }
 
@@ -1338,7 +1591,7 @@
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.tab-btn').forEach(el => {
-        el.classList.remove('border-amber-500', 'text-amber-300', 'bg-stone-900/60');
+        el.classList.remove('border-amber-500', 'text-amber-300', 'bg-stone-900/70');
         el.classList.add('border-transparent', 'text-stone-400');
       });
 
@@ -1354,7 +1607,7 @@
       };
       const activeBtn = document.getElementById(btnMap[tabId]);
       if (activeBtn) {
-        activeBtn.classList.add('border-amber-500', 'text-amber-300', 'bg-stone-900/60');
+        activeBtn.classList.add('border-amber-500', 'text-amber-300', 'bg-stone-900/70');
         activeBtn.classList.remove('border-transparent', 'text-stone-400');
       }
 
@@ -1370,6 +1623,24 @@
         renderPrivateConversationsList();
         renderPrivateMessages();
       }
+    }
+
+    // --- Quick Mentions Pill Bar (1-tap on mobile) ---
+    function renderQuickMentionsPillBar() {
+      const container = document.getElementById('great-hall-quick-mentions');
+      if (!container) return;
+      container.innerHTML = '<span class="text-stone-400 text-[10px] whitespace-nowrap">Tag nhanh:</span>';
+
+      const char = ensureMyCharacter();
+      (appState.allCharacters || []).forEach(c => {
+        if (char && c.id === char.id) return;
+        const pill = document.createElement('button');
+        pill.type = 'button';
+        pill.className = 'px-2 py-0.5 rounded-full bg-stone-900 hover:bg-amber-950 border border-stone-700 hover:border-amber-600 text-stone-300 hover:text-amber-200 transition text-[11px] font-cinzel whitespace-nowrap flex items-center gap-1 shadow-sm';
+        pill.innerHTML = `<span>${c.avatar_icon || '👤'}</span> <span>@${c.name.split(' ')[0]}</span>`;
+        pill.onclick = () => mentionCharacterInGreatHall(c.name);
+        container.appendChild(pill);
+      });
     }
 
     // --- Great Hall Chat Logic & Mentions ---
@@ -1392,30 +1663,38 @@
       appState.greatHallMessages.forEach(m => {
         const isAnnouncement = m.type === 'announcement' || m.type === 'event';
         const isMe = (appState.myCharacter && m.sender_id === appState.myCharacter.id);
+        const timeStr = m.timestamp ? new Date(m.timestamp * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
 
         const row = document.createElement('div');
         if (isAnnouncement) {
-          row.className = 'p-3 rounded-lg bg-amber-950/40 border border-amber-800/60 my-2';
+          row.className = 'p-3.5 rounded-xl bg-amber-950/50 border border-amber-600/60 my-2 shadow-md';
           row.innerHTML = `
-            <div class="flex items-center gap-2 mb-1">
-              <span class="text-xl">${m.sender_avatar || '🎺'}</span>
-              <span class="font-cinzel font-bold text-amber-300 text-xs">${m.sender_name}</span>
+            <div class="flex items-center justify-between mb-1.5">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl filter drop-shadow">${m.sender_avatar || '🎺'}</span>
+                <span class="font-cinzel font-bold text-amber-300 text-xs md:text-sm tracking-wide">${m.sender_name}</span>
+              </div>
+              <span class="text-[10px] text-amber-400/80 font-mono">${timeStr}</span>
             </div>
-            <p class="text-amber-100/90 text-xs md:text-sm font-serif italic whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
+            <p class="text-amber-100/95 text-xs md:text-sm font-serif italic whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
           `;
         } else {
           row.className = `flex gap-2.5 ${isMe ? 'justify-end' : 'justify-start'}`;
           row.innerHTML = `
-            ${!isMe ? `<span class="text-2xl select-none">${m.sender_avatar || '👤'}</span>` : ''}
-            <div class="max-w-[80%] rounded-xl px-3.5 py-2 ${
-              isMe ? 'bg-amber-900/80 text-amber-100 border border-amber-600/40' : 'bg-stone-800/90 text-stone-200 border border-stone-700'
+            ${!isMe ? `<span class="text-2xl select-none filter drop-shadow cursor-pointer" onclick="openPrivateChat('${m.sender_id}')" title="Bấm để mật đàm với ${m.sender_name}">${m.sender_avatar || '👤'}</span>` : ''}
+            <div class="max-w-[85%] sm:max-w-[75%] rounded-xl px-3.5 py-2.5 shadow-md ${
+              isMe ? 'bg-amber-900/80 text-amber-100 border border-amber-500/50' : 'bg-stone-800/95 text-stone-200 border border-stone-700'
             }">
-              <div class="text-[10px] font-cinzel font-bold ${isMe ? 'text-amber-300 text-right' : 'text-amber-400'} mb-0.5">
-                ${m.sender_name}
+              <div class="flex items-center justify-between gap-3 text-[10px] font-cinzel font-bold ${isMe ? 'text-amber-300 text-right' : 'text-amber-400'} mb-1">
+                <div class="flex items-center gap-1.5 truncate">
+                  <span>${m.sender_name}</span>
+                  ${!isMe ? `<button type="button" onclick="openPrivateChat('${m.sender_id}')" class="text-[10px] text-amber-400/90 hover:text-amber-200 underline font-normal ml-1" title="Mở phòng mật đàm riêng">🗝️ Mật đàm</button>` : ''}
+                </div>
+                <span class="text-[9px] text-stone-400 font-mono shrink-0">${timeStr}</span>
               </div>
-              <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-snug">${formatMentions(m.content)}</p>
+              <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
             </div>
-            ${isMe ? `<span class="text-2xl select-none">${m.sender_avatar || '👤'}</span>` : ''}
+            ${isMe ? `<span class="text-2xl select-none filter drop-shadow">${m.sender_avatar || '👤'}</span>` : ''}
           `;
         }
         container.appendChild(row);
@@ -1547,7 +1826,6 @@
         return;
       }
 
-      // If input doesn't already have @, add it
       if (!input.value.endsWith('@') && !input.value.endsWith('@ ')) {
         const val = input.value;
         input.value = val ? (val + ' @') : '@';
@@ -1583,7 +1861,6 @@
         return;
       }
 
-      // Check character preceding @ (must be start of text or whitespace / bracket / quote)
       if (lastAtIndex > 0 && !/[\s([{"']/.test(textBeforeCursor[lastAtIndex - 1])) {
         closeMentionAutocomplete();
         return;
@@ -1732,7 +2009,6 @@
       appState.allCharacters.forEach(c => {
         if (appState.myCharacter && c.id === appState.myCharacter.id) return;
 
-        // Directory card with full untruncated name, title, role badge and clean action buttons
         const row = document.createElement('div');
         row.className = 'p-2.5 rounded-lg bg-stone-900/70 hover:bg-stone-800/80 border border-stone-800 transition flex flex-col gap-1.5 shadow-sm';
         const escapedName = c.name.replace(/'/g, "\\'");
@@ -1802,7 +2078,7 @@
             <div class="min-w-0 flex-1">
               <div class="font-cinzel font-bold text-xs truncate ${isActive ? 'text-amber-300' : 'text-stone-200'}">${c.name}</div>
               <div class="text-[10px] text-stone-400 italic font-serif truncate">
-                ${lastMsg ? (lastMsg.sender_id === (char ? char.id : '') ? 'You: ' : '') + lastMsg.content : c.title}
+                ${lastMsg ? (lastMsg.sender_id === (char ? char.id : '') ? 'Bạn: ' : '') + lastMsg.content : c.title}
               </div>
             </div>
           </div>
@@ -1816,6 +2092,16 @@
       });
     }
 
+    function mobileBackToWhisperList() {
+      const container = document.getElementById('private-conversations-container');
+      const chatWin = document.getElementById('private-chat-window');
+      if (container && chatWin) {
+        container.classList.remove('hidden');
+        chatWin.classList.add('hidden');
+        chatWin.classList.remove('flex');
+      }
+    }
+
     function openPrivateChat(recipientId) {
       if (!recipientId) return;
       appState.activePrivateRecipientId = recipientId;
@@ -1823,15 +2109,26 @@
       // Show tab-private directly
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       document.querySelectorAll('.tab-btn').forEach(el => {
-        el.classList.remove('border-amber-500', 'text-amber-300', 'bg-stone-900/60');
+        el.classList.remove('border-amber-500', 'text-amber-300', 'bg-stone-900/70');
         el.classList.add('border-transparent', 'text-stone-400');
       });
       const target = document.getElementById('tab-private');
       if (target) target.classList.remove('hidden');
       const activeBtn = document.getElementById('nav-btn-private');
       if (activeBtn) {
-        activeBtn.classList.add('border-amber-500', 'text-amber-300', 'bg-stone-900/60');
+        activeBtn.classList.add('border-amber-500', 'text-amber-300', 'bg-stone-900/70');
         activeBtn.classList.remove('border-transparent', 'text-stone-400');
+      }
+
+      // Responsive mobile toggle: on mobile screens (< 768px), show chat window and hide conversation list
+      if (window.innerWidth < 768) {
+        const container = document.getElementById('private-conversations-container');
+        const chatWin = document.getElementById('private-chat-window');
+        if (container && chatWin) {
+          container.classList.add('hidden');
+          chatWin.classList.remove('hidden');
+          chatWin.classList.add('flex');
+        }
       }
 
       renderPrivateConversationsList();
@@ -1841,10 +2138,13 @@
       if (header && recipient) {
         header.innerHTML = `
           <div class="flex items-center gap-2">
-            <span class="text-xl">${recipient.avatar_icon || '👤'}</span>
+            <button onclick="mobileBackToWhisperList()" class="md:hidden px-2 py-1 bg-stone-800 hover:bg-stone-700 rounded text-amber-300 text-xs font-cinzel">
+              ← Danh Sách
+            </button>
+            <span class="text-xl filter drop-shadow">${recipient.avatar_icon || '👤'}</span>
             <div>
               <span class="font-cinzel font-bold text-amber-300 text-sm">${recipient.name}</span>
-              <span class="text-xs text-stone-400 font-serif italic ml-2">(${recipient.title})</span>
+              <span class="text-xs text-stone-400 font-serif italic ml-1">(${recipient.title})</span>
             </div>
           </div>
           <button type="button" onclick="openModal('bribe-modal')" class="text-xs text-amber-400 hover:text-amber-300 hover:underline flex items-center gap-1 font-cinzel font-bold">
@@ -1881,39 +2181,73 @@
 
       msgs.forEach(m => {
         const isMe = (m.sender_id === char.id);
+        const timeStr = m.timestamp ? new Date(m.timestamp * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
         const row = document.createElement('div');
         row.className = `flex gap-2.5 ${isMe ? 'justify-end' : 'justify-start'}`;
         row.innerHTML = `
-          ${!isMe ? `<span class="text-2xl select-none">${m.sender_avatar || '👤'}</span>` : ''}
-          <div class="max-w-[80%] rounded-xl px-3.5 py-2 ${
-            isMe ? 'bg-amber-900/80 text-amber-100 border border-amber-600/40' : 'bg-stone-800/90 text-stone-200 border border-stone-700'
+          ${!isMe ? `<span class="text-2xl select-none filter drop-shadow">${m.sender_avatar || '👤'}</span>` : ''}
+          <div class="max-w-[85%] sm:max-w-[75%] rounded-xl px-3.5 py-2.5 shadow-md ${
+            isMe ? 'bg-amber-900/80 text-amber-100 border border-amber-500/50' : 'bg-stone-800/95 text-stone-200 border border-stone-700'
           }">
-            <div class="text-[10px] font-cinzel font-bold ${isMe ? 'text-amber-300 text-right' : 'text-amber-400'} mb-0.5">
-              ${m.sender_name}
+            <div class="flex items-center justify-between gap-3 text-[10px] font-cinzel font-bold ${isMe ? 'text-amber-300 text-right' : 'text-amber-400'} mb-1">
+              <span>${m.sender_name}</span>
+              <span class="text-[9px] text-stone-400 font-mono shrink-0">${timeStr}</span>
             </div>
-            <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-snug">${m.content}</p>
+            <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-relaxed">${m.content}</p>
           </div>
-          ${isMe ? `<span class="text-2xl select-none">${m.sender_avatar || '👤'}</span>` : ''}
+          ${isMe ? `<span class="text-2xl select-none filter drop-shadow">${m.sender_avatar || '👤'}</span>` : ''}
         `;
         container.appendChild(row);
       });
       container.scrollTop = container.scrollHeight;
     }
 
-    async function sendPrivateMessage(e) {
-      if (e) e.preventDefault();
-      const input = document.getElementById('private-input');
-      if (!input) return;
-      const content = input.value.trim();
-      if (!content || !appState.activePrivateRecipientId) return;
-
+    async function quickBribe(amount) {
+      if (!appState.activePrivateRecipientId) {
+        alert('Vui lòng chọn một nhân vật để gửi hối lộ!');
+        return;
+      }
+      const recipient = (appState.allCharacters || []).find(c => c.id === appState.activePrivateRecipientId);
+      if (!recipient) return;
       const char = ensureMyCharacter();
       if (!char) {
-        alert('Vui lòng chọn nhân vật đại diện trước khi thì thầm!');
+        alert('Vui lòng chọn nhân vật đại diện trước!');
+        return;
+      }
+      if (amount > appState.myGold) {
+        alert(`Bạn không có đủ ${amount} đồng vàng! Hiện có: ${appState.myGold} vàng.`);
         return;
       }
 
-      input.value = '';
+      try {
+        const res = await fetch('/api/bribe', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            sender_id: char.id,
+            receiver_id: recipient.id,
+            amount: amount,
+            message: `Hối lộ kín ${amount} đồng vàng`
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          appState.myGold = data.new_gold;
+          updateHeaderGold();
+          soundEngine.playCoinClink();
+          // Also send a descriptive whisper message in the chamber
+          await sendDirectPrivateMessage(`*[Kín đáo dúi ${amount} đồng vàng vào tay áo]* "Một chút thành ý gửi đến bạn..."`);
+        } else {
+          alert(data.detail || 'Giao dịch vàng thất bại.');
+        }
+      } catch (e) {
+        alert('Lỗi chuyển vàng hối lộ.');
+      }
+    }
+
+    async function sendDirectPrivateMessage(content) {
+      const char = ensureMyCharacter();
+      if (!char || !appState.activePrivateRecipientId || !content) return;
 
       const payload = {
         action: 'send_message',
@@ -1928,9 +2262,7 @@
         try {
           appState.ws.send(JSON.stringify(payload));
           sent = true;
-        } catch (wsErr) {
-          console.warn('WS private send failed, trying HTTP fallback:', wsErr);
-        }
+        } catch (e) {}
       }
 
       if (!sent) {
@@ -1947,26 +2279,25 @@
           });
           const resData = await res.json();
           if (resData.status === 'ok') {
-            sent = true;
             const key = [char.id, appState.activePrivateRecipientId].sort().join('__');
             if (!appState.privateChats[key]) appState.privateChats[key] = [];
-            if (!appState.privateChats[key].some(m => m.id === resData.message.id)) {
-              appState.privateChats[key].push(resData.message);
-            }
-            const otherId = appState.activePrivateRecipientId;
-            if (!appState.privateChats[otherId]) appState.privateChats[otherId] = [];
-            if (!appState.privateChats[otherId].some(m => m.id === resData.message.id)) {
-              appState.privateChats[otherId].push(resData.message);
-            }
+            appState.privateChats[key].push(resData.message);
             renderPrivateMessages();
             renderPrivateConversationsList();
           }
-        } catch (httpErr) {
-          console.error('HTTP private send error:', httpErr);
-          input.value = content;
-          alert('Không thể gửi mật đàm. Vui lòng thử lại!');
-        }
+        } catch (e) {}
       }
+    }
+
+    async function sendPrivateMessage(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('private-input');
+      if (!input) return;
+      const content = input.value.trim();
+      if (!content || !appState.activePrivateRecipientId) return;
+
+      input.value = '';
+      await sendDirectPrivateMessage(content);
     }
 
     // --- Dossier & Envelope Rendering ---
@@ -1978,7 +2309,7 @@
       document.getElementById('dossier-name').innerText = c.name;
       document.getElementById('dossier-title').innerText = c.title;
       document.getElementById('dossier-bio').innerText = c.bio || c.brief;
-      document.getElementById('dossier-acting').innerText = c.acting_tips || 'Carry yourself with medieval nobility.';
+      document.getElementById('dossier-acting').innerText = c.acting_tips || 'Hãy giữ phong thái cao quý của một nhân vật thời trung cổ.';
 
       // Things you know
       const tykList = document.getElementById('dossier-tyk-list');
@@ -1989,15 +2320,23 @@
         tykList.appendChild(li);
       });
 
-      // Start objectives checklist
+      // Start objectives checklist & progress
       const startObjList = document.getElementById('dossier-start-obj-list');
       startObjList.innerHTML = '';
       const checkedSet = new Set(c.checked_objectives || []);
+      const totalObj = (c.envelope_a?.start_objectives || []).length;
+      const completedObj = checkedSet.size;
+      const pct = totalObj > 0 ? Math.round((completedObj / totalObj) * 100) : 0;
+
+      const progressEl = document.getElementById('dossier-obj-progress-bar');
+      const progressText = document.getElementById('dossier-obj-progress-text');
+      if (progressEl) progressEl.style.width = `${pct}%`;
+      if (progressText) progressText.innerText = `${completedObj}/${totalObj} (${pct}%)`;
 
       (c.envelope_a?.start_objectives || []).forEach((obj, idx) => {
         const isChecked = checkedSet.has(idx);
         const item = document.createElement('div');
-        item.className = 'flex items-start gap-2.5 p-2 rounded-lg bg-black/30 border border-stone-800 text-xs font-serif cursor-pointer hover:border-amber-800/60 transition';
+        item.className = 'flex items-start gap-2.5 p-2 rounded-lg bg-black/40 border border-stone-800 text-xs font-serif cursor-pointer hover:border-amber-700/60 transition';
         item.innerHTML = `
           <input type="checkbox" ${isChecked ? 'checked' : ''} class="mt-0.5 rounded text-amber-600 focus:ring-0 cursor-pointer">
           <span class="${isChecked ? 'line-through text-stone-500' : 'text-stone-300'}">${obj}</span>
@@ -2022,11 +2361,11 @@
         envBBadge.className = 'text-xs bg-red-950 text-red-200 border border-red-600 px-2 py-0.5 rounded font-cinzel font-bold';
         envBBadge.innerText = 'UNSEALED';
 
-        let afterHtml = '<div class="text-xs font-cinzel text-red-400 mb-2 uppercase font-semibold">Post-Murder Objectives:</div><ul class="space-y-1.5 text-xs text-stone-200 font-serif list-disc list-inside">';
+        let afterHtml = '<div class="text-xs font-cinzel text-red-400 mb-2 uppercase font-semibold">Chỉ Dẫn Sau Án Mạng:</div><ul class="space-y-1.5 text-xs text-stone-200 font-serif list-disc list-inside">';
         (c.envelope_b?.after_murder_objectives || []).forEach(item => {
           const isMurdererAlert = item.includes('YOU ARE THE MURDERER');
           if (isMurdererAlert) {
-            afterHtml += `<li class="text-red-400 font-bold bg-red-950/80 p-2 rounded border border-red-700/60">${item}</li>`;
+            afterHtml += `<li class="text-red-400 font-bold bg-red-950/90 p-2.5 rounded-lg border border-red-600 shadow">${item}</li>`;
           } else {
             afterHtml += `<li>${item}</li>`;
           }
@@ -2064,8 +2403,8 @@
       appState.allExhibits.forEach(ex => {
         const isRevealed = (appState.stage >= 4 || appState.revealedExhibits.includes(ex.id));
         const card = document.createElement('div');
-        card.className = `p-4 rounded-xl border ${
-          isRevealed ? 'parchment-inner border-[#523d27] shadow-lg' : 'bg-stone-900/60 border-stone-800 opacity-50'
+        card.className = `p-4 rounded-xl border transition shadow-md ${
+          isRevealed ? 'parchment-inner border-[#523d27]' : 'bg-stone-900/60 border-stone-800 opacity-50'
         }`;
 
         if (isRevealed) {
@@ -2075,15 +2414,15 @@
               <span class="text-[10px] font-cinzel font-semibold bg-[#4a341c] text-amber-200 px-1.5 py-0.5 rounded">Exhibit ${ex.id}</span>
             </div>
             <div class="text-xs font-serif italic text-[#5e452a] mb-2">${ex.description}</div>
-            <p class="text-xs font-serif text-[#261a0d] leading-relaxed"><strong class="font-cinzel">Investigation Notes:</strong> ${ex.notes}</p>
+            <p class="text-xs font-serif text-[#261a0d] leading-relaxed"><strong class="font-cinzel">Ghi Chú Khám Nghiệm:</strong> ${ex.notes}</p>
           `;
         } else {
           card.innerHTML = `
             <div class="flex items-center justify-between border-b border-stone-700 pb-1.5 mb-2">
               <h4 class="font-cinzel font-bold text-sm text-stone-400">Exhibit ${ex.id}</h4>
-              <span class="text-[10px] bg-stone-800 text-stone-500 px-1.5 py-0.5 rounded">Sealed</span>
+              <span class="text-[10px] bg-stone-800 text-stone-500 px-1.5 py-0.5 rounded">Niêm Phong</span>
             </div>
-            <p class="text-xs text-stone-500 italic font-serif">In custody of ${ex.held_by}. Presented to court in Stage 4.</p>
+            <p class="text-xs text-stone-500 italic font-serif">Đang được giữ bởi ${ex.held_by}. Sẽ được công bố chính thức tại Stage 4.</p>
           `;
         }
         grid.appendChild(card);
@@ -2097,7 +2436,7 @@
       const perfSelect = document.getElementById('vote-perf-select');
       if (!accusedSelect) return;
 
-      accusedSelect.innerHTML = '<option value="" disabled selected>-- Select the Murderer --</option>';
+      accusedSelect.innerHTML = '<option value="" disabled selected>-- Chọn Hung Thủ Sát Hại Sir Rufus --</option>';
       dressedSelect.innerHTML = '';
       perfSelect.innerHTML = '';
 
@@ -2145,12 +2484,12 @@
         const data = await res.json();
         if (data.status === 'ok') {
           soundEngine.playFanfare();
-          alert('Your accusation ballot has been sealed and entered into the court records!');
-          document.getElementById('vote-submit-btn').innerText = '✓ Ballot Submitted';
+          alert('Phiếu tố cáo của bạn đã được niêm phong sáp đỏ và chuyển vào sổ lưu tòa án!');
+          document.getElementById('vote-submit-btn').innerText = '✓ Đã Nộp Phiếu Tố Cáo';
           document.getElementById('vote-submit-btn').disabled = true;
         }
       } catch (e) {
-        alert('Failed to submit ballot.');
+        alert('Không thể nộp phiếu tố cáo.');
       }
     }
 
@@ -2163,7 +2502,7 @@
 
       if (!recipientId || amount <= 0 || !appState.myCharacter) return;
       if (amount > appState.myGold) {
-        alert('You do not possess enough gold coins for such a lavish sum!');
+        alert('Bạn không sở hữu đủ số vàng quý giá này!');
         return;
       }
 
@@ -2184,12 +2523,12 @@
           updateHeaderGold();
           soundEngine.playCoinClink();
           closeModal('bribe-modal');
-          alert(`You discreetly handed ${amount} gold coins to the recipient.`);
+          alert(`Bạn đã kín đáo trao ${amount} đồng vàng cho người nhận.`);
         } else {
-          alert(data.detail || 'Transfer failed.');
+          alert(data.detail || 'Giao dịch vàng thất bại.');
         }
       } catch (e) {
-        alert('Error transferring gold.');
+        alert('Lỗi chuyển vàng.');
       }
     }
 
@@ -2236,7 +2575,7 @@
         })
       });
       closeModal('settings-modal');
-      alert('Settings updated successfully!');
+      alert('Cài đặt API đã được lưu thành công!');
     }
 
     function openModal(id) {
@@ -2250,8 +2589,9 @@
     }
 
     function copyLanUrl() {
-      navigator.clipboard.writeText(appState.lanUrl).then(() => {
-        alert('Network URL copied to clipboard!');
+      const url = getShareableUrl();
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Đã sao chép liên kết phòng vào bộ nhớ tạm: ' + url);
       });
     }
 
@@ -2497,7 +2837,7 @@
           currentChatlogData.transactions.forEach(tx => {
             const timeStr = new Date(tx.timestamp * 1000).toLocaleTimeString();
             const row = document.createElement('div');
-            row.className = 'p-2.5 rounded-lg bg-stone-900/70 border border-amber-900/40 flex items-center justify-between';
+            row.className = 'p-2.5 rounded-lg bg-stone-900/70 border border-amber-900/40 flex items-center justify-between shadow-sm';
             row.innerHTML = `
               <div class="flex items-center gap-2">
                 <span class="text-lg">💰</span>
@@ -2505,7 +2845,7 @@
                   <div class="font-cinzel text-xs text-stone-200 font-bold">
                     <span class="text-amber-300">${tx.from_name}</span> ➔ <span class="text-amber-300">${tx.to_name}</span>
                   </div>
-                  <div class="text-[11px] text-stone-400 font-serif italic">"${tx.message || 'No note'}"</div>
+                  <div class="text-[11px] text-stone-400 font-serif italic">"${tx.message || 'Không có ghi chú'}"</div>
                 </div>
               </div>
               <div class="text-right">

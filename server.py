@@ -484,7 +484,7 @@ async def root():
 @app.get("/api/network-info")
 async def get_network_info():
     ip = get_lan_ip()
-    port = 8000
+    port = int(os.getenv("PORT", 8000))
     lan_url = f"http://{ip}:{port}"
     return {
         "ip": ip,
