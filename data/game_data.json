@@ -1,0 +1,502 @@
+{
+  "title": "A Knight of Murder",
+  "setting": "Fernwood Manor, 14th Century England",
+  "speeches": {
+    "introduction": "Hello and welcome to this grand celebration. For those of you who don't know me, I am Lord Taylor, the lord of this fine manor. I want to take this opportunity to thank you all for taking the time to be here to celebrate the marriage of my only son, Baron Bartholomew, to the Lady Diana of Dunnsberry- a noble marriage that I could not help but be elated with. I am sure that each and every one of you has a special place and purpose here tonight and I am glad that you all made it here to celebrate with us.",
+    "investigation": "As you can all see, there was a murder that just occurred amongst us all. The victim, Sir Rufus, who was a noble and victorious knight, was just stabbed to death before our very eyes. At this time, I need to ask for your full cooperation in this investigation. It is important that no one leave the castle as you are all considered suspects.\n\nCurrently, the host will be handing each of you a sealed envelope. You will want to open and read that information carefully. That envelope will contain information and objectives that will help you conduct your own investigation. For some of you, it will provide bargaining and blackmailing power; for others, it may be the secret that you are the murderer. Conduct your investigation wisely and let no one know the secrets that you are not to reveal. It is now that you will try to uncover the possible motives that each of you may have for wanting Sir Rufus dead.\n\nAfter I have questioned some of you and conducted my own investigation into this crime, I will be presenting the tangible evidence that I have found. You will then get a chance to examine that evidence before you make a final accusation as to who the killer is among you. Until then, I suggest you conduct your own investigation by questioning each other and uncovering possible motives for the death of Sir Rufus.\n\nThank you and I will be addressing you again once I have collected the evidence to show you.",
+    "toast": "Friends, nobles, and honored guests of Fernwood! I call upon all of you to raise your goblets high in honor of my son Baron Bartholomew and his lovely bride, Lady Diana of Dunnsberry! May their union bring everlasting prosperity, peace, and glory to the manor of Fernwood! To the bride and groom!",
+    "evidence_presentation": "After review of all the facts of this murder and conducting my own investigation, these are the facts and evidence that I have uncovered pertaining to this murder.\n\nAt approximately eight thirty tonight, Friday, December 2nd, Sir Rufus was found dead. Sir Rufus was a knight in the manor of Fernwood who had just won his first joust earlier today against the very popular and undefeated Sir Cameron.\n\nUpon further investigation, I was able to uncover some evidence to help in the investigation.\n\nEXHIBIT A (hold up exhibit A) is the weapon we found at the scene of the crime. This dagger was found lodged in the victim's chest, thus, ending his life prematurely.\n\nEXHIBIT B (hold up exhibit B) are the personal items found on the victim at the time of the crime. Among these items is a handkerchief that is said to be that of Maid Marilyn. When asked, Maid Marilyn claimed that she had to give it to him earlier tonight as a sign of her favor. She said it is part of the laws of the kingdom.\n\nEXHIBIT C (hold up exhibit C) are the laws of the kingdom, provided by the queen, proving this fact. In clause 5b it is stated that the winner of a joust can request the favor of any woman he chooses that night.\n\nEXHIBIT D (hold up exhibit D) is a bottle of poison. This bottle is said to be found in the horse stall of Sir Cameron's horse, Stallion, after the joust took place. This poison is known to be harmless to humans, but affects horses greatly.\n\nEXHIBIT E (hold up exhibit E) is a note that was found. It appears Sir Rufus has been threatening some of the families in the land.\n\nEXHIBIT F (hold up exhibit F) is a similar note confiscated from Baron Bartholomew. It seems that Sir Rufus was also trying to blackmail the baron.\n\nI will leave these articles of evidence out so that you all can review them as you make your own claims about the identity of the murderer. Thank you for your help with the investigation.\n\n©2012 Night of Mystery Inc. • www.nightofmystery.com\n\nA Knight of Murder",
+    "solution": "(To be read by Willie the Watchperson after everyone has turned in their accusations)\n\nAfter reviewing the evidence, I have come to the conclusion that the murderer must be Lady Diana of Dunnsberry. I feel that Lady Diana committed this act to keep Sir Rufus from exposing the fact that Lady Diana is not a lady indeed, but rather a serf from another manor that is trying to gain her independence.\n\nAlthough Lady Diana or should I just say, Diana, did a great job at trying to mislead us all, I have come to this conclusion based upon the following evidence:\n\n• If you take a close look at the coinage found on the body of Sir Rufus, you will see that there is coinage from both Dunnsberry and Fernwood, leading us to believe that Sir Rufus was in fact from Dunnsberry as well, or at least had visited there.\n\n• Furthermore, if you examine the coinage of Dunnsberry, you will note the distinct coat of arms that is to represent the manor of Dunnsberry.\n\n• If you examine the murder weapon, you see that the same coat of arms is inscribed upon it. • This links the murder weapon to a resident of Dunnsberry, but does not display the motive. I believe that Sir Rufus recognized Lady Diana from his travels to Dunnsberry, but not as a lady, rather as a serf.\n\nI have come to THIS conclusion based on the following evidence:\n\n• If you are to take a close look at the Laws of the Land, you will see that a serf can gain their freedom in this kingdom only by escaping to another manor and living there for one year plus one day. Today marks the one year anniversary of when Diana entered this manor. You should all be well aware of this, for it is was stated on both the manor announcements and in the greeting at the beginning of the night that the baron was to marry his bride exactly one year from when she came to the manor and they met.\n\n• This is consistent with the blackmail note to the baron, in which Sir Rufus alluded to knowing that Diana was no more noble than the barons's true love, which some may know as Maid Monica, the daughter of a servant.\n\n• Further, if you examine some of Diana's actions tonight, you will note that she does not have the markings of a true noblewoman.\n\n- Diana has claimed to make her own outfit for her wedding.\n\n- Diana brought food to the party that she herself made.\n\n- Baron Bartholomew noted that she makes one delicious stew.\n\nBy examining Diana's behaviors, we can conclude that she is not a true lady, for she knows how to cook and sew, two things that a noble woman would never know how to do.\n\nToday was the last day that Lady Diana had to live in this manor to gain her independence. With her freedom so close, it is clear that Diana acted in desperation and killed Sir Rufus to ensure her freedom. Sir Rufus was the only one in Fernwood who would have recognized her from Dunnsberry as a serf and put her independence in jeopardy.\n\n©2012 Night of Mystery Inc. • www.nightofmystery.com",
+    "laws_of_the_land": "Laws of the Land As set forth by Queen Genevieve on how his kingdom is to be ruled\n\nI. Betrayal of the queen is punishable by death!!! II. The lord's word is law in his manor\n\na. The only person who can overrule a lord is the queen.\n\nb. A manor consists of a castle, church and the surrounding lands granted to the lord by the queen.\n\nIII. Everyone that makes earnings must tithe a percentage of their earnings to the queen\n\na. Percentages are set by the queen.\n\nb. Tithes (taxes) are collected by Sir Rufus in compliance with the wishes of the queen. IV. The manor is to be run with a system as follows:\n\na. Lords & Ladies-granted land from the queen and may run the manor as they see fit. They award land to the vassals and knights in exchange for protection from invaders. Among their duties are arranging marriages within their manor and administering justice.\n\nb. Vassals & Knights-are awarded land from the nobles of the manor. They are free to farm the land or pay peasants to do so. They may also have serfs that live on and farm their land.\n\nc. Peasants-often live in huts outside the castle walls and work on land owned by vassals or knights for a percentage of the profits. They still have their freedom, but own no land.\n\nd. Serfs-they are slaves to the lord for life. They farm the land for food and shelter, they are not allowed to have earthly possessions and in order to gain any freedom, they must escape and live one year plus one day in another manor. They are never required to fight, but are guaranteed protection from invaders. They need permission to marry.\n\nV. Tournaments are to be a time of great celebration a. To be held to honor such events as coronation, a noble marriage or to boost the economy of a manor.\n\nb. The victorious knight may request the favor of any lady at the celebration. She will then be his escort for the evening."
+  },
+  "exhibits": [
+    {
+      "id": "A",
+      "title": "EXHIBIT A: The Murder Weapon",
+      "description": "The murder weapon -- a jeweled dagger in the heart.",
+      "notes": "Found lodged in the victim's chest, cause of death. Upon close examination, it bears the distinct coat of arms of the manor of Dunnsberry.",
+      "held_by": "Willie the Watchman"
+    },
+    {
+      "id": "B",
+      "title": "EXHIBIT B: Personal Items on the Victim",
+      "description": "Personal items found on the victim at the time of the crime.",
+      "notes": "Among these items is a silk handkerchief belonging to Maid Marilyn, and coins from both Fernwood and Dunnsberry.",
+      "held_by": "Willie the Watchman"
+    },
+    {
+      "id": "C",
+      "title": "EXHIBIT C: The Laws of the Land",
+      "description": "The royal decree and laws of Queen Genevieve.",
+      "notes": "Clause 5b states the victorious knight may request the favor of any woman at the celebration. Also states a serf can gain independence only by escaping to another manor and living there for one year plus one day.",
+      "held_by": "Queen Genevieve"
+    },
+    {
+      "id": "D",
+      "title": "EXHIBIT D: Bottle of Poison",
+      "description": "A glass vial found in the stall of Sir Cameron's warhorse, Stallion.",
+      "notes": "Poison is harmless to humans, but fatal or debilitating if ingested by horses. Used to sabotage Sir Cameron during the joust.",
+      "held_by": "Sir Cameron"
+    },
+    {
+      "id": "E",
+      "title": "EXHIBIT E: Threatening Note to Maid Monica",
+      "description": "A threatening letter sent to Maid Monica.",
+      "notes": "Shows that Sir Rufus had been terrorizing and threatening local families in the manor to extort 15% taxes.",
+      "held_by": "Maid Monica"
+    },
+    {
+      "id": "F",
+      "title": "EXHIBIT F: Blackmail Note to Baron Bartholomew",
+      "description": "A blackmail note confiscated from Baron Bartholomew.",
+      "notes": "Reveals that Sir Rufus was blackmailing the Baron, hinting that he knew the truth about Lady Diana not being a true noblewoman.",
+      "held_by": "Baron Bartholomew"
+    }
+  ],
+  "characters": [
+    {
+      "id": "queen_genevieve",
+      "name": "Queen Genevieve",
+      "title": "Queen of the Kingdom",
+      "gender": "Female",
+      "avatar_icon": "👑",
+      "brief": "Ruler of the prosperous kingdom. Benevolent, fair-minded, but fiercely protective of her royal treasury. Betrayal is punishable by death.",
+      "bio": "Queen Genevieve The queen of an elaborate kingdom made up of many manors, you rule the land lovingly and fairly. As a devoted queen, you treasure your position and value all of the people in your kingdom equally. To the best of your ability, you strive to run your kingdom justly while, of course, making your share of riches. Currently, you live in your castle, but you are traveling to see the tournament that is to be held in celebration of the marriage of Baron Bartholomew to Lady Diana of Dunnsberry in the castle at Fernwood. Baron Bartholomew is the son of Lord Taylor, the lord of Fernwood, where the wedding and tournament are to take place. The tournament is meant to be a great celebration and features a joust between two knights, Sir Cameron and Sir Rufus. Although, Sir Cameron has a trusted and notable reputation, Sir Rufus’ character is more nondescript. Sir Rufus has spent much of his time traveling in the kingdom and recently settled down in Fernwood. You were thankful when Sir Rufus took over the duties of collecting taxes, you are looking forward to making Sir Rufus’ acquaintance. Additionally, you will be attending to some business matters while you are visiting Fernwood. In the past few years, your tax money from this manor has been dwindling. (You have always charged 10%, not a penny more or less.) Since it has been years since you have traveled to Fernwood, you wonder how prosperous the manor truly is and how well Lord Taylor is running it. If you find that Lord Taylor is unfit for running a profitable and peaceful manor, you have considered the possibility of letting Sir Rufus (a knight who has been collecting your taxes) take over rule of the land. Despite the underlying business matters, you are happy to be traveling to Fernwood. It will be a wonderful wedding and tournament no matter what the outcomes may be.",
+      "acting_tips": "As a benevolent ruler, you will treat everyone with dignity and concern. You are not vindictive, but fair minded and prefer to see that the kingdom thrives (as well as your treasury). As queen, you will want to come dressed elegantly in your medieval best. Do not forget your robe, scepter or crown. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "Tax money is down in the manor, but production of crops seems to be up. Someone must be stealing from the treasury!",
+          "You are considering taking the manor away from Lord Taylor if he cannot prove to be an effective leader.",
+          "As stated in Laws of the L and (included in this envelope) betrayal of the queen is punishable by death."
+        ],
+        "start_objectives": [
+          "Ask Lord Taylor and Lady Gwendolyn (the lord and lady) why there seems to be a shortage of tax money coming from this manor.",
+          "Let Sir Rufus (a knight) know that if you find the lord and lady unfit to run a peaceful and profitable manor, you are going to grant Sir Rufus rule over Fernwood Manor.",
+          "If anyone asks about you raising taxes, assure them that you have not and do not intend to do so.",
+          "When you are introduced to Lady Diana of Dunnsberry, tell her she has become a beautiful woman–you do not recognize her from the little girl you once met.",
+          "Whenever you please, tell Joking Jerry (the jester) that they must make you laugh before you are to continue on with the evening’s celebration."
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "If anyone accuses you of trying to get rich off of the people of the manor, assure them that you have not been receiving your due tax money.",
+          "If you hear any rumors about who might be stealing money from your treasury, question the sources and their motives.",
+          "Tell anyone that you may suspect of cheating you that betrayal of the Queen is punishable by death.",
+          "You may show the Laws of the Land to anyone you choose, but give it only to Willie the Watchperson when he asks."
+        ]
+      }
+    },
+    {
+      "id": "lord_taylor",
+      "name": "Lord Taylor",
+      "title": "Lord of Fernwood Manor",
+      "gender": "Male",
+      "avatar_icon": "🏰",
+      "brief": "Ruler of Fernwood Manor. Authoritative, protective of his lands, and host of his son's lavish wedding tournament.",
+      "bio": "Lord Taylor As the Lord of Fernwood manor, you run a happy and healthy community. Among your many duties as lord, you are responsible for arranging the marriages of those in the manor. Just recently, you have arranged a marriage between Sir Rufus (a knight) and Maid Monica (a vassal’s daughter). You think this will be a good union for the daughter of one of your more prominent vassals and who should be happy to be slated to be married to a knight! More importantly, as lord you are also responsible for the profitability of the queen’s lands that you rule. Under your rule, the lands of Fernwood have flourished, making the queen’s treasury prosper while you have been in power. A loving husband, you rule the land along side your devoted wife, Lady Gwendolyn. A product of an arranged marriage, you have been happily wed for 20 years and have borne one son, Baron Bartholomew. Originally you had arranged for Bartholomew to wed his childhood sweetheart, Maid Monica. However, you discovered a more politically and socially suitable mate for him in Lady Diana of Dunnsberry (a noblewoman from Dunnsberry) who arrived at the manor a little less than a year ago in search of a husband. Because she is of noble blood, you thought that Lady Diana would be a better match for your son in both wealth and class. Although you regret that Bartholomew’s heart is not fully with Lady Diana, you consider this a business matter and must be treated as one. Thankfully, Bartholomew appears to be in agreement with your choice and has not fought you on your decision. To truly celebrate the marriage of your only son, you are throwing a tournament and celebration of epic proportions. At the tournament, you hope to demonstrate not only your approval for this marriage, but to show Queen Genevieve (the queen) how profitable your manor has become— Queen Genevieve can’t help but be satisfied with how prosperous your lands have become since she last visited many, many years ago. The celebration will be a grand celebration for the manor and you can’t wait to host it!",
+      "acting_tips": "As lord of the manor, you want nothing more than to run your lands with the good faith of the queen. You are diplomatic and congenial to everyone in your manor, for you know that you would not be as rich as you are without your subjects. Since you benefit from the wealth of the land, come dressed in your medieval best which may include bright colors and expensive fabrics like silk and velvet. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www. nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "Baron Bartholomew (your son) was not fully in love with Lady Diana of Dunnsberry (his bride), instead he loved Maid Monica (a vassal’s daughter).",
+          "Maid Monica was opposed to the marriage you arranged between herself and Sir Rufus (the victim).",
+          "Maid Monica (a maid) is still in love with Baron Bartholomew."
+        ],
+        "start_objectives": [
+          "Whenever you please, tell Joking Jerry (the jester) that they must make you laugh before you are to continue on with the evening’s celebration.",
+          "If anyone questions your decisions or authority, let them know that you are standing firm by your decisions.",
+          "When Queen Genevieve (the queen) inquires about the productivity of the manor, assure her that the manor has been quite profitable, which should be reflected in the tax money she is receiving.",
+          "Let Maid Monica (a vassal’s daughter) know that you have arranged a marriage between herself and Sir Rufus (a knight). Tonight, for being the victor in the tournament, Sir Rufus will have his choosing of women as his escort, but next month Sir Rufus and she are to marry.",
+          "If you find our any disheartening information on Sir Rufus, confront him on the accusations you discover.",
+          "Read the introduction to the guests when the host asks you to do so.",
+          "Later, you will have to make a toast to your son’s marriage and the prosperity of the manor when instructed by the host."
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "If anyone asks for a favor now that Sir Rufus is dead, be suspicious of their motives. Let them know that you do not grant the wishes of murderers.",
+          "Accuse Maid Monica of being the one to commit murder in order to ruin your son’s wedding day and advance her own agenda.",
+          "Assure Queen Genevieve (the queen) that death in your manor is very uncommon and that you rule a most peaceful manor.",
+          "Discreetly let your son (Baron Bartholomew) know that murder is no way to get what he wants."
+        ]
+      }
+    },
+    {
+      "id": "lady_gwendolyn",
+      "name": "Lady Gwendolyn",
+      "title": "Lady of Fernwood Manor",
+      "gender": "Female",
+      "avatar_icon": "🌹",
+      "brief": "Lady of the Manor, mother to the groom. Sophisticated, aristocratic, watchful of castle affairs and marriages.",
+      "bio": "Lady Gwendolyn As the Lady of the manor of Fernwood, you are happily married to Lord Taylor (your husband) and find it a joy to serve Queen Genevieve (the queen). In the years the two of you have ruled over Fernwood, your manor has done nothing but prosper. Since the queen has not visited in many years, you are excited for his anticipated arrival for the tournament celebration. The queen’s visit will allow him to witness first hand the productivity and peaceful status of Fernwood. In addition, your excitement for the festivities is strong since the tournament celebration is being held to honor the marriage of your only son, Baron Bartholomew, to Lady Diana of Dunnsberry (a noblewoman). Although you are regretful that Bartholomew will not be marrying Maid Monica (his true love - a vassal’s daughter), you find that your husband did the right thing by arranging a marriage with Lady Diana of Dunnsberry - a better political and social match for your son and his standing. (As lord, Lord Taylor is in charge of arranging all of the marriages in the manor.) Another marriage that you are hoping that your husband will soon arrange is the marriage of Maid Marilyn (your lady-in-waiting) to Sir Cameron, your most valiant knight on the manor. Because she is your assistant, you have a strong, motherly bond to Maid Marilyn and wish that she will get to marry the man that she adores. At the tournament, the winning knight will get to pick the favor of the maid he chooses. As such, you suspect that Sir Cameron will be asking for Maid Marilyn’s favor (escort) at the tournament if he wins. However, as valiant as Sir Cameron may be, you suspect that there may be something going on between him and Charlamagne (the chambermaid). Earlier this morning, you saw Charlamagne coming out of Sir Cameron’s room just before the tournament started. Since you do not want to break Maid Marilyn’s heart unintentionally, you intend to find out just what business Charlamagne has with Sir Cameron before making Maid Marilyn aware of the situation. As the wedding, tournament and celebration quickly approach - you can’t wait to attend! You anticipate having a full house of jovial spirits and find this will be the perfect way to show off your prosperous community to your rulers!",
+      "acting_tips": "As the lady of the manor, you consider yourself the figurehead of the kingdom and will dress elegantly and with sophistication. Your manor has done very well financially, so you have many riches which allow you to buy nice, bright clothes made of expensive fabric, like silk and velvet. As a loving ruler, you treat the citizens and subjects of your manor with dignity and respect, for you know without them you would not be as rich as you are. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "Maid Monica (a vassal’s daughter) is in love with your son (Baron Bartholomew).",
+          "Maid Maril yn (your lady-in-waiting,) is in love with Sir Cameron (a knight).",
+          "You saw Charlamagne (the chambermaid) coming out of Sir Cameron’s room early this morning."
+        ],
+        "start_objectives": [
+          "If anyone questions your or your husband’s rule, let them know that your decisions can only be overruled by the queen (Queen Genevieve).",
+          "Tell Sir Rufus (a knight) that he may have his choice of the ladies tonight, but that you wish him to stay away from Maid Marilyn (your lady-in-waiting).",
+          "Let Maid Marilyn know that you have plans to ensure that she will end up with Sir Cameron.",
+          "Assure Lady Diana of Dunnsberry (your son’s bride) that you are happy to have her in the family. Insist it was a travesty that her family could not be here to celebrate.",
+          "Tell Maid Monica (Bartholomew’s old love) that if she wants the best for your son (Baron Bartholomew), she will not act up today.",
+          "Find out from Charlamagne what she was doing in Sir Cameron’s room earlier."
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "Tell Maid Monica that she is just like Charlamagne - conniving and willing to do anything to hurt those you love.",
+          "Warn Maid Marilyn that Sir Cameron may be keeping a secret from her. (That he and Charlamagne may have a secret relationship.)",
+          "Ask Sir Cameron about his intentions with Maid Marilyn. If Sir Cameron confesses to be true to Maid Marilyn, inquire why Charlamagne was seen sneaking out of his room earlier.",
+          "Find out how Lady Diana is doing. It must be difficult to have someone murdered on your wedding day.",
+          "Ask your husband (Lord Taylor) who he thinks is disgruntled in the community and may be to blame.",
+          "Assure Maid Monica that Lord Taylor (your husband) will never let your son marry a murderer!"
+        ]
+      }
+    },
+    {
+      "id": "baron_bartholomew",
+      "name": "Baron Bartholomew",
+      "title": "Son to Lord Taylor and Lady Gwendolyn",
+      "gender": "Male",
+      "avatar_icon": "🍷",
+      "brief": "The groom-to-be. Handsome and wealthy noble, torn between his duty to marry Lady Diana and his secret passion for Maid Monica.",
+      "bio": "Baron Bartholomew As the son of Lord Taylor and Lady Gwendolyn (the lord and lady) who rule the manor of Fernwood for the queen, you have grown up wealthy and are accustomed to getting what you want. Being of noble descent, you have the pick of the women and you have always fancied Maid Monica (a peasant’s daughter). At one point you were certain you were going to marry Maid Monica, for your father (Lord Taylor) had arranged a marriage between the two of you at your request. However, when Lady Diana of Dunnsberry (a noblewoman) came to the manor in search of a husband, your father changed his mind citing that a union with Lady Diana was a better match for you both politically and socially. Since your father IS the lord of the manor, you cannot argue with him - his ruling is law in these parts. (The only person who could overrule him is the queen.) The tournament being thrown in the castle of Fernwood is in honor of your wedding to Lady Diana. You are to be married on the one year anniversary of when you and Lady Diana met. While you find Lady Diana to be a fine woman, your heart is still with Maid Monica, your childhood sweetheart. Regardless of how your heart feels, you know that it is your position to honor your father’s rule or you may be banished. The acceptance of your father’s decision has angered Maid Monica and you worry that Monica will do something horrible to ruin the wedding or the tournament. While you may not be with the woman you love, you hope that the same fate does not await Sir Cameron, a knight and your friend. Sir Cameron will be competing for the hand of Maid Marilyn (Lady Gwendolyn’s lady-in-waiting and Sir Cameron’s true love) at the tournament. For Sir Cameron’s sake, you hope that he wins the tournament and that someone ends up with the woman they love. In addition to your wedding, you believe your parents are hosting this tournament and celebration to attract the attention of Queen Genevieve (the queen). You have heard rumors circulating that the queen may award rule of the lands to someone else if they find that your parents are unfit rulers. Since the queen will be traveling to the manor, it will give your parents ample opportunity to show off their prosperity and affirm their leadership. As the celebration approaches, you are excited for your wedding and the tournament. Not only are you looking forward to becoming a married man, but you are anticipating much praise for your parents from the queen during her visit.",
+      "acting_tips": "A noble by birth, you act regal and sophisticated as you have been bred to do so. Since your family comes from much wealth and it is your wedding day, you will dress in your medieval best. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "Earlier tonight, Sir Cameron (a knight) told you he believes someone sabotaged him in the joust.",
+          "You fear that Maid Monica (your old love) is trying to ruin your wedding day.",
+          "Lord Taylor and Lady Gwendolyn (your parents) are in danger of losing rule of their manor if proven to be unfit leaders.",
+          "You found a blackmail note in your pocket (included in this envelope). Sir Rufus was intending to blackmail you, but you are unsure about what."
+        ],
+        "start_objectives": [
+          "Introduce Queen Genevieve (the queen) to your new wife, Lady Diana of Dunnsberry.",
+          "Assure Sir Cameron (a knight) that even though he lost, he put up a good fight in the joust at the tournament earlier today.",
+          "Ask Maid Monica (your old love interest) not to cause any trouble for you tonight.",
+          "Find out from Queen Genevieve (the queen) why she is considering taking away rule over the manor lands from your parents (Lord Taylor and Lady Gwendolyn). Report that information back to your parents."
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "Find out all you can from Charlamagne (the chambermaid) about Sir Rufus. You may offer Charlamagne money for her knowledge.",
+          "Confront Lady Diana of Dunnsberry (your bride) on what she may be hiding from you.",
+          "Assure Maid Monica that Lady Diana has only one quality above her, the fact that she can make a delicious good stew.",
+          "Ask Sir Cameron how far he would go to avenge a cheater.",
+          "You may show your note to anyone, but give it only to Willie the Watchperson when asked."
+        ]
+      }
+    },
+    {
+      "id": "lady_diana",
+      "name": "Lady Diana of Dunnsberry",
+      "title": "Bride-to-be / Noblewoman",
+      "gender": "Female",
+      "avatar_icon": "👰",
+      "brief": "The bride-to-be from Dunnsberry. Beautiful and charming, but harboring an explosive secret about her true identity.",
+      "bio": "Lady Diana of Dunnsberry The daughter of the nobles of Dunnsberry, you have traveled to Fernwood in search of a nobleman to marry. Shortly after arriving in Fernwood, you set your sights on Baron Bartholomew, the son of Lord Taylor and Lady Gwendolyn (the lord and lady). It has taken less than a year to win the permission of the baron’s father Lord Taylor (the lord), who has arranged for the marriage to take place. You are overjoyed by the impending union, even though you know that Baron Bartholomew’s heart is not with you, but with Maid Monica, his childhood sweetheart. It is of little concern to you that you are breaking up Bartholomew’s and Monica’s romance if it means getting noble status. Knowing this, you are aware that Maid Monica may try to ruin your wedding and your marriage at the tournament because she is still bitter over your union with Bartholomew. At least this is your story and you are sticking to it. In reality, you are but a serf woman from Dunnsberry. Since birth, you have longed for your freedom and in order to gain it, by the laws of the land, you must escape your lord’s manor and travel to another manor and stay there one year and one day without anyone noticing. To make your dream come true, you stole some clothing and possessions from the true Lady Diana of Dunnsberry and traveled all this way to Fernwood to start a new life. Since the manors of Dunnsberry and Fernwood are very distant, you have depended on the fact that no one would travel between the two manors and recognize you. However, this assumption was wrong. Sir Rufus, who was a knight in Dunnsberry, has recently made his new residence as a knight in Fernwood. Since you fear that Sir Rufus will recognize you, you have done everything you can to stay away from him. Coincidentally, you also know that Sir Rufus was banned from your former kingdom, a disgrace no one wants public. Hence, IF Sir Rufus were to threaten to reveal your identity, you are willing to blackmail him with his past. It is vital that Sir Rufus does not recognize you as a serf and not as the true Lady Diana of Dunnsberry, for you are so close to winning your freedom. Your wedding and the tournament fall on your one year anniversary of when you entered the manor. You must make sure NO ONE knows of your serf status the whole night, or you will be doomed to a life of slavery in Dunnsberry.",
+      "acting_tips": "You are a noblewoman, but really you are a serf at heart. You are gentle and kind to those who you know are going through the same travesties that you have had to endure (other serfs and peasants) and you have little sympathy for those who are wealthy. Regardless, you know that your freedom depends on you keeping good relations with all, so you will try to fit in as best as possible. It is IMPORTANT that you bring something to the party that you make yourself, such as cookies. You may ask the host what they would like you to bring if you choose, or just show up with a dish to share. Since you are trying to pass yourself off as a noblewoman, dress in your medieval best with clothes made with expensive fabrics, such as silk and velvet. Remember that it is your wedding day, so wearing white would be most appropriate. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": true,
+      "envelope_a": {
+        "things_you_know": [
+          "Maid Monica (a maid) is in love with Baron Bartholomew (your husband).",
+          "YOU ARE THE MURDERER!!!! Let no one know. You need to keep your identity as a serf a secret.",
+          "You killed Sir Rufus because you were afraid he would expose your identity after he recognized you earlier tonight."
+        ],
+        "start_objectives": [
+          "When you are introduced to Queen Genevieve (the queen), let him know that it has been so long since you have seen him, that you don’t remember him at all.",
+          "If anyone thanks you for bringing your dish, let them know that you enjoyed making it.",
+          "If Sir Rufus (a corrupt knight) recognizes you, tell him he must be mistaken.",
+          "When Maid Monica (Bartholomew’s former girlfriend) accuses you of getting by on your wealth, assure her it is not your riches but your wits that have gotten you this far in life.",
+          "If anyone comments on the absence of your family, insist that they desired to be here, but it was just too far to travel."
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "YOU ARE THE MURDERER! Let no one know. You need to keep your identity as a serf a secret. You killed Sir Rufus because you were afraid he would expose your true identity after he recognized you earlier tonight from Dunnsberry. Defend yourself at all costs and cast suspicion on Maid Monica or Sir Cameron!",
+          "When Baron Bartholomew confronts you about Sir Rufus, insist that you knew he was a corrupt knight that was banished from your former kingdom (Dunnsberry).",
+          "If anyone comments on your dress, let them know that you made it yourself.",
+          "Accuse Maid Monica of committing murder to ruin your wedding day!",
+          "If confronted about having something to hide about your past, insist that you are a worthy spouse for the baron, regardless of your upbringing.",
+          "If asked about your r elationship to Sir Rufus, insist that he lived in Dunnsberry but you did not know him well back then.",
+          "If anyone comments on your challenging wedding day, insist you are only one day away from happiness!"
+        ]
+      }
+    },
+    {
+      "id": "maid_marilyn",
+      "name": "Maid Marilyn",
+      "title": "Lady Gwendolyn's Lady-in-Waiting",
+      "gender": "Female",
+      "avatar_icon": "🎀",
+      "brief": "Lady Gwendolyn's trusted confidante. Sweet, well-liked, infatuated with Sir Cameron, and cornered by Sir Rufus.",
+      "bio": "Maid Marilyn As the lady-in-waiting to Lady Gwendolyn (the lady of the manor) you know the ins and outs of the castle and the manor and you assist Lady Gwendolyn in all of her duties. Being so close to the lady, you have formed a strong bond with her and you tend to think of Lady Gwendolyn as a mother. The lady has no daughters and only one son (Baron Bartholomew). Furthermore, Gwendolyn’s daughter-in-law-to-be (Lady Diana) and Lady Gwendolyn have little in common and Lady Diana seems to be ill-mannered at times. With only their noble descent as a commonality between the two women, Lady Gwendolyn and Lady Diana have not properly bonded as family. Because of this, your relationship with Lady Gwendolyn has only grown stronger. There is soon to be a tournament in the manor and you are excited for it to take place. The tournament will be a time when you get to see Sir Cameron (a knight and your true love) in action! The upcoming joust will be against Sir Rufus (another knight). While Sir Rufus is new to the manor, you already do not like him. Rumors are circulating that Sir Rufus has been terrorizing the people of the manor who are having trouble paying their taxes. Knowing that the queen would never condone such behavior, you believe Sir Rufus to be a ruthless soul, whom you do not wish to be associated with. As the tournament quickly approaches, you cannot wait to attend. In addition to seeing the wedding, you are excited that the winner of the tournament gets to pick a maid as their escort for the evening. With Sir Cameron’s undeniable jousting expertise, you are certain he will be the victor and will choose you for his mate - you cannot wait to be on the side of your favorite man!",
+      "acting_tips": "As the right hand woman of Lady Gwendolyn, it is your duty to do whatever she asks. Obedient and loving, you will stand your ground if you are called on to defend your lady. You want to dress your best to come to the tournament celebration, for you know the winner will get his choice of ladies for the evening and you are counting on it being Sir Cameron. Make sure to bring a handkerchief of some sort so that if a knight asks for your favor, you have something to give him to signify your affection. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "You and Sir Cameron (a knight) are in love.",
+          "Sir Rufus (the victim) asked for your favor tonight, and you unwillingly gave it to him, making Sir Cameron upset.",
+          "Earlier tonight, you learned that Sir Rufus was terrorizing peasants (including Maid Monica and her family)."
+        ],
+        "start_objectives": [
+          "If Sir Rufus (the victorious knight) asks for your favor, deny him of it. Let Sir Rufus know that you would rather be dead than be with him. If he insists, you must give him your handkerchief as a sign that you are his escort for the evening.",
+          "Tell Sir Cameron (your love) that you have a plan that will ensure that the two of you will be together and that you will not have to spend any more time with Sir Rufus.",
+          "Find out from Maid Monica (a peasant) if rumors about Sir Rufus terrorizing the peasants of the kingdom are true.",
+          "Make Lady Gwendolyn (your lady) promise that you will only end up with a man that you love!"
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "Confide in Lady Gwendolyn (the lady) that you are glad that you will no longer need to escort that filthy man.",
+          "Let Maid Monica (a peasant) know that she no longer has to live in fear.",
+          "If your handkerchief is found on Sir Rufus, explain that you had to give it to him because he asked for your favor.",
+          "Try to befriend Lady Diana (a noblewoman) by asking her who made her lovely dress.",
+          "Ask Lord Taylor (the lord) if he intends to arrange a marriage for you to Sir Cameron."
+        ]
+      }
+    },
+    {
+      "id": "sir_cameron",
+      "name": "Sir Cameron",
+      "title": "Knight of the Realm",
+      "gender": "Male",
+      "avatar_icon": "⚔️",
+      "brief": "The manor's champion knight. Chivalrous and undefeated until today's shocking joust defeat. Convinced of foul play.",
+      "bio": "Sir Cameron As the most decorated and chivalrous knight that Fernwood has ever known, you have acquired a great respect throughout the kingdom. As a young lad, you worked your way up the ladder, first as a squire, then as a knight, and now you reside in the queen’s court. One day, you hope to move up to also serve the queen, although right now you are perfectly happy in Fernwood. Fernwood is your home and your true love lives in Fernwood as well, the lady-in-waiting, Maid Marilyn. You have fancied Maid Marilyn for years and hope that your lord, Lord Taylor, will soon arrange your marriage. You are sure that if you can prove yourself by winning the tournament, Lord Taylor may grant you just that. However, you did not win the tournament earlier today. Sir Rufus, a knight that has just recently taken residence in Fernwood, overcame you at the last moment. Among the factors limiting your performance, you consider that there may have been something wrong with Stallion, your horse. Additionally, Sir Rufus knew right where to hit you in order to damage your armor. You have a suspicion that someone may have sabotaged you. While you have considered many possibilities, the only person who would have access to the royal stables and knowledge of your weak spots is Baron Bartholomew, your friend. Not wishing to lose such a devoted confidant, you want to first find proof before you accuse your friend. Despite your loss, you are looking forward to coming to the tournament celebration—it is a time to rejoice and also an opportunity to see your true love, Maid Marilyn. In addition, you hope to use the party to find the culprit who may have aided Sir Rufus in his knowledge of your weaknesses.",
+      "acting_tips": "As a knight in Lord Taylor’s manor (Fernwood), you are gallant and courageous, despite the outcome of the tournament. Certain that someone must have sabotaged the joust earlier today, you will be on the lookout for anyone who may be shifty or exhibit a want to betray you. To the celebration you will want to come dressed in your armor, adorned with your shield, sword and/or your helmet. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "Someone sabotaged you for the tournament joust, and you suspect Baron Bartholomew (the baron).",
+          "You are in love with Maid Marilyn (lady-in-waiting), whose favor was given to Sir Rufus (the victim) tonight. This upset you greatly.",
+          "After the tournament you found a bottle of horse poison (included in this envelope) in the stall of Stallion (your horse)."
+        ],
+        "start_objectives": [
+          "Tell Maid Marilyn (the lady-in-waiting) that you will find a way to win back her love (since you did not win the joust).",
+          "If asked about your intentions with Maid Marilyn, go on the record saying that you would do ANYTHING to gain her favor.",
+          "Inform Sir Rufus (the winning knight) that he will not come between you and Maid Marilyn – you will see to it!",
+          "Let Baron Bartholomew (the baron) know that you are certain someone sabotaged your joust with Sir Rufus.",
+          "Ask Willie the Watchperson if they have seen anything peculiar going on in the castle, you are sure someone must have gotten into your room to alter your armor."
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "Question the loyalty of Baron Bartholomew and why he would betray you.",
+          "Tell Maid Marilyn that now there is nothing standing in the way of you being together except for the blessing of the lord.",
+          "Ask Lord Taylor (the lord) if you may marry Maid Marilyn, even though you did not win the joust today.",
+          "Try to figure out who could have gotten in to your room to alter your armor.",
+          "If your valor is questioned, assure them that you would not stoop to murdering anyone in such a cowardly way.",
+          "You may show the bottle of horse poison to anyone you please, but give it to NO ONE EXCEPT Willie the Watchperson, when asked."
+        ]
+      }
+    },
+    {
+      "id": "sir_rufus",
+      "name": "Sir Rufus",
+      "title": "Knight and Tax Collector (Victim)",
+      "gender": "Male",
+      "avatar_icon": "🛡️",
+      "brief": "Corrupt knight and tax collector. Arrogant, greedy, blackmailing nobles, and winner of today's joust.",
+      "bio": "Sir Rufus You are a knight in the manor of Fernwood. After traveling throughout the lands, you have recently made Fernwood your home, not because of its prosperity, but because it is so secluded that no one has heard of you and your dastardly ways. Before Fernwood, you traveled to many manors, but were not liked in most of them because of your corrupt ways and illegal doings. Despite what the knight code would suggest, you are not a gallant or courageous knight, and you are glad that no one in Fernwood has realized that just yet. Rather, no one knows of your despicable ways that can go on the record with the lord or the queen, and that is because you have threatened their families. Since replanting yourself in Fernwood, you have tried to gain favor with the queen by taking over the duties of collecting the queen’s tax money – 10% of the earnings of the vassals and peasants. Recently, you increased the percentage of earnings tithed to 15%. This increase caused a great number of the families to have trouble paying. To ensure their payments were on time and in full, you have threatened the lives of many peasant families when they don’t agree to pay up. Luckily for the families, so far all of them have paid. Additionally, you have warned the families that if they tell of your demonic behavior to the lord (Lord Taylor) or queen (Queen Genevieve), they will suffer at your hands. Even though you have increased the taxes, due to the profits you have been keeping for yourself, the queen has noticed a drop in the riches he is receiving. To cover your tracks, you have blamed the lack of profitability in the manor. To Queen Genevieve (the queen), you have explained that Lord Taylor is simply not doing his job and thus the people of the manor have less earnings to give to the queen. With your explanation, you are hoping that Queen Genevieve will see that she has chosen a poor leader and will award you rule of the manor instead. In order to make this happen, you must be able to convince Queen Genevieve that Lord Taylor is not fit to run a peaceful and profitable manor. Additionally, you will need to make sure that the queen does not find out that you are behind the stolen money because she will never award the manor to someone who betrayed her. In order to make a good name for yourself in Fernwood, you must win the jousting tournament that is being held in honor of the noble marriage between Baron Bartholomew (the baron) and Lady Diana of Dunnsberry (a noblewoman). You have tried your hardest to stay away from Lady Diana so that she will not recognize you as the knight that was banished from her manor (Dunnsberry) two years ago. Even though you have not seen Diana in some time, you believe she looks quite different. At the tournament, you are scheduled to fight Sir Cameron, a favorite of the kingdom. Since Sir Cameron has a reputation for great fighting skills, you decided to try to increase your odds at winning. First, you drugged Sir Cameron’s horse, Stallion. Next, you convinced Charlamagne (the chambermaid) to sneak into Sir Cameron’s room and alter his armor so that Sir Cameron would be easier to defeat. Charlamagne did this under the assumption that you would make her your escort at the tournament party, another promise you don’t intend to keep. Although you are aware that Charlamagne fancies you, you do not return her affections. In order to win popularity with the nobles, you intend to ask Maid Marilyn (the lady-in-waiting) for her favor as an escort when you win the tournament. As the tournament celebration approaches, you are happy to attend. At the party you are looking forward to basking in the glory of victory and enhancing your popularity in the kingdom.",
+      "acting_tips": "Although you are evil down to your bone, you do not want others to regard you this way. Try to uphold the gallant image of a knight by acting accordingly at the party. In your own time, you let your real colors shoe. Come dressed as the valiant knight that you portray. Do not forget your armor, sword, helmet and shield. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": true,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "Many people wanted you dead, but you do not know who killed you."
+        ],
+        "start_objectives": [
+          "Tell Charlamagne that you cannot keep true to your promise to make her your lady. Remind Charlamagne that if you told of how she helped you, she would be in trouble.",
+          "Ask Maid Maril yn (the lady-in-waiting) for her hand for the evening. If she objects, make her aware that it is your right as the winner of the tournament to be escorted by the maiden of your choice.",
+          "If Queen Genevieve (the queen) tells you about her plans for the kingdom, assure her that you will be a most fit ruler for the manor and you have many ideas on how to raise the profitability of the manor.",
+          "After you talk to Queen Genevieve, tell Charlamagne that everything is going according to plan.",
+          "Inform Maid Monica (the peasant) that she better not do anything to betray you–you are about to be lord!",
+          "If anyone accuses you of unjustly taking money from them, let them know you were just doing your job to serve the queen.",
+          "Tell the Lady Diana of Dunnsberry (a noblewoman) that she looks very familiar from Dunnsberry, but you are sure she is not the noblewoman you remember.",
+          "YOU ARE THE VICTIM TONIGH T!!! T el l NO ONE.",
+          "When the lights go out tonight, you will have to fall down dead.",
+          "When you have completed the above tasks, discreetly let the host know so that he/she can move onto the next stage of the game when they see fit.",
+          "When the lights go out tonight at the toast, you will fall down dead!"
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "Depending on what y ou want to do, you have the option of the following objectives:",
+          "Try to find the murderer while maintaining your innocence.",
+          "Sell your secrets for money and try to become the wealthiest player.",
+          "You may assume another role if your host wants you to.",
+          "Sit back, relax and enjoy the show!"
+        ]
+      }
+    },
+    {
+      "id": "joking_jerry",
+      "name": "Joking Jerry",
+      "title": "Court Jester",
+      "gender": "Male",
+      "avatar_icon": "🎭",
+      "brief": "The castle jester. Wit, humor, and mockery disguise an astute observer who hears everything whispered in the halls.",
+      "bio": "Joking Jerry As the court jester in the manor of Fernwood, you have served Lord Taylor and Lady Gwendolyn (the lord and lady) since childhood. Luckily, having the gift for humoring others has rewarded you with a rather posh lifestyle. Living in the castle, you are also at the center of the action when events come to the manor, such as the upcoming noble marriage of Baron Bartholomew (the son of the lord and lady) to Lady Diana (a noblewoman) and the jousting tournament celebration planned in honor of it. As the excitement for the event has grown, you have noticed a number of peculiar things happening around the manor recently. Earlier today you spotted Charlamagne (the chambermaid) sneaking into and out of Sir Cameron’s room. At first, you believed that Charlamagne’s sneaky behavior was due to a love tryst with the knight. However, since Sir Cameron was not around at the time, you do not believe that Charlamagne was in Sir Cameron’s chambers for romantic reasons. Additionally, Sir Cameron is in love with Maid Marilyn (the lady-in-waiting) and you do not believe Sir Cameron would ever betray his fair maiden. Additionally, you overheard Sir Cameron complaining of his armor being altered and (if this is true) you are sure Charlamagne must be the culprit. Among other spotty behavior, you have noticed that Charlamagne is always present when Sir Rufus (the victorious knight) is in the castle. Certain that Charlamagne has grand expectations of advancement beyond her position, you believe Charlamagne desires to be married to someone of higher status, like a knight. As the celebration quickly approaches, you are excited to attend. The life of the party, you are believe there will not be another night as entertaining as this one!",
+      "acting_tips": "You are the life of the party—that is why you are the jester. You have a happy and comedic disposition; you are fun and outgoing. Come to the party dressed as a jester and don’t forget your jokes, you may be called on to entertain the guests at the celebration. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "Sir Cameron (a knight) suspects Baron Bartholomew (his friend) of sabotage.",
+          "Earlier today, you witnessed Charlamagne (the chambermaid) leaving Sir Cameron’s quarters.",
+          "Sir Rufus (the victim) asked for the favor of Maid Marilyn (the lady-in-waiting), which angered Sir Cameron and Lady Gwendolyn (the lady)."
+        ],
+        "start_objectives": [
+          "Tell jokes and entertain anyone from a higher social class that requests your services.",
+          "Ask Sir Cameron (a knight) how he thinks he fared in the tournament today. Find out who Sir Cameron suspects of sabotaging him.",
+          "Find out from Charlamagne (the chambermaid) what she was doing in Sir Cameron’s quarters earlier today.",
+          "Ask Maid Maril yn (lady-in-waiting) if she plans to be Sir Cameron’s escort this evening, even though he did not win.",
+          "Question Lady Gwendolyn (the lady) about who she desires to have Maid Marilyn arranged to marry."
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "Inform Lady Gwendolyn that she did not need to use murder to keep Sir Rufus away from her dear lady-in-waiting.",
+          "Let Willie the Watchperson (the investigator) know of your suspicions of Lady Gwendolyn.",
+          "Tell Charlamagne that you know her secret (that she altered the armor). Ask Charlamagne how much money she is willing to pay to keep that quiet.",
+          "Find out from Sir Cameron what proof he has that was sabotaged.",
+          "Ask Sir Cameron how much he is willing to pay to find out who may have truly sabotaged him in the tournament."
+        ]
+      }
+    },
+    {
+      "id": "willie_watchman",
+      "name": "Willie the Watchman",
+      "title": "Manor Watchperson and Investigator",
+      "gender": "Male",
+      "avatar_icon": "🗝️",
+      "brief": "Guardian of the manor and chief investigator. Serious, vigilant, and determined to bring the killer to medieval justice.",
+      "bio": "Willie the Watchperson As the watchperson for the manor of Fernwood, you live in the castle and the majority of your duties include keeping a tight watch over the castle and its residents. As a whole, you are also in charge of the security for the manor of Fernwood, which includes the castle, the church and the lands surrounding that were granted to the lord (Lord Taylor) from the queen (Queen Genevieve). Lately, you are aware that there has been some upheaval between the residents of the manor and Sir Rufus (a knight). Hoping to gain favoritism from the queen, Sir Rufus has taken on the responsibility of collecting the taxes for the queen. Since Sir Rufus is the queen’s appointed official, you have not interfered. It is your opinion that you cannot help the upset peasants who do not want to pay the tax increase and you have left that matter up to Sir Rufus to deal with as he sees fit. With the approaching noble wedding between Baron Bartholomew (the lord and lady’s son) and Lady Diana of Dunnsberry (a noblewoman) and the jousting tournament being thrown to celebrate the wedding, you believe you will need to be extra diligent in your responsibilities as there is certain to be some illegal activities in progress. Additionally, this is an important time for the lord because this is the first time the queen has visited in years. It is vital that Lord Taylor demonstrates that he runs a peaceful and profitable manor if he wants to maintain his lordship and that nothing goes wrong while Queen Genevieve (the queen) is visiting. With the impending wedding being the focus of the visit, Lady Gwendolyn has asked you to keep a close eye on Maid Monica (a maid) and Charlamagne (a chambermaid). Maid Monica is Baron Bartholomew’s former girlfriend and has been noticeably upset about the wedding of her former beau. The lady is concerned that Monica may act up or do something to sabotage Bartholomew’s wedding day. Additionally, the lady has noted that Charlamagne has been spotted wandering suspiciously around the castle in areas where she should not be. As the tournament celebration approaches, you are excited to attend and partake in a joyous occasion in the manor. Be prepared to take charge that evening in the event that anything should go wrong.",
+      "acting_tips": "As the watchperson for the lord and his manor, you are strict and demanding. Throughout the night, you will be called upon to enforce the rules as you see fit. While doing so, do not permit any disobedience—to you, to the lord & lady or to the queen (as he will be visiting for the tournament). If anything goes awry, you will be asked to lead an investigation, so you may want to bring a pad of paper to take notes. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "You have no secrets, your job is to uncover the truth by finding out what other guests at the tournament know."
+        ],
+        "start_objectives": [
+          "Tell Sir Cameron (a knight) that he put up a good fight today despite his defeat.",
+          "Assure Maid Monica (a maid) that you will be watching her closely and that it is in her best interest not to act up.",
+          "Question Sir Rufus (a knight) to find out if he wishes to be promoted.",
+          "Let Charlamagne (the chambermaid) know that she has been spotted sneaking around the castle and you plan to keep a close eye on her tonight.",
+          "When the victim falls down dead tonight, outline the body with tape (provided by host) and then tell everyone to remain in the room. The host will then give you some instructions to read. Willie the Watchperson"
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "Lead the crime scene investigation by questioning each of the suspects at the party regarding what they know about the crime.",
+          "Find out from the following people if they have anything to add to your investigation: - Queen Genevieve, the queen - Maid Monica, the peasant (if she is here) - Sir Cameron, a knight - Baron Bartholomew, the baron",
+          "Ask Maid Maril yn (the lady-in-waiting) if she had any contact with the victim earlier tonight. Inform Marilyn that some of her belongings were found in the victim’s possession.",
+          "You may show your own evidence to anyone, but give it to no one, no matter what the price.",
+          "Once you have completed your investigation, let the host know that you are finished. The host will hand you an evidence presentation and ask you to present your evidence and findings to the rest of the group."
+        ]
+      }
+    },
+    {
+      "id": "charlamagne",
+      "name": "Charlamagne",
+      "title": "Chambermaid",
+      "gender": "Female",
+      "avatar_icon": "🧹",
+      "brief": "Castle chambermaid with access to all private quarters. Smitten with Sir Rufus and entangled in secret castle plots.",
+      "bio": "Charlamagne As the chambermaid for the castle, you spend your days cleaning the castle and emptying chamber pots. While you appreciate the fact that having this job allows you to live at the castle, your days of feeling as though you will be promoted simply because of your loyalty and hard work to Lord Taylor and Lady Gwendolyn (the lord and lady) are well over. This realization occurred to you when Maid Marilyn was appointed as Lady Gwendolyn’s lady-inwaiting instead of you. Since, you have resented Maid Marilyn and her tight relationship with Lady Gwendolyn. This lack of promotion ruined your chances of social advancement, and you are beginning to realize that hard work and loyalty will get you nowhere under Lord Taylor’s rule. With that in mind, you have befriended Sir Rufus, a new knight to the manor. After observing Sir Rufus’ actions, you can sense that he plans to get ahead as well by any means possible – something you have in common. Knowing this, you have agreed to work together to gain status in the manor. Being the chambermaid, Sir Rufus has asked you to gain access to Sir Cameron’s room and to alter his armor before the tournament so that Sir Rufus has a better chance at wounding Sir Cameron in the joust. In return, Sir Rufus promised to ask for your favor that night if, indeed, he does win the tournament. Being the escort of Sir Rufus (a knight) will definitely be a step up the ladder to a higher place in the class system, so you have agreed to help him. You are aware that your betrayal of Sir Cameron may come back to haunt you, but you are willing to take that chance for the betterment of your life. In addition, the defeat of Sir Cameron will also be a defeat of Maid Marilyn – for you know she is in love with Sir Cameron. Additionally, to help advance your goals, you have agreed to help Sir Rufus who believes that Queen Genevieve (the queen) will grant him rule over the manor if he can prove that Lord Taylor is not running a prosperous and peaceful land. As part of your agreement, you will try to convince Queen Genevieve that Lord Taylor is not doing an adequate job at running the manor in return for him arranging a marriage to yourself, once he is lord. As the tournament celebration approaches, you find yourself excited for the event. With Queen Genevieve in attendance, it will be the perfect time for you to fulfill your part of the agreement with Sir Rufus. It is a big night for you for if Sir Rufus wins the tournament, you expect him to ask for your favor that night. The victorious knight always chooses one of the maids for their escort. By the end, you hope to be on top! (Or at least not cleaning chamber pots anymore.)",
+      "acting_tips": "As a servant in the castle, you spend your days cleaning and tidying up and also taking out the chamber pots. You were once a happy and loyal worker, but have since become bitter after realizing your fate is to remain a servant. This realization has made you vindictive and sneaky and you plan to use whatever means necessary to get ahead at the tournament party. This is a celebration, so you can dress in your medieval best, although, as a servant, that is not the fanciest of clothes. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "You altered the armor of Sir Cameron (a knight) at the request of Sir Rufus so that Sir Rufus would win the joust.",
+          "Sir Rufus did not ask you for your favor - as he promised.",
+          "You despise Maid Marilyn (lady-in-waiting) for taking what you considered your place as lady-in-waiting.",
+          "Rule of the Fernwood may be granted to Sir Rufus if the current rulers are deemed unfit to rule. You were working with Sir Rufus to prove Lord Taylor is an unfit ruler. In return, he promised to arrange a marriage for you to himself."
+        ],
+        "start_objectives": [
+          "Congratulate Sir Rufus (a knight) on his victory. Remind Sir Rufus that he owes you a favor for helping him to win.",
+          "Tell Maid Marilyn (the lady-in-waiting) that she is love with a loser. (Sir Cameron DID lose the tournament).",
+          "Find out from Queen Genevieve (the queen) if there is to be a change in the rule of the kingdom. Insist you are not happy with the current leaders.",
+          "If asked about your wher eabouts earlier, assure whomever that, as chambermaid, you have a right to be in any room in the castle that you please.",
+          "You discovered that the lord has arranged a marriage for Sir Rufus to Maid Monica. Let Lord Taylor know that you are not happy with the situation.",
+          "Accuse Maid Monica, Sir Rufus’s new wife-to-be, of stealing your happiness. Inform Maid Monica that you will find a way to make sure that they are never wed."
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "If asked how wel l you knew Sir Rufus, let them know that you had an agreement that he did not fulfill.",
+          "Remind Maid Maril yn that even though Sir Rufus is dead, Sir Cameron’s record will be forever tarnished with a loss today.",
+          "Ask Lady Diana (the noblewoman) about her dress.",
+          "If anyone accuses you of sabotaging Sir Cameron, insist it must be Baron Bartholomew (his friend), for the baron is the closest to the knight.",
+          "Remind Maid Monica that she will no longer be able to “marry-up”.",
+          "Accuse Sir Cameron of killing Sir Rufus because he wanted vindication for the defeat suffered in the tournament."
+        ]
+      }
+    },
+    {
+      "id": "maid_monica",
+      "name": "Maid Monica",
+      "title": "Castle Maid",
+      "gender": "Female",
+      "avatar_icon": "💔",
+      "brief": "A peasant maid and Baron Bartholomew's former love. Heartbroken over his noble engagement and threatened with marriage to Sir Rufus.",
+      "bio": "Maid Monica The daughter of a peasant in Fernwood, you grew up believing that you would be married off to your childhood sweetheart, Baron Bartholomew. Despite the vast class differences, you were promised this because of your endearing love and devotion to the baron. Lord Taylor (Bartholomew’s father and the lord of the manor) went so far as to arrange your marriage to Baron Bartholomew to take place a little over a year ago. It was then that Lady Diana of Dunnsberry (a noblewoman) came to the manor in search of a nobleman to marry. Lord Taylor almost immediately called off your arranged marriage and arranged another marriage between Lady Diana and Baron Bartholomew, as he thought Lady Diana was a better match politically and socially for his son. To make up for his cancelled arrangement, Lord Taylor has now arranged a marriage for you to Sir Rufus, a knight and man you do not like or trust. Recently, Queen Genevieve (the queen) has raised the taxes from 10% of your earnings to 15%. When you told Sir Rufus (the man who is in charge of collecting the taxes in Fernwood) that you would not be able to pay that much in taxes and still survive, Sir Rufus responded that your family would not survive if you DID NOT pay the full amount. Soon thereafter, Sir Rufus threatened members of your family with his sword if you did not pay in full and on time. With your newly arranged marriage, you not only dislike your fiance, but you fear him. Despite your new arrangement, you are still in love with Bartholomew and you despise Lady Diana for taking him away from you. It pains you to see the union of the two, but there is no avoiding the tournament. You have considered that you may still be able to wed Bartholomew if you can convince Lord Taylor that Lady Diana is an unfit wife for his son. In the meantime, you will be attending the tournament celebration. The whole manor will be participating in the celebration, and you are ordered to be there as a resident of the manor. Additionally, you hope that you can use the celebration to gain information that will prove Lady Diana to be an unfit match for Bartholomew.",
+      "acting_tips": "You are a maid, an eligible woman who happens to be the daughter of a servant. Since you will be witnessing and participating in the celebration of the wedding of your former beau, you are quite bitter about attending the event. Come begrudgingly to the party to see if you can somehow “replace” Lady Diana of Dunnsberry. At the celebration, you want to impress your ex-beau, so you would like to dress as nice as you can in your medieval attire. For more information, including on ideas on how to dress, who will be at the party, some olde English words to use, etc., please see the party tips page at www.nightofmystery.com or www.aknightofmurder.com",
+      "coins": 12,
+      "is_victim": false,
+      "is_murderer": false,
+      "envelope_a": {
+        "things_you_know": [
+          "You are arranged to marry Sir Rufus (the victim).",
+          "You are in love with Baron Bartholomew (the baron).",
+          "Earlier tonight, you saw Lady Diana (a noblewoman) taking to Sir Rufus (the victim).",
+          "Sir Rufus was using force to make sure the peasant families pay their taxes (You have proof of this in the note in this envelope)."
+        ],
+        "start_objectives": [
+          "Insist to Lor d Taylor (the lord) that he picked the wrong maid for his son. Insist he will regret his choice.",
+          "Ask Queen Genevieve (the queen) why she raised the taxes from 10% to 15% of your earnings.",
+          "If asked, admit that Sir Rufus (a knight) has been terrorizing families when they have trouble making the full tax payment, but that you cannot report the behavior or Sir Rufus will harm your family. Plead with whomever to keep your secret.",
+          "Tell Lady Diana of Dunnsberry (a noblewoman) that if it were not for her wealth, Baron Bartholomew (your former beau) would never have married her.",
+          "Because you still have feelings for Baron Bartholomew, smile and wink at him.",
+          "If anyone asks you to do anything, tell them you will do as you please."
+        ]
+      },
+      "envelope_b": {
+        "after_murder_objectives": [
+          "Ask Lady Diana about her relationship to the victim, Sir Rufus. You swore that you saw the two of them taking earlier.",
+          "Ask Baron Bartholomew why he married Lady Diana instead of you.",
+          "Try to disgrace Lady Diana by asking her about her handmade dress.",
+          "If confronted about the murder, assure whomever that it is Lady Diana that has something to hide, not yourself.",
+          "Tell Queen Genevieve that Sir Rufus has been charging 15% in tax money and that Sir Rufus was going to murder your family if you told.",
+          "You may show your note (included in this envelope) to anyone you choose as proof, but give it to NO ONE but Willie the Watchperson when asked."
+        ]
+      }
+    }
+  ]
+}

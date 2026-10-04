@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.vscode/
+.idea/
+chatlogs/*
+!chatlogs/.gitkeep
+data/room_state.json
+data/simulation_audit_report.json
+

@@ -1,0 +1,2542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Knight of Murder - Medieval Mystery</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: MedievalSharp & Cinzel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=MedievalSharp&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #12100e;
+      color: #e6dfd5;
+      background-image: radial-gradient(#261d17 1px, transparent 1px), radial-gradient(#261d17 1px, #12100e 1px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+    }
+    .font-medieval {
+      font-family: 'MedievalSharp', cursive;
+    }
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+    .parchment-card {
+      background: linear-gradient(135deg, #2a221b 0%, #1c1612 100%);
+      border: 1px solid #4a3b2c;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
+    }
+    .parchment-inner {
+      background: #dfd3be;
+      color: #2b1f14;
+      background-image: radial-gradient(#d3c4a8 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .gold-glow {
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    }
+    .gold-text {
+      color: #e5c158;
+    }
+    .gold-border {
+      border-color: #d4af37;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1a1511;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #4a3b2c;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #735c44;
+    }
+    /* Blackout overlay animation */
+    @keyframes lightning {
+      0%, 100% { opacity: 0; }
+      10%, 12% { opacity: 0.9; }
+      14%, 20% { opacity: 0; }
+      22%, 25% { opacity: 0.8; }
+      30% { opacity: 0; }
+    }
+    .lightning-flash {
+      animation: lightning 2s ease-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-800 selection:text-amber-100">
+
+  <!-- ================= TOP HEADER ================= -->
+  <header class="bg-[#1a1410] border-b border-[#3d2e20] sticky top-0 z-40 px-4 py-3 shadow-xl">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="text-3xl">⚔️</span>
+        <div>
+          <h1 class="text-lg md:text-xl font-cinzel font-bold text-[#e5c158] tracking-wider flex items-center gap-2">
+            A KNIGHT OF MURDER
+            <span id="header-stage-badge" class="hidden md:inline-block text-xs font-normal font-sans bg-[#3b2a1a] text-amber-200 px-2 py-0.5 rounded border border-amber-900/50">Stage 1</span>
+          </h1>
+          <p class="text-xs text-stone-400 font-serif italic hidden sm:block">Fernwood Manor • Medieval Mystery Party</p>
+        </div>
+      </div>
+
+      <!-- In-Game Controls & Status -->
+      <div class="flex items-center space-x-2 md:space-x-4">
+        <!-- Player Persona Indicator -->
+        <div id="header-persona-pill" class="hidden items-center bg-stone-900/90 border border-amber-600/60 rounded-full px-3 py-1 shadow text-xs font-cinzel text-amber-200 gap-1.5" title="Nhân vật của bạn">
+          <span id="header-persona-avatar" class="text-base select-none">👤</span>
+          <span id="header-persona-name" class="font-bold truncate max-w-[110px] sm:max-w-[180px]">Guest</span>
+        </div>
+
+        <!-- Gold Counter (when in game) -->
+        <div id="header-gold-pill" class="hidden items-center bg-amber-950/70 border border-amber-600/50 rounded-full px-3 py-1 shadow-inner">
+          <span class="text-amber-400 mr-1.5 text-base">💰</span>
+          <span id="player-gold-display" class="font-bold text-amber-200 text-sm">12</span>
+          <span class="text-xs text-amber-400/80 ml-1 hidden sm:inline">Gold</span>
+        </div>
+
+        <!-- Stage Ready Button -->
+        <button id="ready-stage-btn" onclick="toggleReady()" class="hidden items-center gap-1.5 px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded-lg border border-stone-600 text-xs md:text-sm font-cinzel font-semibold transition">
+          <span id="ready-status-icon">⚪</span>
+          <span id="ready-btn-text">Ready for Stage 2</span>
+          <span id="ready-count-badge" class="bg-amber-900/80 text-amber-200 text-xs px-1.5 py-0.2 rounded-full border border-amber-600/40">0/2</span>
+        </button>
+
+        <!-- Audio Mute Toggle -->
+        <button onclick="toggleAudio()" id="audio-toggle-btn" class="p-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 text-stone-300 border border-stone-700 text-sm transition" title="Toggle Medieval Music & FX">
+          🔊
+        </button>
+
+        <!-- LAN / QR Code Popup Toggle -->
+        <button onclick="openModal('network-modal')" class="p-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 text-amber-300 border border-stone-700 text-sm transition" title="Invite Friend / QR Code">
+          📱
+        </button>
+
+        <!-- Settings Toggle -->
+        <button onclick="openModal('settings-modal')" class="p-2 rounded-lg bg-stone-800/80 hover:bg-stone-700 text-stone-300 border border-stone-700 text-sm transition" title="API Settings">
+          ⚙️
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT CONTAINER ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-2 sm:p-4">
+
+    <!-- ================= VIEW 1: LOBBY & CHARACTER SELECTION ================= -->
+    <div id="lobby-view" class="space-y-6">
+      
+      <!-- Welcome Hero Banner -->
+      <div class="parchment-card rounded-2xl p-6 md:p-8 text-center border-amber-900/60 relative overflow-hidden">
+        <div class="absolute -right-8 -bottom-8 opacity-10 text-9xl pointer-events-none">🏰</div>
+        <h2 class="text-3xl md:text-5xl font-cinzel font-black text-amber-300 mb-2 tracking-wide drop-shadow-md">
+          Hear Ye! Hear Ye!
+        </h2>
+        <p class="text-amber-100/90 text-sm md:text-base max-w-2xl mx-auto font-serif">
+          A glorious tournament celebration is planned to honor the noble marriage of <strong class="text-amber-300">Baron Bartholomew</strong> to <strong class="text-amber-300">Lady Diana of Dunnsberry</strong> in Fernwood Manor. Choose your noble identity to enter the banquet hall!
+        </p>
+
+        <!-- Quick LAN URL Banner for 2nd Player -->
+        <div class="mt-6 max-w-lg mx-auto bg-black/40 border border-amber-700/40 rounded-xl p-3 flex items-center justify-between gap-3 text-left">
+          <div class="truncate">
+            <div class="text-xs uppercase tracking-wider text-amber-400/90 font-cinzel font-semibold">Join via Phone / 2nd Device</div>
+            <div id="lan-url-display" class="text-sm font-mono text-stone-200 truncate">Loading network link...</div>
+          </div>
+          <button onclick="copyLanUrl()" class="px-3 py-1.5 bg-amber-900/70 hover:bg-amber-800 text-amber-200 text-xs rounded-lg border border-amber-600/50 font-cinzel whitespace-nowrap transition">
+            📋 Copy Link
+          </button>
+          <button onclick="openModal('network-modal')" class="px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-amber-300 text-xs rounded-lg border border-stone-600 font-cinzel whitespace-nowrap transition">
+            📱 QR Code
+          </button>
+        </div>
+      </div>
+
+      <!-- Player Registration Box -->
+      <div class="parchment-card rounded-xl p-5 border-[#3d2e20]">
+        <h3 class="text-lg font-cinzel font-bold text-amber-300 mb-3 flex items-center gap-2">
+          <span>👑</span> Step 1: Enter Your Name & Choose Your Character
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div class="md:col-span-1">
+            <label class="block text-xs uppercase font-cinzel text-stone-400 mb-1">Your Name / Alias</label>
+            <input type="text" id="player-name-input" placeholder="e.g. Lord Alex" value="Player 1" 
+                   class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+          </div>
+          <div class="md:col-span-1">
+            <label class="block text-xs uppercase font-cinzel text-stone-400 mb-1">Guest Cast Size</label>
+            <select id="cast-size-select" onchange="changeCastSize()" class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+              <option value="12" selected>12 Characters (Full Manor Drama)</option>
+              <option value="8">8 Characters (Core Suspects)</option>
+            </select>
+          </div>
+          <div class="md:col-span-1 flex items-end">
+            <button id="start-banquet-btn" onclick="startBanquet()" class="w-full py-2.5 px-4 bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-600 text-amber-950 font-cinzel font-black rounded-lg shadow-lg transition tracking-wider flex items-center justify-center gap-2">
+              <span>🍷</span> Start Banquet
+            </button>
+          </div>
+        </div>
+
+        <!-- Character Selection Grid -->
+        <div class="text-xs uppercase font-cinzel text-stone-400 mb-2">Select your suspect persona (Sir Rufus is locked to AI as the victim):</div>
+        <div id="character-selection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ================= VIEW 2: ACTIVE GAME DASHBOARD ================= -->
+    <div id="game-view" class="hidden flex flex-col space-y-4">
+      
+      <!-- Stage Announcement Banner -->
+      <div id="stage-banner" class="parchment-card rounded-xl p-3 md:p-4 border-amber-900/60 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center space-x-3">
+          <span id="stage-banner-icon" class="text-2xl md:text-3xl">🎺</span>
+          <div>
+            <div id="stage-banner-title" class="text-sm md:text-base font-cinzel font-bold text-amber-300">Stage 1: Arrival & Reception</div>
+            <div id="stage-banner-desc" class="text-xs text-stone-300 font-serif">Mingle with fellow nobles, investigate rumors, and review your Secret Dossier.</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openModal('bribe-modal')" class="px-3 py-1.5 bg-gradient-to-r from-amber-800 to-amber-700 hover:from-amber-700 hover:to-amber-600 text-amber-100 rounded-lg text-xs font-cinzel font-bold border border-amber-500/40 shadow transition flex items-center gap-1.5">
+            <span>💰</span> Send Bribe / Gold
+          </button>
+          <button id="vote-nav-btn" onclick="switchTab('tab-vote')" class="hidden px-3 py-1.5 bg-red-900/80 hover:bg-red-800 text-red-100 rounded-lg text-xs font-cinzel font-bold border border-red-500/50 shadow transition flex items-center gap-1.5">
+            <span>⚖️</span> Who Dunnit?
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex border-b border-[#3d2e20] space-x-1 overflow-x-auto text-xs md:text-sm font-cinzel items-center">
+        <button id="nav-btn-great-hall" onclick="switchTab('tab-great-hall')" class="tab-btn active px-4 py-2.5 font-bold border-b-2 border-amber-500 text-amber-300 bg-stone-900/60 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
+          <span>🏰</span> The Great Hall
+        </button>
+        <button id="nav-btn-private" onclick="switchTab('tab-private')" class="tab-btn px-4 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
+          <span>🗝️</span> Private Whispers <span id="unread-private-badge" class="hidden bg-amber-500 text-amber-950 font-bold px-1.5 py-0.2 rounded-full text-xs">!</span>
+        </button>
+        <button id="nav-btn-dossier" onclick="switchTab('tab-dossier')" class="tab-btn px-4 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
+          <span>📜</span> Secret Dossier (Envelopes)
+        </button>
+        <button id="nav-btn-evidence" onclick="switchTab('tab-evidence')" class="tab-btn px-4 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
+          <span>🔍</span> Evidence &amp; Laws
+        </button>
+        <button id="nav-btn-vote" onclick="switchTab('tab-vote')" class="tab-btn px-4 py-2.5 font-bold border-b-2 border-transparent text-stone-400 hover:text-stone-200 rounded-t-lg transition flex items-center gap-2 whitespace-nowrap">
+          <span>⚖️</span> Accusation Ballot
+        </button>
+      </div>
+
+      <!-- ================= TAB 1: THE GREAT HALL ================= -->
+      <div id="tab-great-hall" class="tab-content flex flex-col md:flex-row gap-4 h-[65vh]">
+        <!-- Chat Area -->
+        <div class="flex-1 parchment-card rounded-xl p-3 flex flex-col h-full border-[#3d2e20]">
+          <div class="text-xs uppercase font-cinzel text-amber-400/80 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
+            <span>Banquet Room Conversation (Use @Name to address AI characters directly)</span>
+            <span class="text-stone-400 text-xs">Public</span>
+          </div>
+
+          <!-- Messages Scrollable List -->
+          <div id="great-hall-messages-list" class="flex-1 overflow-y-auto space-y-3 py-3 pr-1 text-sm font-sans">
+            <!-- Messages rendered by JS -->
+          </div>
+
+          <!-- Chat Input -->
+          <div class="relative pt-2 border-t border-[#3d2e20]">
+            <!-- Mention Autocomplete Popup -->
+            <div id="mention-autocomplete-popup" 
+                 style="z-index: 9999;"
+                 class="hidden absolute bottom-[calc(100%+8px)] left-0 w-80 max-h-72 bg-stone-950 border-2 border-amber-500 rounded-xl shadow-[0_-10px_35px_rgba(0,0,0,0.95)] overflow-y-auto p-1.5 divide-y divide-stone-800">
+            </div>
+
+            <form onsubmit="sendGreatHallMessage(event)" class="flex gap-2 items-center">
+              <button type="button" 
+                      onclick="toggleMentionAutocomplete()" 
+                      title="Bấm để chọn nhanh nhân vật muốn tag (@)" 
+                      class="px-2.5 py-2 bg-stone-800 hover:bg-amber-950 text-amber-300 font-cinzel font-bold text-xs rounded-lg border border-amber-600/60 hover:border-amber-400 transition flex items-center gap-1 shrink-0 shadow">
+                <span class="text-sm">🏷️</span><span>@Tag</span>
+              </button>
+              <input type="text" id="great-hall-input" placeholder="Address the banquet or type @ to tag a character..." 
+                     autocomplete="off"
+                     oninput="handleGreatHallInput(event)"
+                     onkeyup="handleGreatHallInput(event)"
+                     onkeydown="handleGreatHallKeydown(event)"
+                     class="flex-1 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+              <button type="submit" class="px-4 py-2 bg-amber-800 hover:bg-amber-700 text-amber-100 font-cinzel font-bold text-xs md:text-sm rounded-lg border border-amber-600/50 transition shrink-0">
+                Speak
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Sidebar: Castle Guests Directory -->
+        <div class="w-full md:w-80 lg:w-96 parchment-card rounded-xl p-3 border-[#3d2e20] flex flex-col h-auto md:h-full shrink-0">
+          <div class="text-xs uppercase font-cinzel text-amber-400/80 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
+            <span>Guests in Manor</span>
+            <span id="guest-count-badge" class="text-xs text-stone-400 font-mono">12</span>
+          </div>
+          <div id="guests-directory-list" class="flex-1 overflow-y-auto space-y-2 py-2 text-xs">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TAB 2: PRIVATE WHISPERS ================= -->
+      <div id="tab-private" class="tab-content hidden flex flex-col md:flex-row gap-4 h-[65vh]">
+        <!-- Conversations List -->
+        <div class="w-full md:w-80 lg:w-96 parchment-card rounded-xl p-3 border-[#3d2e20] flex flex-col shrink-0">
+          <div class="text-xs uppercase font-cinzel text-amber-400/80 pb-2 border-b border-[#3d2e20]">
+            Private Chambers
+          </div>
+          <div id="private-conversations-list" class="flex-1 overflow-y-auto space-y-1.5 py-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Active Private Chat Window -->
+        <div class="flex-1 parchment-card rounded-xl p-3 flex flex-col h-full border-[#3d2e20]">
+          <div id="active-private-header" class="text-xs uppercase font-cinzel text-amber-400/80 pb-2 border-b border-[#3d2e20] flex justify-between items-center">
+            <span>Select a character to whisper secretly</span>
+            <button onclick="openModal('bribe-modal')" class="text-xs text-amber-400 hover:underline">Send Gold</button>
+          </div>
+
+          <div id="private-messages-list" class="flex-1 overflow-y-auto space-y-3 py-3 pr-1 text-sm font-sans">
+            <div class="text-center text-stone-500 italic py-10 font-serif">
+              Choose a lord, lady, knight or servant from the left to begin a secluded, private conversation.
+            </div>
+          </div>
+
+          <form onsubmit="sendPrivateMessage(event)" class="pt-2 border-t border-[#3d2e20] flex gap-2">
+            <input type="text" id="private-input" placeholder="Whisper in confidence..." disabled
+                   class="flex-1 bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 disabled:opacity-50">
+            <button type="submit" id="private-send-btn" disabled class="px-4 py-2 bg-amber-800 hover:bg-amber-700 disabled:opacity-50 text-amber-100 font-cinzel font-bold text-xs md:text-sm rounded-lg border border-amber-600/50 transition">
+              Whisper
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ================= TAB 3: SECRET DOSSIER ================= -->
+      <div id="tab-dossier" class="tab-content hidden space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Character Background & Identity Card -->
+          <div class="parchment-inner rounded-xl p-6 shadow-2xl border-4 border-[#523d27]">
+            <div class="flex items-center space-x-3 mb-4 border-b-2 border-[#826645] pb-3">
+              <span id="dossier-avatar" class="text-4xl">👑</span>
+              <div>
+                <h3 id="dossier-name" class="text-2xl font-cinzel font-black text-[#3d2b17]">Your Character</h3>
+                <div id="dossier-title" class="text-sm font-serif italic text-[#5e452a]">Title / Occupation</div>
+              </div>
+            </div>
+
+            <div class="space-y-4 text-sm font-serif leading-relaxed text-[#261a0d]">
+              <div>
+                <h4 class="font-cinzel font-bold uppercase text-xs tracking-wider text-[#63492b] mb-1">Background Biography</h4>
+                <p id="dossier-bio" class="whitespace-pre-line">Loading your character biography...</p>
+              </div>
+
+              <div>
+                <h4 class="font-cinzel font-bold uppercase text-xs tracking-wider text-[#63492b] mb-1">Manner & Costume Tips</h4>
+                <p id="dossier-acting" class="whitespace-pre-line italic">Costume & manner advice...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Secret Objectives & Envelopes -->
+          <div class="space-y-4">
+            
+            <!-- Envelope A: Start of Party -->
+            <div class="parchment-card rounded-xl p-5 border-amber-800/60">
+              <div class="flex items-center justify-between border-b border-amber-900/60 pb-2 mb-3">
+                <h4 class="font-cinzel font-bold text-amber-300 text-base flex items-center gap-2">
+                  <span>✉️</span> ENVELOPE (A): Secret Knowledge & Start Objectives
+                </h4>
+                <span class="text-xs bg-amber-950 text-amber-200 border border-amber-800 px-2 py-0.5 rounded">Active</span>
+              </div>
+
+              <div class="text-xs font-cinzel text-amber-400 mb-1.5 uppercase font-semibold">Things You Know (Keep safe or sell):</div>
+              <ul id="dossier-tyk-list" class="space-y-1 text-xs text-stone-300 font-serif mb-4 list-disc list-inside">
+                <!-- TYK items -->
+              </ul>
+
+              <div class="text-xs font-cinzel text-amber-400 mb-1.5 uppercase font-semibold">Start of Party Objectives (Tick when completed):</div>
+              <div id="dossier-start-obj-list" class="space-y-2">
+                <!-- Checklist items -->
+              </div>
+            </div>
+
+            <!-- Envelope B: Post-Murder -->
+            <div id="envelope-b-container" class="parchment-card rounded-xl p-5 border-red-950/60 opacity-60">
+              <div class="flex items-center justify-between border-b border-red-900/60 pb-2 mb-3">
+                <h4 class="font-cinzel font-bold text-red-300 text-base flex items-center gap-2">
+                  <span>📜</span> ENVELOPE (B): Post-Murder Directives
+                </h4>
+                <span id="envelope-b-badge" class="text-xs bg-stone-900 text-stone-400 border border-stone-800 px-2 py-0.5 rounded">SEALED (Stage 3)</span>
+              </div>
+
+              <div id="envelope-b-content" class="text-xs text-stone-400 italic font-serif">
+                This envelope is strictly sealed by order of Willie the Watchman. It shall be opened automatically upon the tragic occurrence of the murder at Stage 3.
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ================= TAB 4: EVIDENCE ROOM & LAWS ================= -->
+      <div id="tab-evidence" class="tab-content hidden space-y-6">
+        
+        <!-- Exhibits Grid -->
+        <div>
+          <h3 class="text-lg font-cinzel font-bold text-amber-300 mb-3 flex items-center gap-2">
+            <span>🔍</span> Tangible Crime Scene Exhibits (Presented in Stage 4)
+          </h3>
+          <div id="exhibits-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Exhibits populated by JS -->
+          </div>
+        </div>
+
+        <!-- Laws of the Land -->
+        <div class="parchment-inner rounded-xl p-6 border-4 border-[#523d27]">
+          <h3 class="text-xl font-cinzel font-black text-[#3d2b17] border-b-2 border-[#826645] pb-2 mb-4 flex items-center gap-2">
+            <span>📜</span> Laws of the Land (As Decreed by Queen Genevieve)
+          </h3>
+          <div id="laws-of-the-land-body" class="text-sm font-serif leading-relaxed text-[#261a0d] whitespace-pre-line">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= TAB 5: ACCUSATION & VOTE (WHO DUNNIT) ================= -->
+      <div id="tab-vote" class="tab-content hidden max-w-2xl mx-auto parchment-card rounded-xl p-6 border-amber-900/70">
+        <h3 class="text-2xl font-cinzel font-black text-amber-300 mb-2 text-center">
+          Who Dunnit? Official Accusation Ballot
+        </h3>
+        <p class="text-xs text-stone-300 text-center font-serif mb-6">
+          Submit your official accusation before Willie the Watchman delivers the royal solution. All guests must vote!
+        </p>
+
+        <form onsubmit="submitWhoDunnitVote(event)" class="space-y-4 text-sm font-cinzel">
+          <div>
+            <label class="block text-xs uppercase text-amber-400 mb-1">I firmly accuse:</label>
+            <select id="vote-accused-select" required class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+              <option value="" disabled selected>-- Select the Murderer --</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase text-amber-400 mb-1">Their Motive for the Murder:</label>
+            <textarea id="vote-motive-input" rows="2" placeholder="Why did they strike Sir Rufus down in cold blood?" required
+                      class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs uppercase text-amber-400 mb-1">The Crucial Evidence / Murder Weapon:</label>
+            <textarea id="vote-evidence-input" rows="2" placeholder="Which exhibit or clue proves their guilt beyond doubt?" required
+                      class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-stone-800">
+            <div>
+              <label class="block text-xs uppercase text-stone-400 mb-1">Best Dressed Guest:</label>
+              <select id="vote-dressed-select" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-xs focus:outline-none focus:border-amber-500">
+                <!-- Options -->
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs uppercase text-stone-400 mb-1">Best Performance / Liar:</label>
+              <select id="vote-perf-select" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-xs focus:outline-none focus:border-amber-500">
+                <!-- Options -->
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" id="vote-submit-btn" class="w-full py-3 bg-gradient-to-r from-red-800 to-amber-700 hover:from-red-700 hover:to-amber-600 text-amber-100 font-cinzel font-black rounded-lg shadow-lg border border-red-500/40 transition tracking-wider">
+            ⚖️ Seal and Submit Accusation
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-[#140f0c] border-t border-[#291e15] py-2 px-4 text-center text-xs text-stone-500 font-serif">
+    A Knight of Murder • Designed for 2 Human Sleuths &amp; Living Medieval AI Agents • Fernwood Manor
+  </footer>
+
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal 1: LAN Network & QR Code Modal -->
+  <div id="network-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+    <div class="parchment-card rounded-2xl max-w-md w-full p-6 border-amber-800/80 shadow-2xl relative text-center">
+      <button onclick="closeModal('network-modal')" class="absolute top-4 right-4 text-stone-400 hover:text-stone-100 text-xl font-bold">✕</button>
+      <span class="text-4xl">📱</span>
+      <h3 class="text-xl font-cinzel font-bold text-amber-300 mt-2 mb-1">Join Banquet on 2nd Device</h3>
+      <p class="text-xs text-stone-300 font-serif mb-4">Scan this QR code with your phone camera or connect via the local network URL:</p>
+      
+      <!-- QR Code Image -->
+      <div class="bg-white p-4 rounded-xl inline-block mx-auto mb-4 shadow-inner">
+        <img id="network-qr-image" src="" alt="QR Code" class="w-48 h-48 mx-auto">
+      </div>
+
+      <div class="bg-black/50 p-2.5 rounded-lg border border-amber-900/50 mb-4 flex items-center justify-between text-left">
+        <div id="network-modal-url" class="font-mono text-xs text-amber-200 truncate mr-2">http://192.168.x.x:8000</div>
+        <button onclick="copyLanUrl()" class="px-2.5 py-1 bg-amber-900 hover:bg-amber-800 text-amber-200 text-xs rounded font-cinzel">Copy</button>
+      </div>
+      <p class="text-[11px] text-stone-400 italic">Both devices must be connected to the same Wi-Fi network.</p>
+    </div>
+  </div>
+
+  <!-- Modal 2: Bribe / Transfer Gold Modal -->
+  <div id="bribe-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+    <div class="parchment-card rounded-2xl max-w-md w-full p-6 border-amber-800/80 shadow-2xl relative">
+      <button onclick="closeModal('bribe-modal')" class="absolute top-4 right-4 text-stone-400 hover:text-stone-100 text-xl font-bold">✕</button>
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-3xl">💰</span>
+        <div>
+          <h3 class="text-lg font-cinzel font-bold text-amber-300">Offer Bribe or Transfer Gold</h3>
+          <p class="text-xs text-stone-400 font-serif">Gold buys secrets, loyalties, and favors in Fernwood.</p>
+        </div>
+      </div>
+
+      <!-- Laws of Castle Bribery (Tiered Guide) -->
+      <div class="bg-black/50 p-3 rounded-xl border border-amber-900/50 text-[11px] font-serif text-stone-300 space-y-1 mb-4">
+        <div class="text-amber-400 font-cinzel font-bold text-xs uppercase flex items-center gap-1.5">
+          <span>⚖️</span> Laws of Castle Bribery &amp; Status
+        </div>
+        <p class="text-stone-400 italic">Not all lords and vassals value coin equally:</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1 text-[11px]">
+          <div>👑 <strong class="text-amber-200">The Queen:</strong> Cannot be bribed! (Treasonous to try)</div>
+          <div>⚔️ <strong class="text-amber-200">Nobles &amp; Knights:</strong> Expect 3+ coins for respect.</div>
+          <div>🧹 <strong class="text-amber-200">Servants &amp; Jesters:</strong> Eager for 1–2 coins.</div>
+          <div>🗝️ <strong class="text-amber-200">The Watchman:</strong> Accepts support, never corruption!</div>
+        </div>
+      </div>
+
+      <form onsubmit="submitBribe(event)" class="space-y-4 text-sm font-cinzel">
+        <div>
+          <label class="block text-xs uppercase text-amber-400 mb-1">Recipient Character:</label>
+          <select id="bribe-recipient-select" required class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase text-amber-400 mb-1">Amount to Transfer (You have <span id="bribe-modal-gold" class="text-amber-300 font-bold">12</span>):</label>
+          <input type="number" id="bribe-amount-input" min="1" max="100" value="2" required 
+                 class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase text-amber-400 mb-1">Discreet Note or Demand:</label>
+          <input type="text" id="bribe-message-input" placeholder="e.g. Tell me what you know about the dagger..." 
+                 class="w-full bg-stone-900 border border-amber-900/60 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+        </div>
+
+        <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-amber-950 font-cinzel font-black rounded-lg shadow-lg border border-amber-400/40 transition">
+          Hand Over Gold Coins
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Court Archives & Chat Log Modal -->
+  <div id="chatlog-modal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 md:p-6">
+    <div class="parchment-card rounded-2xl max-w-4xl w-full h-[85vh] p-5 border-amber-800/80 shadow-2xl relative flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-amber-900/60 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span class="text-3xl select-none">📜</span>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-lg md:text-xl font-cinzel font-bold text-amber-300">Court Archives &amp; Chat Logs</h3>
+              <span id="chatlog-access-badge" class="px-2 py-0.5 rounded text-[10px] font-mono"></span>
+            </div>
+            <p class="text-xs text-stone-400 font-serif">Comprehensive records of all Great Hall speeches, private whispers, and clandestine AI intrigues.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="downloadChatlogText()" class="px-3 py-1.5 bg-amber-800 hover:bg-amber-700 text-amber-100 rounded-lg text-xs font-cinzel font-bold border border-amber-600/50 shadow flex items-center gap-1.5 transition">
+            <span>📥</span> Tải Về (.txt)
+          </button>
+          <button onclick="refreshChatlogData()" class="px-2.5 py-1.5 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-lg text-xs font-cinzel border border-stone-700 shadow flex items-center gap-1 transition" title="Làm mới nhật ký">
+            <span>🔄</span>
+          </button>
+          <button onclick="closeModal('chatlog-modal')" class="text-stone-400 hover:text-stone-100 text-2xl font-bold px-2 py-0.5">✕</button>
+        </div>
+      </div>
+
+      <!-- Sub-tabs within Chat Log Modal -->
+      <div class="flex border-b border-stone-800 space-x-1 pt-2 pb-2 text-xs font-cinzel shrink-0 overflow-x-auto">
+        <button id="chatlog-tab-btn-greathall" onclick="switchChatlogTab('greathall')" class="px-3 py-1.5 rounded-lg font-bold bg-amber-950/80 text-amber-300 border border-amber-700/60 transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>🏰</span> Great Hall (<span id="chatlog-count-greathall">0</span>)
+        </button>
+        <button id="chatlog-tab-btn-undercover" onclick="switchChatlogTab('undercover')" class="px-3 py-1.5 rounded-lg font-bold text-stone-400 hover:text-amber-300 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>🕵️</span> Tương Tác Chéo Ngầm AI (<span id="chatlog-count-undercover">0</span>)
+        </button>
+        <button id="chatlog-tab-btn-human" onclick="switchChatlogTab('human')" class="px-3 py-1.5 rounded-lg font-bold text-stone-400 hover:text-amber-300 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>🗝️</span> Mật Đàm Người Chơi (<span id="chatlog-count-human">0</span>)
+        </button>
+        <button id="chatlog-tab-btn-transactions" onclick="switchChatlogTab('transactions')" class="px-3 py-1.5 rounded-lg font-bold text-stone-400 hover:text-amber-300 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap">
+          <span>💰</span> Sổ Cái Vàng (<span id="chatlog-count-transactions">0</span>)
+        </button>
+      </div>
+
+      <!-- Content Area -->
+      <div id="chatlog-tab-content-greathall" class="flex-1 overflow-y-auto space-y-3 py-3 pr-2 text-xs font-sans">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div id="chatlog-tab-content-undercover" class="hidden flex-1 overflow-y-auto space-y-4 py-3 pr-2 text-xs font-sans">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div id="chatlog-tab-content-human" class="hidden flex-1 overflow-y-auto space-y-4 py-3 pr-2 text-xs font-sans">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div id="chatlog-tab-content-transactions" class="hidden flex-1 overflow-y-auto space-y-2 py-3 pr-2 text-xs font-sans">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-amber-900/40 text-[11px] font-serif text-stone-400 flex flex-wrap justify-between items-center shrink-0">
+        <span>Toàn bộ nhật ký tự động lưu vào <code class="bg-black/60 px-1 py-0.5 rounded text-amber-300 font-mono">chatlogs/chatlog_latest.txt</code></span>
+        <button onclick="saveChatlogNow()" class="text-amber-400 hover:underline">Lưu bản ghi ngay lập tức</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Settings Modal -->
+  <div id="settings-modal" class="hidden fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+    <div class="parchment-card rounded-2xl max-w-md w-full p-6 border-stone-700 shadow-2xl relative">
+      <button onclick="closeModal('settings-modal')" class="absolute top-4 right-4 text-stone-400 hover:text-stone-100 text-xl font-bold">✕</button>
+      <h3 class="text-lg font-cinzel font-bold text-amber-300 mb-4 flex items-center gap-2">
+        <span>⚙️</span> Game &amp; AI Settings
+      </h3>
+
+      <form onsubmit="saveSettings(event)" class="space-y-4 text-sm font-cinzel">
+        <div>
+          <label class="block text-xs uppercase text-stone-400 mb-1">AI Provider:</label>
+          <select id="settings-provider-select" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+            <option value="gemini">Google Gemini API (gemini-2.5-flash)</option>
+            <option value="openai">OpenAI API (gpt-4o-mini)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase text-stone-400 mb-1">API Key (Gemini or OpenAI):</label>
+          <input type="password" id="settings-key-input" placeholder="Paste your API key here..." 
+                 class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500">
+          <p class="text-[11px] text-stone-500 font-sans mt-1">Key is stored locally for this game session.</p>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 bg-stone-800 hover:bg-stone-700 text-amber-300 font-cinzel font-bold rounded-lg border border-stone-600 transition">
+          Save Settings
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 4: Dramatic Blackout Overlay (Stage 3) -->
+  <div id="blackout-modal" class="hidden fixed inset-0 z-50 bg-black flex flex-col items-center justify-center p-6 text-center">
+    <div id="lightning-fx" class="absolute inset-0 bg-white opacity-0 pointer-events-none"></div>
+    <div class="relative z-10 max-w-lg space-y-4">
+      <div class="text-6xl animate-bounce">⚡</div>
+      <h2 class="text-3xl md:text-5xl font-cinzel font-black text-red-600 tracking-wider">A MURDER IN THE MANOR!</h2>
+      <p class="text-stone-300 font-serif text-sm md:text-base leading-relaxed">
+        The torches were snuffed in darkness! A terrible cry echoed through the Great Hall!
+        <br><strong class="text-amber-400">Sir Rufus lies slain upon the floor with a dagger in his heart!</strong>
+      </p>
+      <div class="pt-4">
+        <button onclick="dismissBlackout()" class="px-6 py-2.5 bg-red-950 hover:bg-red-900 text-red-200 border border-red-700 font-cinzel font-bold rounded-xl transition">
+          Examine the Crime Scene
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 5: Grand Solution & Awards Modal (Stage 5) -->
+  <div id="solution-modal" class="hidden fixed inset-0 z-50 bg-black/90 overflow-y-auto flex items-center justify-center p-4">
+    <div class="parchment-inner rounded-2xl max-w-2xl w-full p-6 md:p-8 border-8 border-[#523d27] shadow-2xl relative my-8">
+      <button onclick="closeModal('solution-modal')" class="absolute top-4 right-4 text-[#5e452a] hover:text-[#261a0d] text-2xl font-black">✕</button>
+      <div class="text-center mb-6">
+        <span class="text-5xl">🏆</span>
+        <h2 class="text-3xl font-cinzel font-black text-[#3d2b17] mt-2">The Royal Solution Revealed!</h2>
+        <div class="text-sm font-serif italic text-[#63492b]">As Declared by Willie the Watchman</div>
+      </div>
+
+      <div class="space-y-6 text-sm font-serif leading-relaxed text-[#261a0d]">
+        <div class="bg-amber-100/60 p-4 rounded-xl border border-amber-900/30">
+          <h4 class="font-cinzel font-bold text-base text-[#4a341c] mb-1">The True Murderer:</h4>
+          <p id="solution-killer-text" class="text-lg font-cinzel font-black text-red-800">Lady Diana of Dunnsberry</p>
+          <p id="solution-motive-text" class="mt-2 text-xs">Diana is an escaped serf from Dunnsberry seeking freedom after living 1 year + 1 day in Fernwood. Sir Rufus recognized her and threatened her freedom.</p>
+        </div>
+
+        <!-- Awards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-3 bg-white/50 rounded-lg border border-[#826645]/40">
+            <span class="text-xl">🎯</span>
+            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Smoking Gun Award (Sleuths)</h5>
+            <p id="award-smoking-gun" class="font-bold text-sm text-[#261a0d]">Calculating...</p>
+          </div>
+
+          <div class="p-3 bg-white/50 rounded-lg border border-[#826645]/40">
+            <span class="text-xl">💰</span>
+            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Wealthiest Guest</h5>
+            <p id="award-wealthiest" class="font-bold text-sm text-[#261a0d]">Calculating...</p>
+          </div>
+
+          <div class="p-3 bg-white/50 rounded-lg border border-[#826645]/40">
+            <span class="text-xl">👗</span>
+            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Best Dressed Guest</h5>
+            <p id="award-dressed" class="font-bold text-sm text-[#261a0d]">Calculating...</p>
+          </div>
+
+          <div class="p-3 bg-white/50 rounded-lg border border-[#826645]/40">
+            <span class="text-xl">🎭</span>
+            <h5 class="font-cinzel font-bold text-xs uppercase text-[#63492b] mt-1">Best Acting / Cunning Liar</h5>
+            <p id="award-perf" class="font-bold text-sm text-[#261a0d]">Calculating...</p>
+          </div>
+        </div>
+
+        <div class="text-center pt-4">
+          <button onclick="closeModal('solution-modal')" class="px-6 py-2.5 bg-[#4a341c] hover:bg-[#332311] text-amber-100 font-cinzel font-bold rounded-xl shadow-lg transition">
+            Close Verdict &amp; Review Manor
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= FRONTEND LOGIC & SOUND ENGINE ================= -->
+  <script>
+    // --- Application State ---
+    let appState = {
+      playerId: localStorage.getItem('knight_player_id') || ('p_' + Math.random().toString(36).substring(2, 9)),
+      playerName: localStorage.getItem('knight_player_name') || 'Noble Sleuth',
+      characterId: localStorage.getItem('knight_char_id') || null,
+      myCharacter: null,
+      myGold: 12,
+      stage: 1,
+      isGameStarted: false,
+      castSize: 12,
+      allCharacters: [],
+      humanPlayers: {},
+      revealedExhibits: [],
+      allExhibits: [],
+      lawsOfTheLand: '',
+      greatHallMessages: [],
+      privateChats: {},
+      activePrivateRecipientId: null,
+      isAudioMuted: false,
+      ws: null,
+      lanUrl: ''
+    };
+
+    localStorage.setItem('knight_player_id', appState.playerId);
+
+    // --- Web Audio Synthesizer (Zero External Dependencies) ---
+    class MedievalAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.isMuted = false;
+        this.luteTimer = null;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+      playNote(freq, type = 'sine', duration = 0.5, gainLevel = 0.15) {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(gainLevel, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) {}
+      }
+      playCoinClink() {
+        this.init();
+        this.playNote(1975.53, 'triangle', 0.25, 0.2); // B6
+        setTimeout(() => this.playNote(2637.02, 'sine', 0.35, 0.25), 60); // E7
+      }
+      playFanfare() {
+        this.init();
+        const notes = [440, 554.37, 659.25, 880];
+        notes.forEach((n, idx) => {
+          setTimeout(() => this.playNote(n, 'triangle', 0.6, 0.2), idx * 160);
+        });
+      }
+      playThunder() {
+        this.init();
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const bufferSize = this.ctx.sampleRate * 2;
+          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          const noise = this.ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = this.ctx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(120, this.ctx.currentTime);
+          filter.frequency.linearRampToValueAtTime(40, this.ctx.currentTime + 1.8);
+          const gain = this.ctx.createGain();
+          gain.gain.setValueAtTime(0.6, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 1.9);
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.ctx.destination);
+          noise.start();
+        } catch (e) {}
+      }
+      startAmbientLute() {
+        if (this.luteTimer) return;
+        const chords = [
+          [220, 277.18, 329.63], // A major
+          [196, 246.94, 293.66], // G major
+          [164.81, 196, 246.94], // E minor
+          [220, 261.63, 329.63]  // A minor
+        ];
+        let idx = 0;
+        this.luteTimer = setInterval(() => {
+          if (!this.isMuted && this.ctx) {
+            const chord = chords[idx % chords.length];
+            chord.forEach((freq, fIdx) => {
+              setTimeout(() => this.playNote(freq, 'triangle', 1.8, 0.04), fIdx * 250);
+            });
+            idx++;
+          }
+        }, 3500);
+      }
+    }
+
+    const soundEngine = new MedievalAudioEngine();
+
+    function toggleAudio() {
+      soundEngine.init();
+      soundEngine.isMuted = !soundEngine.isMuted;
+      document.getElementById('audio-toggle-btn').innerText = soundEngine.isMuted ? '🔇' : '🔊';
+      if (!soundEngine.isMuted) {
+        soundEngine.startAmbientLute();
+        soundEngine.playCoinClink();
+      }
+    }
+
+    // --- Networking & API Communication ---
+    async function initApp() {
+      try {
+        const netRes = await fetch('/api/network-info');
+        const netData = await netRes.json();
+        appState.lanUrl = netData.lan_url;
+        document.getElementById('lan-url-display').innerText = netData.lan_url;
+        document.getElementById('network-modal-url').innerText = netData.lan_url;
+        // Generate QR code using reliable public QR API
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(netData.lan_url)}`;
+        document.getElementById('network-qr-image').src = qrUrl;
+      } catch (e) {}
+
+      await loadGameData();
+      await restorePlayerState();
+      connectWebSocket();
+    }
+
+    function ensureMyCharacter() {
+      if (appState.myCharacter && appState.myCharacter.id) {
+        return appState.myCharacter;
+      }
+      if (appState.characterId && appState.allCharacters && appState.allCharacters.length > 0) {
+        const found = appState.allCharacters.find(c => c.id === appState.characterId);
+        if (found) {
+          appState.myCharacter = found;
+          return found;
+        }
+      }
+      const registered = Object.values(appState.humanPlayers || {}).find(p => p.player_id === appState.playerId);
+      if (registered && registered.character_id && appState.allCharacters && appState.allCharacters.length > 0) {
+        const found = appState.allCharacters.find(c => c.id === registered.character_id);
+        if (found) {
+          appState.characterId = found.id;
+          appState.myCharacter = found;
+          localStorage.setItem('knight_char_id', found.id);
+          return found;
+        }
+      }
+      // If still none, assign first available non-victim character
+      if (appState.allCharacters && appState.allCharacters.length > 0) {
+        const available = appState.allCharacters.find(c => !c.is_victim && !c.is_human) || appState.allCharacters.find(c => !c.is_victim);
+        if (available) {
+          appState.characterId = available.id;
+          appState.myCharacter = available;
+          localStorage.setItem('knight_char_id', available.id);
+          fetch('/api/join', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              player_id: appState.playerId,
+              player_name: appState.playerName || 'Noble Sleuth',
+              character_id: available.id
+            })
+          }).catch(err => console.warn('Auto join failed:', err));
+          return available;
+        }
+      }
+      return null;
+    }
+
+    function updatePersonaUI() {
+      const char = ensureMyCharacter();
+      const pill = document.getElementById('header-persona-pill');
+      const avatarEl = document.getElementById('header-persona-avatar');
+      const nameEl = document.getElementById('header-persona-name');
+      if (char) {
+        if (pill) {
+          pill.classList.remove('hidden');
+          pill.classList.add('flex');
+        }
+        if (avatarEl) avatarEl.innerText = char.avatar_icon || '👤';
+        if (nameEl) nameEl.innerText = char.name;
+      }
+    }
+
+    async function loadGameData() {
+      try {
+        const res = await fetch('/api/game-data');
+        const data = await res.json();
+        appState.allCharacters = data.characters || [];
+        appState.allExhibits = data.exhibits || [];
+        appState.revealedExhibits = data.revealed_exhibits || [];
+        appState.lawsOfTheLand = data.laws_of_the_land || '';
+        appState.castSize = data.cast_size || 12;
+        appState.humanPlayers = data.human_players || {};
+        appState.stage = data.stage || 1;
+        appState.isGameStarted = data.is_game_started || false;
+
+        document.getElementById('cast-size-select').value = appState.castSize;
+        renderCharacterSelectionGrid();
+        renderExhibitsGrid();
+        renderVoteFormOptions();
+        document.getElementById('laws-of-the-land-body').innerText = appState.lawsOfTheLand;
+
+        ensureMyCharacter();
+        updatePersonaUI();
+
+        if (appState.isGameStarted) {
+          showGameDashboard();
+        }
+      } catch (e) {
+        console.error('Error loading game data:', e);
+      }
+    }
+
+    async function restorePlayerState() {
+      if (!appState.playerId) return;
+      try {
+        const res = await fetch(`/api/state/${appState.playerId}`);
+        const data = await res.json();
+        if (data.registered && data.character) {
+          appState.characterId = data.character.id;
+          appState.myCharacter = data.character;
+          appState.myGold = data.character.current_gold;
+          appState.stage = data.stage;
+          appState.greatHallMessages = data.great_hall_messages || [];
+          appState.privateChats = data.private_chats || {};
+          appState.isGameStarted = data.is_game_started;
+          
+          updateHeaderGold();
+          updatePersonaUI();
+          updateStageUI();
+          renderGreatHallMessages();
+          renderDossierView();
+          renderPrivateConversationsList();
+
+          if (appState.isGameStarted) {
+            showGameDashboard();
+          }
+        } else {
+          // If not registered on server, automatically re-join with saved characterId
+          const savedCid = appState.characterId || localStorage.getItem('knight_char_id');
+          if (savedCid) {
+            try {
+              const joinRes = await fetch('/api/join', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                  player_id: appState.playerId,
+                  player_name: appState.playerName || 'Noble Sleuth',
+                  character_id: savedCid
+                })
+              });
+              const joinData = await joinRes.json();
+              if (joinData.status === 'ok') {
+                appState.characterId = savedCid;
+                appState.myCharacter = joinData.character;
+                appState.myGold = joinData.character.current_gold;
+              }
+            } catch (err) {
+              console.warn('Auto re-join error:', err);
+            }
+          }
+          ensureMyCharacter();
+          updatePersonaUI();
+          if (appState.isGameStarted) {
+            showGameDashboard();
+          }
+        }
+      } catch (e) {
+        console.error('Error restoring player state:', e);
+      }
+    }
+
+    function connectWebSocket() {
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = `${protocol}//${window.location.host}/ws/${appState.playerId}`;
+      appState.ws = new WebSocket(wsUrl);
+
+      appState.ws.onopen = () => console.log('WebSocket connected.');
+      appState.ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        handleWebSocketMessage(msg);
+      };
+      appState.ws.onclose = () => {
+        console.log('WebSocket closed. Reconnecting in 3s...');
+        setTimeout(connectWebSocket, 3000);
+      };
+    }
+
+    function handleWebSocketMessage(data) {
+      console.log('WS event:', data.type);
+      if (data.type === 'new_message') {
+        appState.greatHallMessages.push(data.message);
+        renderGreatHallMessages();
+        if (data.message.is_blackout) {
+          triggerBlackoutAnimation();
+        }
+      } else if (data.type === 'new_private_message') {
+        const char = ensureMyCharacter();
+        const myCid = char ? char.id : (appState.characterId || null);
+        const parts = (data.chat_key || '').split('__');
+        if (myCid && parts.includes(myCid)) {
+          const key = data.chat_key;
+          if (!appState.privateChats[key]) appState.privateChats[key] = [];
+          if (!appState.privateChats[key].some(m => m.id === data.message.id)) {
+            appState.privateChats[key].push(data.message);
+          }
+          const otherId = parts[0] === myCid ? parts[1] : parts[0];
+          if (otherId) {
+            if (!appState.privateChats[otherId]) appState.privateChats[otherId] = [];
+            if (!appState.privateChats[otherId].some(m => m.id === data.message.id)) {
+              appState.privateChats[otherId].push(data.message);
+            }
+          }
+          renderPrivateMessages();
+          renderPrivateConversationsList();
+          soundEngine.playCoinClink();
+        }
+      } else if (data.type === 'player_joined') {
+        appState.humanPlayers = data.human_players;
+        renderCharacterSelectionGrid();
+        renderGuestsDirectory();
+      } else if (data.type === 'game_started') {
+        appState.isGameStarted = true;
+        appState.stage = data.stage;
+        showGameDashboard();
+        soundEngine.playFanfare();
+      } else if (data.type === 'ready_toggled') {
+        appState.humanPlayers = data.human_players;
+        updateReadyButton();
+      } else if (data.type === 'stage_advanced') {
+        appState.stage = data.stage;
+        appState.revealedExhibits = data.revealed_exhibits;
+        updateStageUI();
+        renderExhibitsGrid();
+        renderDossierView();
+        soundEngine.playFanfare();
+        if (data.event && data.event.is_blackout) {
+          triggerBlackoutAnimation();
+        }
+        if (data.stage === 5 && data.awards) {
+          showSolutionAwards(data.awards);
+        }
+      } else if (data.type === 'gold_transferred') {
+        soundEngine.playCoinClink();
+        if (appState.myCharacter) {
+          if (data.from_id === appState.myCharacter.id) {
+            appState.myGold = data.sender_gold;
+          } else if (data.to_id === appState.myCharacter.id) {
+            appState.myGold = data.receiver_gold;
+          }
+          updateHeaderGold();
+        }
+      }
+
+      // Auto-refresh chatlog modal if it is currently open
+      const chatlogModal = document.getElementById('chatlog-modal');
+      if (chatlogModal && !chatlogModal.classList.contains('hidden')) {
+        refreshChatlogData();
+      }
+    }
+
+    // --- UI Renderers ---
+
+    function renderCharacterSelectionGrid() {
+      const grid = document.getElementById('character-selection-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      appState.allCharacters.forEach(c => {
+        const isVictim = c.is_victim;
+        const isSelectedByMe = (c.id === appState.characterId);
+        
+        let claimedByOther = false;
+        let claimedName = '';
+        for (const pid in appState.humanPlayers) {
+          if (pid !== appState.playerId && appState.humanPlayers[pid].character_id === c.id) {
+            claimedByOther = true;
+            claimedName = appState.humanPlayers[pid].player_name;
+            break;
+          }
+        }
+
+        const card = document.createElement('div');
+        card.className = `p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+          isSelectedByMe 
+            ? 'bg-amber-950/80 border-amber-400 gold-glow ring-2 ring-amber-500' 
+            : claimedByOther 
+              ? 'bg-stone-900/60 border-stone-800 opacity-50 cursor-not-allowed'
+              : isVictim
+                ? 'bg-stone-900/60 border-stone-800 opacity-60'
+                : 'bg-stone-900/80 border-[#3d2e20] hover:border-amber-700/60 hover:bg-stone-800/80'
+        }`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-2xl">${c.avatar_icon || '👤'}</span>
+              <span class="text-[10px] font-cinzel font-semibold px-2 py-0.5 rounded ${
+                isSelectedByMe ? 'bg-amber-500 text-amber-950' :
+                claimedByOther ? 'bg-stone-800 text-stone-400' :
+                isVictim ? 'bg-red-950 text-red-300' : 'bg-stone-800 text-stone-300'
+              }">
+                ${isSelectedByMe ? 'YOU' : claimedByOther ? `Taken (${claimedName})` : isVictim ? 'Locked to AI' : 'Available'}
+              </span>
+            </div>
+            <h4 class="font-cinzel font-bold text-sm text-amber-200">${c.name}</h4>
+            <div class="text-xs font-serif italic text-stone-400 mb-2">${c.title}</div>
+            <p class="text-[11px] text-stone-300/90 font-serif leading-tight line-clamp-3">${c.brief}</p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-stone-800/80 text-right">
+            ${
+              isVictim ? '<span class="text-[10px] text-red-400 italic">Locked as victim</span>' :
+              claimedByOther ? '<span class="text-[10px] text-stone-500">Occupied</span>' :
+              isSelectedByMe ? '<span class="text-xs font-cinzel font-bold text-amber-400">✓ Chosen Role</span>' :
+              '<button class="text-xs font-cinzel font-bold text-amber-300 hover:text-amber-100">Select Role →</button>'
+            }
+          </div>
+        `;
+
+        if (!isVictim && !claimedByOther) {
+          card.onclick = () => selectCharacter(c.id);
+        }
+        grid.appendChild(card);
+      });
+    }
+
+    async function selectCharacter(cid) {
+      const nameInput = document.getElementById('player-name-input').value.trim() || 'Noble Sleuth';
+      appState.playerName = nameInput;
+      localStorage.setItem('knight_player_name', nameInput);
+
+      try {
+        const res = await fetch('/api/join', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            player_id: appState.playerId,
+            player_name: appState.playerName,
+            character_id: cid
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          appState.characterId = cid;
+          appState.myCharacter = data.character;
+          appState.myGold = data.character.current_gold;
+          localStorage.setItem('knight_char_id', cid);
+          renderCharacterSelectionGrid();
+          soundEngine.playCoinClink();
+        } else {
+          alert(data.detail || 'Could not select this role.');
+        }
+      } catch (e) {
+        alert('Network error joining game.');
+      }
+    }
+
+    async function changeCastSize() {
+      const size = parseInt(document.getElementById('cast-size-select').value);
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ cast_size: size })
+      });
+      await loadGameData();
+    }
+
+    async function startBanquet() {
+      soundEngine.init();
+      soundEngine.startAmbientLute();
+      if (!appState.characterId) {
+        alert('Please select a character persona first before starting the banquet!');
+        return;
+      }
+      try {
+        const res = await fetch('/api/start', { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          showGameDashboard();
+        }
+      } catch (e) {
+        alert('Failed to start banquet.');
+      }
+    }
+
+    function showGameDashboard() {
+      ensureMyCharacter();
+      updatePersonaUI();
+      document.getElementById('lobby-view').classList.add('hidden');
+      document.getElementById('game-view').classList.remove('hidden');
+      document.getElementById('header-gold-pill').classList.remove('hidden');
+      document.getElementById('header-gold-pill').classList.add('flex');
+      document.getElementById('ready-stage-btn').classList.remove('hidden');
+      document.getElementById('ready-stage-btn').classList.add('flex');
+      
+      updateHeaderGold();
+      updateStageUI();
+      renderGuestsDirectory();
+      renderDossierView();
+      renderVoteFormOptions();
+    }
+
+    function updateHeaderGold() {
+      const disp = document.getElementById('player-gold-display');
+      const modalDisp = document.getElementById('bribe-modal-gold');
+      if (disp) disp.innerText = appState.myGold;
+      if (modalDisp) modalDisp.innerText = appState.myGold;
+    }
+
+    function updateStageUI() {
+      const stageTitles = {
+        1: "Stage 1: Arrival & Reception",
+        2: "Stage 2: The Banquet & Festivities",
+        3: "Stage 3: The Foul Murder of Sir Rufus",
+        4: "Stage 4: Presentation of Evidence & Accusations",
+        5: "Stage 5: The Grand Climax & Solution"
+      };
+      const stageDescs = {
+        1: "Review your Envelope A in your Secret Dossier, observe the Laws of the Land, and seek whispers.",
+        2: "Lord Taylor opens the feast! Mingle, bribe guards or servants, and complete your start objectives.",
+        3: "Sir Rufus is dead! Willie investigates. Envelope B is now unlocked in your Secret Dossier!",
+        4: "Willie lays Exhibits A through F upon the table! Review the clues and submit your Who Dunnit ballot!",
+        5: "Willie delivers the final solution! The cold-blooded killer is unmasked!"
+      };
+
+      document.getElementById('header-stage-badge').innerText = `Stage ${appState.stage}`;
+      document.getElementById('stage-banner-title').innerText = stageTitles[appState.stage] || `Stage ${appState.stage}`;
+      document.getElementById('stage-banner-desc').innerText = stageDescs[appState.stage] || "";
+      
+      if (appState.stage === 3) {
+        document.getElementById('stage-banner-icon').innerText = '⚡';
+      } else if (appState.stage === 4) {
+        document.getElementById('stage-banner-icon').innerText = '🔍';
+        document.getElementById('vote-nav-btn').classList.remove('hidden');
+      } else if (appState.stage === 5) {
+        document.getElementById('stage-banner-icon').innerText = '👑';
+      }
+
+      updateReadyButton();
+    }
+
+    function updateReadyButton() {
+      const btn = document.getElementById('ready-stage-btn');
+      const text = document.getElementById('ready-btn-text');
+      const icon = document.getElementById('ready-status-icon');
+      const badge = document.getElementById('ready-count-badge');
+      if (!btn) return;
+
+      if (appState.stage >= 5) {
+        btn.classList.add('hidden');
+        return;
+      }
+
+      const nextStage = appState.stage + 1;
+      text.innerText = `Advance to Stage ${nextStage}`;
+
+      // Count ready players
+      let totalHumans = Object.keys(appState.humanPlayers).length;
+      let readyHumans = 0;
+      let amIReady = false;
+
+      for (const pid in appState.humanPlayers) {
+        if (appState.humanPlayers[pid].ready_for_next_stage) {
+          readyHumans++;
+          if (pid === appState.playerId) amIReady = true;
+        }
+      }
+
+      badge.innerText = `${readyHumans}/${totalHumans} Ready`;
+      if (amIReady) {
+        icon.innerText = '🟢';
+        btn.classList.add('border-green-600', 'bg-green-950/60');
+      } else {
+        icon.innerText = '⚪';
+        btn.classList.remove('border-green-600', 'bg-green-950/60');
+      }
+    }
+
+    async function toggleReady() {
+      try {
+        await fetch('/api/ready', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ player_id: appState.playerId })
+        });
+      } catch (e) {}
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(el => {
+        el.classList.remove('border-amber-500', 'text-amber-300', 'bg-stone-900/60');
+        el.classList.add('border-transparent', 'text-stone-400');
+      });
+
+      const target = document.getElementById(tabId);
+      if (target) target.classList.remove('hidden');
+
+      const btnMap = {
+        'tab-great-hall': 'nav-btn-great-hall',
+        'tab-private': 'nav-btn-private',
+        'tab-dossier': 'nav-btn-dossier',
+        'tab-evidence': 'nav-btn-evidence',
+        'tab-vote': 'nav-btn-vote'
+      };
+      const activeBtn = document.getElementById(btnMap[tabId]);
+      if (activeBtn) {
+        activeBtn.classList.add('border-amber-500', 'text-amber-300', 'bg-stone-900/60');
+        activeBtn.classList.remove('border-transparent', 'text-stone-400');
+      }
+
+      if (tabId === 'tab-private') {
+        const char = ensureMyCharacter();
+        if (!appState.activePrivateRecipientId) {
+          const firstOther = (appState.allCharacters || []).find(c => !char || c.id !== char.id);
+          if (firstOther) {
+            openPrivateChat(firstOther.id);
+            return;
+          }
+        }
+        renderPrivateConversationsList();
+        renderPrivateMessages();
+      }
+    }
+
+    // --- Great Hall Chat Logic & Mentions ---
+    function formatMentions(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.innerText = text;
+      const safe = div.innerHTML;
+
+      return safe.replace(/@([A-Za-z0-9_]+(?:\s+[A-Za-z0-9_]+)?)/g, (match, p1) => {
+        return `<span class="inline-flex items-center font-cinzel font-bold text-amber-300 bg-amber-950/90 px-1.5 py-0.5 rounded border border-amber-500/50 shadow-sm text-xs tracking-wide">@${p1}</span>`;
+      });
+    }
+
+    function renderGreatHallMessages() {
+      const container = document.getElementById('great-hall-messages-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      appState.greatHallMessages.forEach(m => {
+        const isAnnouncement = m.type === 'announcement' || m.type === 'event';
+        const isMe = (appState.myCharacter && m.sender_id === appState.myCharacter.id);
+
+        const row = document.createElement('div');
+        if (isAnnouncement) {
+          row.className = 'p-3 rounded-lg bg-amber-950/40 border border-amber-800/60 my-2';
+          row.innerHTML = `
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xl">${m.sender_avatar || '🎺'}</span>
+              <span class="font-cinzel font-bold text-amber-300 text-xs">${m.sender_name}</span>
+            </div>
+            <p class="text-amber-100/90 text-xs md:text-sm font-serif italic whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
+          `;
+        } else {
+          row.className = `flex gap-2.5 ${isMe ? 'justify-end' : 'justify-start'}`;
+          row.innerHTML = `
+            ${!isMe ? `<span class="text-2xl select-none">${m.sender_avatar || '👤'}</span>` : ''}
+            <div class="max-w-[80%] rounded-xl px-3.5 py-2 ${
+              isMe ? 'bg-amber-900/80 text-amber-100 border border-amber-600/40' : 'bg-stone-800/90 text-stone-200 border border-stone-700'
+            }">
+              <div class="text-[10px] font-cinzel font-bold ${isMe ? 'text-amber-300 text-right' : 'text-amber-400'} mb-0.5">
+                ${m.sender_name}
+              </div>
+              <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-snug">${formatMentions(m.content)}</p>
+            </div>
+            ${isMe ? `<span class="text-2xl select-none">${m.sender_avatar || '👤'}</span>` : ''}
+          `;
+        }
+        container.appendChild(row);
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendGreatHallMessage(e) {
+      if (e) e.preventDefault();
+      closeMentionAutocomplete();
+      const input = document.getElementById('great-hall-input');
+      if (!input) return;
+      const content = input.value.trim();
+      if (!content) return;
+
+      const char = ensureMyCharacter();
+      if (!char) {
+        alert('Vui lòng chọn nhân vật đại diện trước khi phát biểu tại Đại Sảnh!');
+        return;
+      }
+
+      // Clear input immediately so user gets instant feedback
+      input.value = '';
+
+      const payload = {
+        action: 'send_message',
+        type: 'public',
+        sender_id: char.id,
+        content: content
+      };
+
+      let sent = false;
+      // 1. Try WebSocket if OPEN
+      if (appState.ws && appState.ws.readyState === WebSocket.OPEN) {
+        try {
+          appState.ws.send(JSON.stringify(payload));
+          sent = true;
+        } catch (wsErr) {
+          console.warn('WS send failed, switching to HTTP fallback:', wsErr);
+        }
+      }
+
+      // 2. HTTP Fallback if WS not open or failed
+      if (!sent) {
+        try {
+          const res = await fetch('/api/message', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              type: 'public',
+              sender_id: char.id,
+              content: content
+            })
+          });
+          const resData = await res.json();
+          if (resData.status === 'ok') {
+            sent = true;
+            // If WS is not connected, manually append to local state
+            if (!appState.ws || appState.ws.readyState !== WebSocket.OPEN) {
+              appState.greatHallMessages.push(resData.message);
+              renderGreatHallMessages();
+            }
+          }
+        } catch (httpErr) {
+          console.error('HTTP send error:', httpErr);
+          input.value = content;
+          alert('Không thể gửi phát ngôn. Vui lòng thử lại!');
+        }
+      }
+    }
+
+    // --- Mention Autocomplete & Quick Tag Logic ---
+    const CHARACTER_SEARCH_KEYWORDS = {
+      queen_genevieve: ["queen", "genevieve", "nữ hoàng", "nu hoang", "hoang gia", "queen genevieve"],
+      baron_bartholomew: ["baron", "bartholomew", "nam tước", "nam tuoc", "chu re", "chú rể", "baron bartholomew"],
+      lord_taylor: ["lord", "taylor", "lãnh chúa", "lanh chua", "chu manor", "chủ nhà", "lord taylor"],
+      lady_diana: ["lady diana", "diana", "dunnsberry", "cô dâu", "co dau", "tieu thu", "tiểu thư", "lady diana of dunnsberry"],
+      lady_gwendolyn: ["lady gwendolyn", "gwendolyn", "quy ba", "quý bà", "quy phu nhan"],
+      sir_cameron: ["sir cameron", "cameron", "hiep si", "hiệp sĩ", "ky si", "kỵ sĩ"],
+      sir_rufus: ["sir rufus", "rufus", "hiep si", "hiệp sĩ", "nan nhan", "nạn nhân"],
+      willie_watchman: ["willie", "watchman", "thi ve", "thị vệ", "cai nguc", "cai ngục", "willie the watchman", "bailiff"],
+      maid_marilyn: ["maid marilyn", "marilyn", "thi nu", "thị nữ", "hau gai", "khăn tay"],
+      maid_monica: ["maid monica", "monica", "thi nu", "thị nữ", "tinh cu", "tình cũ"],
+      charlamagne: ["charlamagne", "chambermaid", "hau gai", "hầu gái", "phong ngu"],
+      joking_jerry: ["joking jerry", "jerry", "jester", "fool", "he", "hề", "chang he", "chàng hề"]
+    };
+
+    function matchesCharacterQuery(c, query) {
+      if (!query) return true;
+      const q = query.toLowerCase().trim();
+      if (!q) return true;
+
+      if (c.name && c.name.toLowerCase().includes(q)) return true;
+      if (c.title && c.title.toLowerCase().includes(q)) return true;
+      if (c.id && c.id.toLowerCase().includes(q)) return true;
+
+      const aliases = CHARACTER_SEARCH_KEYWORDS[c.id] || [];
+      return aliases.some(a => a.toLowerCase().includes(q));
+    }
+
+    let mentionAutocompleteState = {
+      active: false,
+      candidates: [],
+      selectedIndex: 0,
+      triggerPrefix: '',
+      atIndex: -1
+    };
+
+    function mentionCharacterInGreatHall(characterName) {
+      switchTab('tab-great-hall');
+      const input = document.getElementById('great-hall-input');
+      if (!input) return;
+      const tag = `@${characterName} `;
+      if (!input.value.includes(tag)) {
+        input.value = tag + input.value;
+      }
+      input.focus();
+      input.selectionStart = input.selectionEnd = input.value.length;
+      closeMentionAutocomplete();
+    }
+
+    function toggleMentionAutocomplete() {
+      const popup = document.getElementById('mention-autocomplete-popup');
+      const input = document.getElementById('great-hall-input');
+      if (!popup || !input) return;
+
+      if (mentionAutocompleteState.active && !popup.classList.contains('hidden')) {
+        closeMentionAutocomplete();
+        return;
+      }
+
+      // If input doesn't already have @, add it
+      if (!input.value.endsWith('@') && !input.value.endsWith('@ ')) {
+        const val = input.value;
+        input.value = val ? (val + ' @') : '@';
+      }
+      input.focus();
+      input.selectionStart = input.selectionEnd = input.value.length;
+
+      const candidates = (appState.allCharacters || []).filter(c => {
+        if (appState.myCharacter && c.id === appState.myCharacter.id) return false;
+        return true;
+      });
+
+      mentionAutocompleteState = {
+        active: true,
+        candidates: candidates,
+        selectedIndex: 0,
+        triggerPrefix: '@',
+        atIndex: input.value.lastIndexOf('@')
+      };
+      renderMentionAutocompletePopup();
+    }
+
+    function handleGreatHallInput(e) {
+      const input = document.getElementById('great-hall-input') || (e && e.target);
+      if (!input) return;
+      const val = input.value;
+      const cursorPos = input.selectionStart != null ? input.selectionStart : val.length;
+      const textBeforeCursor = val.slice(0, cursorPos);
+      const lastAtIndex = textBeforeCursor.lastIndexOf('@');
+
+      if (lastAtIndex === -1) {
+        closeMentionAutocomplete();
+        return;
+      }
+
+      // Check character preceding @ (must be start of text or whitespace / bracket / quote)
+      if (lastAtIndex > 0 && !/[\s([{"']/.test(textBeforeCursor[lastAtIndex - 1])) {
+        closeMentionAutocomplete();
+        return;
+      }
+
+      const query = textBeforeCursor.slice(lastAtIndex + 1);
+      if (/[\r\n]/.test(query) || query.length > 30) {
+        closeMentionAutocomplete();
+        return;
+      }
+
+      const candidates = (appState.allCharacters || []).filter(c => {
+        if (appState.myCharacter && c.id === appState.myCharacter.id) return false;
+        return matchesCharacterQuery(c, query);
+      });
+
+      if (candidates.length === 0) {
+        closeMentionAutocomplete();
+        return;
+      }
+
+      mentionAutocompleteState = {
+        active: true,
+        candidates: candidates,
+        selectedIndex: 0,
+        triggerPrefix: textBeforeCursor.slice(lastAtIndex),
+        atIndex: lastAtIndex
+      };
+
+      renderMentionAutocompletePopup();
+    }
+
+    function handleGreatHallKeydown(e) {
+      const popup = document.getElementById('mention-autocomplete-popup');
+      if (!mentionAutocompleteState.active || !popup || popup.classList.contains('hidden')) {
+        return;
+      }
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        mentionAutocompleteState.selectedIndex = (mentionAutocompleteState.selectedIndex + 1) % mentionAutocompleteState.candidates.length;
+        renderMentionAutocompletePopup();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        mentionAutocompleteState.selectedIndex = (mentionAutocompleteState.selectedIndex - 1 + mentionAutocompleteState.candidates.length) % mentionAutocompleteState.candidates.length;
+        renderMentionAutocompletePopup();
+      } else if (e.key === 'Enter' || e.key === 'Tab') {
+        if (mentionAutocompleteState.candidates.length > 0) {
+          e.preventDefault();
+          selectMentionCandidate(mentionAutocompleteState.candidates[mentionAutocompleteState.selectedIndex]);
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeMentionAutocomplete();
+      }
+    }
+
+    function renderMentionAutocompletePopup() {
+      const popup = document.getElementById('mention-autocomplete-popup');
+      if (!popup) return;
+      popup.innerHTML = `
+        <div class="px-3 py-1.5 text-[11px] font-cinzel text-amber-400 font-bold uppercase tracking-wider flex justify-between items-center bg-stone-900 border-b border-stone-800 rounded-t-lg">
+          <span class="flex items-center gap-1.5"><span>👥</span> Chọn nhân vật muốn Tag (@)</span>
+          <span class="text-[10px] text-stone-400 font-sans font-normal">Enter / Click để chọn</span>
+        </div>
+      `;
+
+      mentionAutocompleteState.candidates.forEach((c, idx) => {
+        const isSelected = idx === mentionAutocompleteState.selectedIndex;
+        const item = document.createElement('div');
+        item.className = `p-2 flex items-center justify-between cursor-pointer rounded-lg transition text-xs my-0.5 ${
+          isSelected ? 'bg-amber-900/80 text-amber-100 ring-1 ring-amber-400' : 'text-stone-300 hover:bg-amber-950/60 hover:text-amber-200'
+        }`;
+        item.innerHTML = `
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="text-xl select-none shrink-0">${c.avatar_icon}</span>
+            <div class="min-w-0">
+              <div class="font-cinzel font-bold text-xs truncate">${c.name}</div>
+              <div class="text-[10px] text-stone-400 font-serif italic truncate">${c.title}</div>
+            </div>
+          </div>
+          <span class="text-[11px] font-cinzel font-bold text-amber-300 bg-amber-950 px-2 py-0.5 rounded border border-amber-600/60 shrink-0 ml-2 shadow-sm">
+            @Tag
+          </span>
+        `;
+        item.addEventListener('pointerdown', (evt) => {
+          evt.preventDefault();
+          selectMentionCandidate(c);
+        });
+        item.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          selectMentionCandidate(c);
+        });
+        popup.appendChild(item);
+      });
+
+      popup.classList.remove('hidden');
+    }
+
+    function selectMentionCandidate(character) {
+      const input = document.getElementById('great-hall-input');
+      if (!input || !character) return;
+
+      const val = input.value;
+      const cursorPos = input.selectionStart != null ? input.selectionStart : val.length;
+      const textBefore = val.slice(0, cursorPos);
+      const textAfter = val.slice(cursorPos);
+
+      const lastAtIndex = textBefore.lastIndexOf('@');
+      let newText = '';
+      if (lastAtIndex !== -1) {
+        newText = textBefore.slice(0, lastAtIndex) + `@${character.name} ` + textAfter;
+      } else {
+        newText = `@${character.name} ` + val;
+      }
+
+      input.value = newText;
+      const newCursor = (lastAtIndex !== -1 ? lastAtIndex : 0) + character.name.length + 2;
+      input.focus();
+      input.selectionStart = input.selectionEnd = newCursor;
+      closeMentionAutocomplete();
+    }
+
+    function closeMentionAutocomplete() {
+      mentionAutocompleteState.active = false;
+      const popup = document.getElementById('mention-autocomplete-popup');
+      if (popup) popup.classList.add('hidden');
+    }
+
+    document.addEventListener('click', (e) => {
+      const popup = document.getElementById('mention-autocomplete-popup');
+      const input = document.getElementById('great-hall-input');
+      if (popup && !popup.contains(e.target) && e.target !== input) {
+        closeMentionAutocomplete();
+      }
+    });
+
+    // --- Private Whispers Chat Logic ---
+    function renderGuestsDirectory() {
+      const list = document.getElementById('guests-directory-list');
+      const bribeSelect = document.getElementById('bribe-recipient-select');
+      if (!list) return;
+      list.innerHTML = '';
+      if (bribeSelect) bribeSelect.innerHTML = '';
+
+      appState.allCharacters.forEach(c => {
+        if (appState.myCharacter && c.id === appState.myCharacter.id) return;
+
+        // Directory card with full untruncated name, title, role badge and clean action buttons
+        const row = document.createElement('div');
+        row.className = 'p-2.5 rounded-lg bg-stone-900/70 hover:bg-stone-800/80 border border-stone-800 transition flex flex-col gap-1.5 shadow-sm';
+        const escapedName = c.name.replace(/'/g, "\\'");
+        const isHuman = c.is_human;
+        row.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0 flex-1 cursor-pointer" onclick="openPrivateChat('${c.id}')" title="Bấm để mở phòng mật đàm">
+              <span class="text-2xl select-none shrink-0">${c.avatar_icon}</span>
+              <div class="min-w-0 flex-1">
+                <div class="font-cinzel font-bold text-amber-200 text-xs leading-snug whitespace-normal break-words">${c.name}</div>
+                <div class="text-[11px] text-stone-400 font-serif italic leading-tight whitespace-normal break-words">${c.title}</div>
+              </div>
+            </div>
+            ${isHuman ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800 font-mono shrink-0">Người chơi</span>' : '<span class="text-[9px] px-1.5 py-0.5 rounded bg-stone-800 text-stone-400 font-mono shrink-0">AI</span>'}
+          </div>
+          <div class="flex items-center justify-end gap-1.5 pt-1.5 border-t border-stone-800/60">
+            <button onclick="mentionCharacterInGreatHall('${escapedName}')" 
+                    title="Gắn thẻ (@) ở Đại Sảnh"
+                    class="px-2.5 py-1 rounded bg-amber-950/80 hover:bg-amber-900 text-amber-300 hover:text-amber-100 border border-amber-700/60 text-xs font-cinzel font-bold transition shadow-sm flex items-center gap-1">
+              <span>🏷️</span> @Tag
+            </button>
+            <button onclick="openPrivateChat('${c.id}')" 
+                    title="Mật đàm riêng tư"
+                    class="px-2.5 py-1 rounded bg-stone-800 hover:bg-stone-700 text-stone-200 hover:text-amber-200 border border-stone-600 text-xs font-cinzel transition shadow-sm flex items-center gap-1">
+              <span>🗝️</span> Whisper
+            </button>
+          </div>
+        `;
+        list.appendChild(row);
+
+        // Bribe dropdown
+        if (bribeSelect) {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.innerText = `${c.name} (${c.title})`;
+          bribeSelect.appendChild(opt);
+        }
+      });
+
+      renderPrivateConversationsList();
+    }
+
+    function renderPrivateConversationsList() {
+      const list = document.getElementById('private-conversations-list');
+      if (!list) return;
+      list.innerHTML = '';
+      const char = ensureMyCharacter();
+
+      (appState.allCharacters || []).forEach(c => {
+        if (char && c.id === char.id) return;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isActive = (appState.activePrivateRecipientId === c.id);
+        const pair = char ? [char.id, c.id].sort() : [];
+        const chatKey = pair.length ? `${pair[0]}__${pair[1]}` : '';
+        const msgs = (chatKey && appState.privateChats[chatKey]) || appState.privateChats[c.id] || [];
+        const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1] : null;
+
+        btn.className = `w-full text-left p-2.5 rounded-lg border text-xs flex items-center justify-between gap-2 transition cursor-pointer select-none ${
+          isActive 
+            ? 'bg-amber-950/90 border-amber-500 text-amber-200 shadow-md ring-2 ring-amber-500/60' 
+            : 'bg-stone-900/60 border-stone-800 text-stone-300 hover:bg-stone-800/80 hover:border-amber-900/60'
+        }`;
+        btn.innerHTML = `
+          <div class="flex items-center gap-2 min-w-0 flex-1 pointer-events-none">
+            <span class="text-xl shrink-0">${c.avatar_icon}</span>
+            <div class="min-w-0 flex-1">
+              <div class="font-cinzel font-bold text-xs truncate ${isActive ? 'text-amber-300' : 'text-stone-200'}">${c.name}</div>
+              <div class="text-[10px] text-stone-400 italic font-serif truncate">
+                ${lastMsg ? (lastMsg.sender_id === (char ? char.id : '') ? 'You: ' : '') + lastMsg.content : c.title}
+              </div>
+            </div>
+          </div>
+          ${msgs.length > 0 ? `<span class="text-[10px] bg-amber-950 text-amber-400 border border-amber-800 px-1.5 py-0.5 rounded font-mono shrink-0 pointer-events-none">${msgs.length}</span>` : ''}
+        `;
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          openPrivateChat(c.id);
+        });
+        list.appendChild(btn);
+      });
+    }
+
+    function openPrivateChat(recipientId) {
+      if (!recipientId) return;
+      appState.activePrivateRecipientId = recipientId;
+
+      // Show tab-private directly
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(el => {
+        el.classList.remove('border-amber-500', 'text-amber-300', 'bg-stone-900/60');
+        el.classList.add('border-transparent', 'text-stone-400');
+      });
+      const target = document.getElementById('tab-private');
+      if (target) target.classList.remove('hidden');
+      const activeBtn = document.getElementById('nav-btn-private');
+      if (activeBtn) {
+        activeBtn.classList.add('border-amber-500', 'text-amber-300', 'bg-stone-900/60');
+        activeBtn.classList.remove('border-transparent', 'text-stone-400');
+      }
+
+      renderPrivateConversationsList();
+
+      const recipient = (appState.allCharacters || []).find(c => c.id === recipientId);
+      const header = document.getElementById('active-private-header');
+      if (header && recipient) {
+        header.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-xl">${recipient.avatar_icon || '👤'}</span>
+            <div>
+              <span class="font-cinzel font-bold text-amber-300 text-sm">${recipient.name}</span>
+              <span class="text-xs text-stone-400 font-serif italic ml-2">(${recipient.title})</span>
+            </div>
+          </div>
+          <button type="button" onclick="openModal('bribe-modal')" class="text-xs text-amber-400 hover:text-amber-300 hover:underline flex items-center gap-1 font-cinzel font-bold">
+            <span>💰</span> Gửi Vàng
+          </button>
+        `;
+      }
+
+      const input = document.getElementById('private-input');
+      const sendBtn = document.getElementById('private-send-btn');
+      if (input) {
+        input.disabled = false;
+        input.placeholder = `Thì thầm mật đàm với ${recipient ? recipient.name : 'nhân vật'}...`;
+        setTimeout(() => input.focus(), 50);
+      }
+      if (sendBtn) sendBtn.disabled = false;
+      renderPrivateMessages();
+    }
+
+    function renderPrivateMessages() {
+      const container = document.getElementById('private-messages-list');
+      const char = ensureMyCharacter();
+      if (!container || !appState.activePrivateRecipientId || !char) return;
+      container.innerHTML = '';
+
+      const pair = [char.id, appState.activePrivateRecipientId].sort();
+      const chatKey = `${pair[0]}__${pair[1]}`;
+      const msgs = appState.privateChats[chatKey] || appState.privateChats[appState.activePrivateRecipientId] || [];
+
+      if (msgs.length === 0) {
+        container.innerHTML = '<div class="text-center text-stone-500 italic py-10 font-serif">Chưa có lời mật đàm nào trong góc kín này. Hãy bắt đầu cuộc trò chuyện bí mật...</div>';
+        return;
+      }
+
+      msgs.forEach(m => {
+        const isMe = (m.sender_id === char.id);
+        const row = document.createElement('div');
+        row.className = `flex gap-2.5 ${isMe ? 'justify-end' : 'justify-start'}`;
+        row.innerHTML = `
+          ${!isMe ? `<span class="text-2xl select-none">${m.sender_avatar || '👤'}</span>` : ''}
+          <div class="max-w-[80%] rounded-xl px-3.5 py-2 ${
+            isMe ? 'bg-amber-900/80 text-amber-100 border border-amber-600/40' : 'bg-stone-800/90 text-stone-200 border border-stone-700'
+          }">
+            <div class="text-[10px] font-cinzel font-bold ${isMe ? 'text-amber-300 text-right' : 'text-amber-400'} mb-0.5">
+              ${m.sender_name}
+            </div>
+            <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-snug">${m.content}</p>
+          </div>
+          ${isMe ? `<span class="text-2xl select-none">${m.sender_avatar || '👤'}</span>` : ''}
+        `;
+        container.appendChild(row);
+      });
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function sendPrivateMessage(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('private-input');
+      if (!input) return;
+      const content = input.value.trim();
+      if (!content || !appState.activePrivateRecipientId) return;
+
+      const char = ensureMyCharacter();
+      if (!char) {
+        alert('Vui lòng chọn nhân vật đại diện trước khi thì thầm!');
+        return;
+      }
+
+      input.value = '';
+
+      const payload = {
+        action: 'send_message',
+        type: 'private',
+        sender_id: char.id,
+        recipient_id: appState.activePrivateRecipientId,
+        content: content
+      };
+
+      let sent = false;
+      if (appState.ws && appState.ws.readyState === WebSocket.OPEN) {
+        try {
+          appState.ws.send(JSON.stringify(payload));
+          sent = true;
+        } catch (wsErr) {
+          console.warn('WS private send failed, trying HTTP fallback:', wsErr);
+        }
+      }
+
+      if (!sent) {
+        try {
+          const res = await fetch('/api/message', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              type: 'private',
+              sender_id: char.id,
+              recipient_id: appState.activePrivateRecipientId,
+              content: content
+            })
+          });
+          const resData = await res.json();
+          if (resData.status === 'ok') {
+            sent = true;
+            const key = [char.id, appState.activePrivateRecipientId].sort().join('__');
+            if (!appState.privateChats[key]) appState.privateChats[key] = [];
+            if (!appState.privateChats[key].some(m => m.id === resData.message.id)) {
+              appState.privateChats[key].push(resData.message);
+            }
+            const otherId = appState.activePrivateRecipientId;
+            if (!appState.privateChats[otherId]) appState.privateChats[otherId] = [];
+            if (!appState.privateChats[otherId].some(m => m.id === resData.message.id)) {
+              appState.privateChats[otherId].push(resData.message);
+            }
+            renderPrivateMessages();
+            renderPrivateConversationsList();
+          }
+        } catch (httpErr) {
+          console.error('HTTP private send error:', httpErr);
+          input.value = content;
+          alert('Không thể gửi mật đàm. Vui lòng thử lại!');
+        }
+      }
+    }
+
+    // --- Dossier & Envelope Rendering ---
+    function renderDossierView() {
+      if (!appState.myCharacter) return;
+      const c = appState.myCharacter;
+
+      document.getElementById('dossier-avatar').innerText = c.avatar_icon || '👑';
+      document.getElementById('dossier-name').innerText = c.name;
+      document.getElementById('dossier-title').innerText = c.title;
+      document.getElementById('dossier-bio').innerText = c.bio || c.brief;
+      document.getElementById('dossier-acting').innerText = c.acting_tips || 'Carry yourself with medieval nobility.';
+
+      // Things you know
+      const tykList = document.getElementById('dossier-tyk-list');
+      tykList.innerHTML = '';
+      (c.envelope_a?.things_you_know || []).forEach(item => {
+        const li = document.createElement('li');
+        li.innerText = item;
+        tykList.appendChild(li);
+      });
+
+      // Start objectives checklist
+      const startObjList = document.getElementById('dossier-start-obj-list');
+      startObjList.innerHTML = '';
+      const checkedSet = new Set(c.checked_objectives || []);
+
+      (c.envelope_a?.start_objectives || []).forEach((obj, idx) => {
+        const isChecked = checkedSet.has(idx);
+        const item = document.createElement('div');
+        item.className = 'flex items-start gap-2.5 p-2 rounded-lg bg-black/30 border border-stone-800 text-xs font-serif cursor-pointer hover:border-amber-800/60 transition';
+        item.innerHTML = `
+          <input type="checkbox" ${isChecked ? 'checked' : ''} class="mt-0.5 rounded text-amber-600 focus:ring-0 cursor-pointer">
+          <span class="${isChecked ? 'line-through text-stone-500' : 'text-stone-300'}">${obj}</span>
+        `;
+        item.onclick = (e) => {
+          if (e.target.tagName !== 'INPUT') {
+            item.querySelector('input').checked = !isChecked;
+          }
+          toggleObjectiveCheck(idx);
+        };
+        startObjList.appendChild(item);
+      });
+
+      // Envelope B Container (Stage >= 3)
+      const envB = document.getElementById('envelope-b-container');
+      const envBBadge = document.getElementById('envelope-b-badge');
+      const envBContent = document.getElementById('envelope-b-content');
+
+      if (appState.stage >= 3) {
+        envB.classList.remove('opacity-60', 'border-red-950/60');
+        envB.classList.add('border-red-600/80', 'gold-glow');
+        envBBadge.className = 'text-xs bg-red-950 text-red-200 border border-red-600 px-2 py-0.5 rounded font-cinzel font-bold';
+        envBBadge.innerText = 'UNSEALED';
+
+        let afterHtml = '<div class="text-xs font-cinzel text-red-400 mb-2 uppercase font-semibold">Post-Murder Objectives:</div><ul class="space-y-1.5 text-xs text-stone-200 font-serif list-disc list-inside">';
+        (c.envelope_b?.after_murder_objectives || []).forEach(item => {
+          const isMurdererAlert = item.includes('YOU ARE THE MURDERER');
+          if (isMurdererAlert) {
+            afterHtml += `<li class="text-red-400 font-bold bg-red-950/80 p-2 rounded border border-red-700/60">${item}</li>`;
+          } else {
+            afterHtml += `<li>${item}</li>`;
+          }
+        });
+        afterHtml += '</ul>';
+        envBContent.innerHTML = afterHtml;
+      }
+    }
+
+    async function toggleObjectiveCheck(idx) {
+      try {
+        await fetch('/api/toggle-objective', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            player_id: appState.playerId,
+            index: idx
+          })
+        });
+        if (appState.myCharacter) {
+          const cur = new Set(appState.myCharacter.checked_objectives || []);
+          if (cur.has(idx)) cur.delete(idx); else cur.add(idx);
+          appState.myCharacter.checked_objectives = Array.from(cur);
+          renderDossierView();
+        }
+      } catch (e) {}
+    }
+
+    // --- Exhibits Grid ---
+    function renderExhibitsGrid() {
+      const grid = document.getElementById('exhibits-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      appState.allExhibits.forEach(ex => {
+        const isRevealed = (appState.stage >= 4 || appState.revealedExhibits.includes(ex.id));
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-xl border ${
+          isRevealed ? 'parchment-inner border-[#523d27] shadow-lg' : 'bg-stone-900/60 border-stone-800 opacity-50'
+        }`;
+
+        if (isRevealed) {
+          card.innerHTML = `
+            <div class="flex items-center justify-between border-b border-[#826645] pb-1.5 mb-2">
+              <h4 class="font-cinzel font-black text-sm text-[#3d2b17]">${ex.title}</h4>
+              <span class="text-[10px] font-cinzel font-semibold bg-[#4a341c] text-amber-200 px-1.5 py-0.5 rounded">Exhibit ${ex.id}</span>
+            </div>
+            <div class="text-xs font-serif italic text-[#5e452a] mb-2">${ex.description}</div>
+            <p class="text-xs font-serif text-[#261a0d] leading-relaxed"><strong class="font-cinzel">Investigation Notes:</strong> ${ex.notes}</p>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="flex items-center justify-between border-b border-stone-700 pb-1.5 mb-2">
+              <h4 class="font-cinzel font-bold text-sm text-stone-400">Exhibit ${ex.id}</h4>
+              <span class="text-[10px] bg-stone-800 text-stone-500 px-1.5 py-0.5 rounded">Sealed</span>
+            </div>
+            <p class="text-xs text-stone-500 italic font-serif">In custody of ${ex.held_by}. Presented to court in Stage 4.</p>
+          `;
+        }
+        grid.appendChild(card);
+      });
+    }
+
+    // --- Vote Form Options ---
+    function renderVoteFormOptions() {
+      const accusedSelect = document.getElementById('vote-accused-select');
+      const dressedSelect = document.getElementById('vote-dressed-select');
+      const perfSelect = document.getElementById('vote-perf-select');
+      if (!accusedSelect) return;
+
+      accusedSelect.innerHTML = '<option value="" disabled selected>-- Select the Murderer --</option>';
+      dressedSelect.innerHTML = '';
+      perfSelect.innerHTML = '';
+
+      appState.allCharacters.forEach(c => {
+        if (!c.is_victim) {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.innerText = `${c.name} (${c.title})`;
+          accusedSelect.appendChild(opt);
+        }
+
+        const dOpt = document.createElement('option');
+        dOpt.value = c.name;
+        dOpt.innerText = c.name;
+        dressedSelect.appendChild(dOpt);
+
+        const pOpt = document.createElement('option');
+        pOpt.value = c.name;
+        pOpt.innerText = c.name;
+        perfSelect.appendChild(pOpt);
+      });
+    }
+
+    async function submitWhoDunnitVote(e) {
+      e.preventDefault();
+      const accused = document.getElementById('vote-accused-select').value;
+      const motive = document.getElementById('vote-motive-input').value.trim();
+      const evidence = document.getElementById('vote-evidence-input').value.trim();
+      const dressed = document.getElementById('vote-dressed-select').value;
+      const perf = document.getElementById('vote-perf-select').value;
+
+      try {
+        const res = await fetch('/api/vote', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            voter_id: appState.myCharacter ? appState.myCharacter.id : appState.playerId,
+            accused_id: accused,
+            motive: motive,
+            evidence: evidence,
+            best_dressed: dressed,
+            best_perf: perf
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          soundEngine.playFanfare();
+          alert('Your accusation ballot has been sealed and entered into the court records!');
+          document.getElementById('vote-submit-btn').innerText = '✓ Ballot Submitted';
+          document.getElementById('vote-submit-btn').disabled = true;
+        }
+      } catch (e) {
+        alert('Failed to submit ballot.');
+      }
+    }
+
+    // --- Bribe Submission ---
+    async function submitBribe(e) {
+      e.preventDefault();
+      const recipientId = document.getElementById('bribe-recipient-select').value;
+      const amount = parseInt(document.getElementById('bribe-amount-input').value);
+      const msg = document.getElementById('bribe-message-input').value.trim();
+
+      if (!recipientId || amount <= 0 || !appState.myCharacter) return;
+      if (amount > appState.myGold) {
+        alert('You do not possess enough gold coins for such a lavish sum!');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/bribe', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            sender_id: appState.myCharacter.id,
+            receiver_id: recipientId,
+            amount: amount,
+            message: msg
+          })
+        });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          appState.myGold = data.new_gold;
+          updateHeaderGold();
+          soundEngine.playCoinClink();
+          closeModal('bribe-modal');
+          alert(`You discreetly handed ${amount} gold coins to the recipient.`);
+        } else {
+          alert(data.detail || 'Transfer failed.');
+        }
+      } catch (e) {
+        alert('Error transferring gold.');
+      }
+    }
+
+    // --- Blackout Animation & Solution Reveal ---
+    function triggerBlackoutAnimation() {
+      const modal = document.getElementById('blackout-modal');
+      const lightning = document.getElementById('lightning-fx');
+      modal.classList.remove('hidden');
+      soundEngine.playThunder();
+      lightning.classList.add('lightning-flash');
+      setTimeout(() => lightning.classList.remove('lightning-flash'), 2500);
+    }
+
+    function dismissBlackout() {
+      document.getElementById('blackout-modal').classList.add('hidden');
+      switchTab('tab-great-hall');
+    }
+
+    function showSolutionAwards(awards) {
+      document.getElementById('solution-modal').classList.remove('hidden');
+      soundEngine.playFanfare();
+      if (awards) {
+        document.getElementById('solution-killer-text').innerText = awards.killer || 'Lady Diana of Dunnsberry';
+        document.getElementById('solution-motive-text').innerText = awards.motive_summary || '';
+        document.getElementById('award-smoking-gun').innerText = Array.isArray(awards.smoking_gun_winners) ? awards.smoking_gun_winners.join(', ') : awards.smoking_gun_winners;
+        document.getElementById('award-wealthiest').innerText = awards.wealthiest_guest || 'None';
+        document.getElementById('award-dressed').innerText = awards.best_dressed || 'None';
+        document.getElementById('award-perf').innerText = awards.best_performance || 'None';
+      }
+    }
+
+    // --- Settings & Modal Helpers ---
+    async function saveSettings(e) {
+      e.preventDefault();
+      const provider = document.getElementById('settings-provider-select').value;
+      const key = document.getElementById('settings-key-input').value.trim();
+
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          provider: provider,
+          api_key: key
+        })
+      });
+      closeModal('settings-modal');
+      alert('Settings updated successfully!');
+    }
+
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    }
+
+    function copyLanUrl() {
+      navigator.clipboard.writeText(appState.lanUrl).then(() => {
+        alert('Network URL copied to clipboard!');
+      });
+    }
+
+    // --- Castle Archives & Court Chat Logs Logic ---
+    let currentChatlogData = null;
+    let activeChatlogTab = 'greathall';
+
+    async function openChatlogModal() {
+      openModal('chatlog-modal');
+      await refreshChatlogData();
+    }
+
+    async function refreshChatlogData() {
+      try {
+        const hostKey = sessionStorage.getItem('knight_host_key') || '';
+        const pid = appState.playerId || '';
+        const res = await fetch(`/api/chatlog?player_id=${encodeURIComponent(pid)}&host_key=${encodeURIComponent(hostKey)}`);
+        if (!res.ok) return;
+        currentChatlogData = await res.json();
+        renderChatlogModal();
+      } catch (e) {
+        console.error('Error fetching chatlog:', e);
+      }
+    }
+
+    function promptHostMode() {
+      const currentKey = sessionStorage.getItem('knight_host_key') || '';
+      const entered = prompt('Nhập Mã Quản Trò (Host Room Code) để mở khóa toàn bộ hồ sơ mật vụ (Mặc định: FERNWOOD):', currentKey);
+      if (entered !== null) {
+        sessionStorage.setItem('knight_host_key', entered.trim().toUpperCase());
+        refreshChatlogData();
+      }
+    }
+
+    function exitHostMode() {
+      sessionStorage.removeItem('knight_host_key');
+      refreshChatlogData();
+    }
+
+    function switchChatlogTab(tab) {
+      activeChatlogTab = tab;
+      const tabs = ['greathall', 'undercover', 'human', 'transactions'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`chatlog-tab-btn-${t}`);
+        const content = document.getElementById(`chatlog-tab-content-${t}`);
+        if (!btn || !content) return;
+        if (t === tab) {
+          btn.className = 'px-3 py-1.5 rounded-lg font-bold bg-amber-950/80 text-amber-300 border border-amber-700/60 transition flex items-center gap-1.5 whitespace-nowrap';
+          content.classList.remove('hidden');
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-lg font-bold text-stone-400 hover:text-amber-300 border border-transparent transition flex items-center gap-1.5 whitespace-nowrap';
+          content.classList.add('hidden');
+        }
+      });
+    }
+
+    function renderChatlogModal() {
+      if (!currentChatlogData) return;
+
+      const ghCount = currentChatlogData.great_hall ? currentChatlogData.great_hall.length : 0;
+      const ucCount = currentChatlogData.ai_undercover_whispers ? Object.keys(currentChatlogData.ai_undercover_whispers).length : 0;
+      const huCount = currentChatlogData.human_whispers ? Object.keys(currentChatlogData.human_whispers).length : 0;
+      const txCount = currentChatlogData.transactions ? currentChatlogData.transactions.length : 0;
+
+      // Update Access Level Badge in Header
+      const badgeEl = document.getElementById('chatlog-access-badge');
+      if (badgeEl) {
+        if (currentChatlogData.can_view_all) {
+          badgeEl.className = 'px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-600/60 font-mono flex items-center gap-1.5';
+          badgeEl.innerHTML = `<span>👑 Quản Trò (Toàn quyền)</span> <button onclick="exitHostMode()" class="text-stone-400 hover:text-white underline text-[9px]">Thoát</button>`;
+        } else {
+          badgeEl.className = 'px-2 py-0.5 rounded text-[10px] bg-stone-900 text-stone-300 border border-stone-700 font-mono flex items-center gap-1.5';
+          badgeEl.innerHTML = `<span>👤 Khách Mời (Bảo mật)</span> <button onclick="promptHostMode()" class="text-amber-400 hover:text-amber-200 underline text-[9px]">🔑 Nhập mã Host</button>`;
+        }
+      }
+
+      const ghEl = document.getElementById('chatlog-count-greathall');
+      const ucEl = document.getElementById('chatlog-count-undercover');
+      const huEl = document.getElementById('chatlog-count-human');
+      const txEl = document.getElementById('chatlog-count-transactions');
+
+      if (ghEl) ghEl.innerText = ghCount;
+      if (ucEl) {
+        if (currentChatlogData.can_view_all) {
+          ucEl.innerText = ucCount;
+        } else {
+          ucEl.innerText = '🔒 Niêm phong';
+        }
+      }
+      if (huEl) huEl.innerText = huCount;
+      if (txEl) txEl.innerText = txCount;
+
+      // 1. Great Hall render
+      const ghContainer = document.getElementById('chatlog-tab-content-greathall');
+      if (ghContainer) {
+        ghContainer.innerHTML = '';
+        if (!currentChatlogData.great_hall || currentChatlogData.great_hall.length === 0) {
+          ghContainer.innerHTML = '<div class="text-stone-500 italic py-8 text-center font-serif">Chưa có phát ngôn nào tại Đại Sảnh.</div>';
+        } else {
+          currentChatlogData.great_hall.forEach(m => {
+            const item = document.createElement('div');
+            const isAnnouncement = m.type === 'announcement' || m.type === 'event';
+            const timeStr = new Date(m.timestamp * 1000).toLocaleTimeString();
+            if (isAnnouncement) {
+              item.className = 'p-3 rounded-lg bg-amber-950/40 border border-amber-800/60';
+              item.innerHTML = `
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-base">${m.sender_avatar || '🎺'}</span>
+                  <span class="font-cinzel font-bold text-amber-300 text-xs">${m.sender_name}</span>
+                  <span class="text-[10px] text-stone-500 font-mono ml-auto">${timeStr}</span>
+                </div>
+                <p class="text-amber-100/90 text-xs font-serif italic whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
+              `;
+            } else {
+              item.className = 'p-2.5 rounded-lg bg-stone-900/60 border border-stone-800';
+              item.innerHTML = `
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-base">${m.sender_avatar || '👤'}</span>
+                  <span class="font-cinzel font-bold text-amber-400 text-xs">${m.sender_name}</span>
+                  <span class="text-[10px] text-stone-500 font-mono ml-auto">${timeStr}</span>
+                </div>
+                <p class="text-stone-200 text-xs font-sans whitespace-pre-line">${formatMentions(m.content)}</p>
+              `;
+            }
+            ghContainer.appendChild(item);
+          });
+        }
+      }
+
+      // 2. Undercover AI Whispers render
+      const ucContainer = document.getElementById('chatlog-tab-content-undercover');
+      if (ucContainer) {
+        ucContainer.innerHTML = '';
+        if (!currentChatlogData.can_view_all) {
+          ucContainer.innerHTML = `
+            <div class="p-6 parchment-card rounded-xl border border-red-900/60 bg-red-950/20 text-center space-y-3 my-4">
+              <div class="text-4xl select-none">🔒📜🕯️</div>
+              <div class="font-cinzel font-bold text-amber-300 text-sm">HỒ SƠ MẬT ĐANG ĐƯỢC NIÊM PHONG BẢO MẬT</div>
+              <p class="text-xs text-stone-300 font-serif max-w-lg mx-auto leading-relaxed">
+                Trong quá trình suy luận (Stage 1 – 4), các trao đổi ngầm giữa các nhân vật AI được <b>niêm phong tuyệt đối</b> để đảm bảo tính công bằng và tính bất ngờ cho khách mời, tránh bị lộ cốt truyện.
+              </p>
+              <div class="text-[11px] text-amber-400 font-serif italic">
+                Toàn bộ bản ghi sẽ tự động giải mật và mở công khai sau khi công bố kết quả phá án (Stage 5 - Reveal & Giải Mã).
+              </div>
+              <div class="pt-2 flex justify-center gap-3">
+                <button onclick="promptHostMode()" class="px-3.5 py-2 bg-gradient-to-r from-amber-900 to-amber-800 hover:from-amber-800 hover:to-amber-700 text-amber-200 border border-amber-600/60 rounded-lg text-xs font-cinzel font-bold shadow transition flex items-center gap-1.5">
+                  <span>👑</span> Nhập Mã Quản Trò (Host Mode)
+                </button>
+              </div>
+            </div>
+          `;
+        } else {
+          const ucKeys = Object.keys(currentChatlogData.ai_undercover_whispers || {});
+          if (ucKeys.length === 0) {
+            ucContainer.innerHTML = `
+              <div class="text-stone-500 italic py-10 text-center font-serif">
+                Chưa có tương tác ngầm nào giữa các AI. Khi trò chơi diễn ra, các nhân vật AI sẽ tự động bí mật gặp gỡ và bàn mưu tính kế trong các góc khuất của lâu đài.
+              </div>
+            `;
+          } else {
+            ucKeys.forEach(key => {
+              const chat = currentChatlogData.ai_undercover_whispers[key];
+              const section = document.createElement('div');
+              section.className = 'parchment-card rounded-xl p-3 border-amber-900/60 space-y-2';
+              section.innerHTML = `
+                <div class="flex items-center justify-between pb-2 border-b border-amber-900/40">
+                  <div class="font-cinzel font-bold text-amber-300 text-xs flex items-center gap-2">
+                    <span>🕵️</span> Mật Đàm Góc Khuất: ${chat.pair_label}
+                  </div>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-amber-950 text-amber-400 border border-amber-800/60 font-mono">
+                    ${chat.messages.length} lời thì thầm
+                  </span>
+                </div>
+                <div class="space-y-2 pt-1">
+                  ${chat.messages.map(m => {
+                    const timeStr = new Date(m.timestamp * 1000).toLocaleTimeString();
+                    return `
+                      <div class="p-2 rounded bg-black/40 border border-stone-800">
+                        <div class="flex items-center justify-between text-[11px] mb-1">
+                          <span class="font-cinzel font-bold text-amber-400">${m.sender_avatar || '👤'} ${m.sender_name}</span>
+                          <span class="text-[9px] text-stone-500 font-mono">${timeStr}</span>
+                        </div>
+                        <p class="text-xs text-stone-200 font-serif italic">${m.content}</p>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              `;
+              ucContainer.appendChild(section);
+            });
+          }
+        }
+      }
+
+      // 3. Human Private Whispers render
+      const huContainer = document.getElementById('chatlog-tab-content-human');
+      if (huContainer) {
+        huContainer.innerHTML = '';
+        const huKeys = Object.keys(currentChatlogData.human_whispers || {});
+        if (huKeys.length === 0) {
+          huContainer.innerHTML = '<div class="text-stone-500 italic py-10 text-center font-serif">Chưa có mật đàm nào với người chơi.</div>';
+        } else {
+          huKeys.forEach(key => {
+            const chat = currentChatlogData.human_whispers[key];
+            const section = document.createElement('div');
+            section.className = 'parchment-card rounded-xl p-3 border-stone-800 space-y-2';
+            section.innerHTML = `
+              <div class="flex items-center justify-between pb-2 border-b border-stone-800">
+                <div class="font-cinzel font-bold text-amber-300 text-xs flex items-center gap-2">
+                  <span>🗝️</span> Mật Đàm: ${chat.pair_label}
+                </div>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-stone-900 text-stone-400 border border-stone-800 font-mono">
+                  ${chat.messages.length} tin nhắn
+                </span>
+              </div>
+              <div class="space-y-2 pt-1">
+                ${chat.messages.map(m => {
+                  const timeStr = new Date(m.timestamp * 1000).toLocaleTimeString();
+                  return `
+                    <div class="p-2 rounded bg-black/40 border border-stone-800">
+                      <div class="flex items-center justify-between text-[11px] mb-1">
+                        <span class="font-cinzel font-bold text-amber-400">${m.sender_avatar || '👤'} ${m.sender_name}</span>
+                        <span class="text-[9px] text-stone-500 font-mono">${timeStr}</span>
+                      </div>
+                      <p class="text-xs text-stone-200 font-serif">${m.content}</p>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `;
+            huContainer.appendChild(section);
+          });
+        }
+      }
+
+      // 4. Transactions render
+      const txContainer = document.getElementById('chatlog-tab-content-transactions');
+      if (txContainer) {
+        txContainer.innerHTML = '';
+        if (!currentChatlogData.transactions || currentChatlogData.transactions.length === 0) {
+          txContainer.innerHTML = '<div class="text-stone-500 italic py-10 text-center font-serif">Chưa có giao dịch vàng hoặc hối lộ nào.</div>';
+        } else {
+          currentChatlogData.transactions.forEach(tx => {
+            const timeStr = new Date(tx.timestamp * 1000).toLocaleTimeString();
+            const row = document.createElement('div');
+            row.className = 'p-2.5 rounded-lg bg-stone-900/70 border border-amber-900/40 flex items-center justify-between';
+            row.innerHTML = `
+              <div class="flex items-center gap-2">
+                <span class="text-lg">💰</span>
+                <div>
+                  <div class="font-cinzel text-xs text-stone-200 font-bold">
+                    <span class="text-amber-300">${tx.from_name}</span> ➔ <span class="text-amber-300">${tx.to_name}</span>
+                  </div>
+                  <div class="text-[11px] text-stone-400 font-serif italic">"${tx.message || 'No note'}"</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="font-cinzel font-bold text-amber-400 text-xs">+${tx.amount} Vàng</div>
+                <div class="text-[9px] text-stone-500 font-mono">${timeStr}</div>
+              </div>
+            `;
+            txContainer.appendChild(row);
+          });
+        }
+      }
+    }
+
+    function downloadChatlogText() {
+      const hostKey = sessionStorage.getItem('knight_host_key') || '';
+      const pid = appState.playerId || '';
+      window.location.href = `/api/chatlog/export?player_id=${encodeURIComponent(pid)}&host_key=${encodeURIComponent(hostKey)}`;
+    }
+
+    async function saveChatlogNow() {
+      try {
+        const res = await fetch('/api/chatlog/save', { method: 'POST' });
+        const data = await res.json();
+        alert('Đã lưu toàn bộ bản ghi vào thư mục máy chủ: ' + data.message);
+      } catch (e) {
+        alert('Lỗi khi lưu chatlog: ' + e);
+      }
+    }
+
+    // Start App on Page Load
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
