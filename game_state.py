@@ -606,6 +606,8 @@ class GameStateManager:
             "llm_provider": self.llm_provider
         }
         try:
+            if os.path.dirname(self.state_file):
+                os.makedirs(os.path.dirname(self.state_file), exist_ok=True)
             with open(self.state_file, "w", encoding="utf-8") as f:
                 json.dump(state, f, indent=2, ensure_ascii=False)
         except Exception as e:
