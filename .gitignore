@@ -7,6 +7,8 @@ __pycache__/
 .idea/
 chatlogs/*
 !chatlogs/.gitkeep
+static/audio_cache/*
+!static/audio_cache/.gitkeep
 data/room_state.json
 data/simulation_audit_report.json
 

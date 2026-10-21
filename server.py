@@ -21,6 +21,7 @@ from pydantic import BaseModel
 
 from game_state import GameStateManager
 from ai_engine import AIEngine, build_character_system_prompt, build_host_system_prompt, build_herald_hint_prompt
+from tts_engine import TTSEngine, CHARACTER_VOICES, clean_text_for_tts
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("server")
@@ -38,6 +39,7 @@ def get_lan_ip() -> str:
 
 game_state = GameStateManager()
 ai_engine = AIEngine(api_key=game_state.api_key, provider=game_state.llm_provider)
+tts_engine = TTSEngine()
 
 # Active WebSocket connections: player_id -> Set[WebSocket]
 connected_websockets: Dict[str, set] = {}
@@ -748,7 +750,9 @@ async def get_public_game_data():
         "laws_of_the_land": game_state.raw_data.get("speeches", {}).get("laws_of_the_land", ""),
         "awards": game_state.awards,
         "llm_provider": game_state.llm_provider,
-        "has_api_key": bool(game_state.api_key)
+        "has_api_key": bool(game_state.api_key),
+        "has_elevenlabs_key": bool(game_state.elevenlabs_api_key),
+        "tts_enabled": game_state.tts_enabled
     }
 
 @app.get("/api/chatlog")
@@ -936,16 +940,46 @@ async def sync_game_state(player_id: str, hall_count: int = 0):
         "awards": game_state.awards
     }
 
+@app.get("/api/tts/voices")
+async def get_tts_voices():
+    return {
+        "status": "ok",
+        "voices": tts_engine.get_all_voices(),
+        "has_elevenlabs_key": bool(game_state.elevenlabs_api_key),
+        "tts_enabled": game_state.tts_enabled
+    }
+
+@app.post("/api/tts")
+async def generate_speech_endpoint(payload: Dict[str, Any] = Body(...)):
+    character_id = payload.get("character_id") or "system"
+    text = payload.get("text", "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="Missing text for TTS")
+    
+    result = await tts_engine.generate_speech(
+        character_id=character_id,
+        text=text,
+        api_key=game_state.elevenlabs_api_key
+    )
+    return result
+
 @app.post("/api/settings")
 async def update_settings(payload: Dict[str, Any] = Body(...)):
     api_key = payload.get("api_key", "").strip()
     provider = payload.get("provider", "gemini").strip()
     cast_size = payload.get("cast_size", 12)
+    elevenlabs_api_key = payload.get("elevenlabs_api_key")
+    tts_enabled = payload.get("tts_enabled")
 
     if api_key:
         game_state.api_key = api_key
     game_state.llm_provider = provider
     game_state.set_cast_size(cast_size)
+
+    if elevenlabs_api_key is not None:
+        game_state.elevenlabs_api_key = elevenlabs_api_key.strip()
+    if tts_enabled is not None:
+        game_state.tts_enabled = bool(tts_enabled)
 
     ai_engine.set_config(api_key=game_state.api_key, provider=game_state.llm_provider)
     game_state.save_state()
@@ -954,7 +988,9 @@ async def update_settings(payload: Dict[str, Any] = Body(...)):
         "type": "settings_updated",
         "cast_size": game_state.cast_size,
         "llm_provider": game_state.llm_provider,
-        "has_api_key": bool(game_state.api_key)
+        "has_api_key": bool(game_state.api_key),
+        "has_elevenlabs_key": bool(game_state.elevenlabs_api_key),
+        "tts_enabled": game_state.tts_enabled
     })
     return {"status": "ok"}
 
@@ -1341,7 +1377,16 @@ async def get_herald_hint_endpoint(payload: Dict[str, Any] = Body(...)):
         import random
         hint_text = random.choice(pool)
 
-    msg = game_state.add_message("system", hint_text, chat_type="public")
+    audio_url = None
+    if game_state.tts_enabled and game_state.elevenlabs_api_key:
+        try:
+            tts_res = await tts_engine.generate_speech("system", hint_text, api_key=game_state.elevenlabs_api_key)
+            if tts_res.get("success"):
+                audio_url = tts_res.get("audio_url")
+        except Exception as e:
+            logger.warning(f"TTS error for herald hint: {e}")
+
+    msg = game_state.add_message("system", hint_text, chat_type="public", audio_url=audio_url)
     await broadcast({
         "type": "herald_hint",
         "message": msg,
@@ -1428,7 +1473,16 @@ async def generate_ai_great_hall_reply(ai_char: Dict[str, Any], sender_cid: str,
         history.append({"role": "user", "content": mention_instruction})
 
         reply = await ai_engine.generate_response(sys_prompt, history, max_tokens=500)
-        ai_msg = game_state.add_message(ai_char["id"], reply, chat_type="public")
+        audio_url = None
+        if game_state.tts_enabled and game_state.elevenlabs_api_key:
+            try:
+                tts_res = await tts_engine.generate_speech(ai_char["id"], reply, api_key=game_state.elevenlabs_api_key)
+                if tts_res.get("success"):
+                    audio_url = tts_res.get("audio_url")
+            except Exception as e:
+                logger.warning(f"TTS generation error in great hall for {ai_char['id']}: {e}")
+
+        ai_msg = game_state.add_message(ai_char["id"], reply, chat_type="public", audio_url=audio_url)
         await broadcast({"type": "new_message", "message": ai_msg})
     finally:
         await broadcast({
@@ -1480,7 +1534,16 @@ async def generate_ai_private_reply(ai_char: Dict[str, Any], sender_cid: str, us
                 history.append({"role": "user", "content": f"{sender_name}: {m['content']}"})
 
         reply = await ai_engine.generate_response(sys_prompt, history, max_tokens=600)
-        ai_msg = game_state.add_message(ai_char["id"], reply, chat_type="private", recipient_id=sender_cid)
+        audio_url = None
+        if game_state.tts_enabled and game_state.elevenlabs_api_key:
+            try:
+                tts_res = await tts_engine.generate_speech(ai_char["id"], reply, api_key=game_state.elevenlabs_api_key)
+                if tts_res.get("success"):
+                    audio_url = tts_res.get("audio_url")
+            except Exception as e:
+                logger.warning(f"TTS generation error in private chat for {ai_char['id']}: {e}")
+
+        ai_msg = game_state.add_message(ai_char["id"], reply, chat_type="private", recipient_id=sender_cid, audio_url=audio_url)
         await broadcast({
             "type": "new_private_message",
             "chat_key": chat_key,

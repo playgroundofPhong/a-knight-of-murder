@@ -37,6 +37,8 @@ class GameStateManager:
         self.awards: Optional[Dict[str, Any]] = None
         self.api_key: str = os.getenv("GEMINI_API_KEY") or os.getenv("OPENAI_API_KEY") or ""
         self.llm_provider: str = "gemini" if (os.getenv("GEMINI_API_KEY") or not os.getenv("OPENAI_API_KEY")) else "openai"
+        self.elevenlabs_api_key: str = os.getenv("ELEVENLABS_API_KEY") or ""
+        self.tts_enabled: bool = True
 
         # Initialize characters from raw data
         self.init_characters()
@@ -364,14 +366,14 @@ class GameStateManager:
         pair = sorted([cid1, cid2])
         return f"{pair[0]}__{pair[1]}"
 
-    def add_message(self, sender_id: str, content: str, chat_type: str = "public", recipient_id: Optional[str] = None, is_undercover: bool = False) -> Dict[str, Any]:
+    def add_message(self, sender_id: str, content: str, chat_type: str = "public", recipient_id: Optional[str] = None, is_undercover: bool = False, audio_url: Optional[str] = None) -> Dict[str, Any]:
         """Add a public or private message."""
         sender_char = self.characters.get(sender_id)
         sender_name = sender_char["name"] if sender_char else sender_id
         sender_avatar = sender_char.get("avatar_icon", "👤") if sender_char else "👤"
 
         msg = {
-            "id": f"msg_{int(time.time()*1000)}",
+            "id": f"msg_{int(time.time()*1000)}_{len(self.great_hall_messages)}",
             "sender_id": sender_id,
             "sender_name": sender_name,
             "sender_avatar": sender_avatar,
@@ -379,7 +381,8 @@ class GameStateManager:
             "timestamp": time.time(),
             "type": chat_type,
             "recipient_id": recipient_id,
-            "is_undercover": is_undercover
+            "is_undercover": is_undercover,
+            "audio_url": audio_url
         }
 
         if chat_type == "public":
@@ -624,8 +627,10 @@ class GameStateManager:
             "revealed_exhibits": list(self.revealed_exhibits),
             "votes": self.votes,
             "awards": self.awards,
-            "api_key": "",
-            "llm_provider": self.llm_provider
+            "api_key": self.api_key,
+            "llm_provider": self.llm_provider,
+            "elevenlabs_api_key": self.elevenlabs_api_key,
+            "tts_enabled": self.tts_enabled
         }
         try:
             if os.path.dirname(self.state_file):
@@ -664,6 +669,12 @@ class GameStateManager:
                         self.api_key = state["api_key"]
                     if state.get("llm_provider"):
                         self.llm_provider = state["llm_provider"]
+                    if state.get("elevenlabs_api_key"):
+                        self.elevenlabs_api_key = state["elevenlabs_api_key"]
+                    elif os.getenv("ELEVENLABS_API_KEY"):
+                        self.elevenlabs_api_key = os.getenv("ELEVENLABS_API_KEY")
+                    if "tts_enabled" in state:
+                        self.tts_enabled = state["tts_enabled"]
 
                     # Ensure strict human vs AI synchronization upon load
                     active_human_cids = {p.get("character_id") for p in self.human_players.values() if p.get("character_id")}

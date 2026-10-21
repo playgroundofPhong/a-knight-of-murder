@@ -211,6 +211,14 @@
           🔊
         </button>
 
+        <!-- Voice Acting Toggle -->
+        <button onclick="toggleVoiceActing()" id="voice-toggle-btn" 
+                class="p-1.5 sm:p-2 rounded-lg bg-amber-950/80 hover:bg-amber-900 text-amber-300 border border-amber-600/60 text-xs sm:text-sm transition shadow flex items-center gap-1" 
+                title="Bật/Tắt Lồng Tiếng Nhân Vật (ElevenLabs & Trình duyệt)">
+          <span>🎙️</span>
+          <span id="voice-toggle-label" class="hidden xl:inline text-xs font-cinzel">Lồng Tiếng: Bật</span>
+        </button>
+
         <!-- Settings Toggle -->
         <button onclick="openModal('settings-modal')" 
                 class="p-1.5 sm:p-2 rounded-lg bg-stone-800/90 hover:bg-stone-700 text-stone-300 border border-stone-700 text-xs sm:text-sm transition shadow" 
@@ -619,12 +627,17 @@
           
           <!-- Character Background & Identity Card -->
           <div class="parchment-inner rounded-xl p-6 shadow-2xl border-4 border-[#523d27] relative">
-            <div class="flex items-center space-x-3 mb-4 border-b-2 border-[#826645] pb-3">
-              <span id="dossier-avatar" class="text-4xl">👑</span>
-              <div>
-                <h3 id="dossier-name" class="text-xl md:text-2xl font-cinzel font-black text-[#3d2b17]">Nhân Vật Của Bạn</h3>
-                <div id="dossier-title" class="text-xs md:text-sm font-serif italic text-[#5e452a]">Tước Vị / Nghề Nghiệp</div>
+            <div class="flex items-center justify-between mb-4 border-b-2 border-[#826645] pb-3 flex-wrap gap-2">
+              <div class="flex items-center space-x-3">
+                <span id="dossier-avatar" class="text-4xl">👑</span>
+                <div>
+                  <h3 id="dossier-name" class="text-xl md:text-2xl font-cinzel font-black text-[#3d2b17]">Nhân Vật Của Bạn</h3>
+                  <div id="dossier-title" class="text-xs md:text-sm font-serif italic text-[#5e452a]">Tước Vị / Nghề Nghiệp</div>
+                </div>
               </div>
+              <button onclick="previewCharacterVoice(appState.myCharacter.id)" class="px-3 py-1.5 rounded-lg bg-[#53381e] hover:bg-[#3d2916] text-amber-200 border border-[#826645] text-xs font-cinzel font-bold flex items-center gap-1.5 transition shadow">
+                <span>🎙️</span> Lắng Nghe Giọng Của Bạn
+              </button>
             </div>
 
             <div class="space-y-4 text-xs md:text-sm font-serif leading-relaxed text-[#261a0d]">
@@ -945,7 +958,24 @@
           <label class="block text-xs uppercase text-stone-400 mb-1">Khóa API (Gemini hoặc OpenAI):</label>
           <input type="password" id="settings-key-input" placeholder="Dán khóa API của bạn vào đây..." 
                  class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
-          <p class="text-[11px] text-stone-500 font-sans mt-1">Khóa được lưu cục bộ trên trình duyệt cho phiên chơi này.</p>
+          <p class="text-[11px] text-stone-500 font-sans mt-1">Khóa trí tuệ nhân tạo dùng để sinh câu thoại và suy luận.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase text-stone-400 mb-1">🎙️ Khóa ElevenLabs API (Lồng Tiếng AI):</label>
+          <input type="password" id="settings-elevenlabs-key-input" placeholder="Dán khóa ElevenLabs (xi-api-key)..." 
+                 class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-2 text-stone-100 text-sm focus:outline-none focus:border-amber-500 shadow-inner">
+          <p class="text-[11px] text-stone-500 font-sans mt-1">Lồng tiếng sống động cho 12 nhân vật &amp; Quản Trò. Để trống nếu muốn dùng giọng đọc trình duyệt.</p>
+        </div>
+
+        <div class="flex items-center justify-between p-2.5 rounded-lg bg-stone-900/90 border border-stone-800">
+          <label class="text-xs text-stone-300 font-cinzel cursor-pointer flex items-center gap-2 select-none">
+            <input type="checkbox" id="settings-voice-toggle" checked class="rounded text-amber-500 focus:ring-0">
+            <span>Tự động phát giọng đọc khi AI lên tiếng</span>
+          </label>
+          <button type="button" onclick="testVoicePlayback()" class="text-xs text-amber-400 hover:text-amber-200 underline font-cinzel shrink-0 flex items-center gap-1">
+            <span>🎧</span> Thử giọng
+          </button>
         </div>
 
         <button type="submit" class="w-full py-2.5 bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-600 hover:to-amber-500 text-stone-950 font-cinzel font-bold rounded-lg border border-amber-500/40 transition shadow">
@@ -1154,7 +1184,217 @@
       }
     }
 
+    // --- Voice Acting Engine (ElevenLabs & Web Speech API) ---
+    class MedievalVoicePlayer {
+      constructor() {
+        this.currentAudio = null;
+        this.currentUtterance = null;
+        this.currentBtn = null;
+        this.speakingMsgId = null;
+        this.isVoiceEnabled = localStorage.getItem('knight_voice_enabled') !== 'false';
+        this.voicesMeta = {};
+        if (window.speechSynthesis) {
+          window.speechSynthesis.onvoiceschanged = () => {
+            // Pre-warm browser voices
+            window.speechSynthesis.getVoices();
+          };
+        }
+      }
+
+      async loadVoicesMeta() {
+        try {
+          const res = await fetch('/api/tts/voices');
+          const data = await res.json();
+          if (data && data.voices) {
+            this.voicesMeta = data.voices;
+          }
+        } catch (e) {
+          console.warn('Could not fetch voice metadata:', e);
+        }
+      }
+
+      stopVoice() {
+        if (this.currentAudio) {
+          try {
+            this.currentAudio.pause();
+            this.currentAudio.currentTime = 0;
+          } catch (e) {}
+          this.currentAudio = null;
+        }
+        if (window.speechSynthesis) {
+          try {
+            window.speechSynthesis.cancel();
+          } catch (e) {}
+          this.currentUtterance = null;
+        }
+        if (this.currentBtn) {
+          this.currentBtn.innerHTML = '<span>🔊</span> <span class="hidden sm:inline text-[10px]">Nghe</span>';
+          this.currentBtn.classList.remove('text-amber-300', 'animate-pulse');
+          this.currentBtn = null;
+        }
+        this.speakingMsgId = null;
+      }
+
+      async playVoiceForMessage(msgId, senderId, btnEl) {
+        if (this.speakingMsgId === msgId) {
+          this.stopVoice();
+          return;
+        }
+        this.stopVoice();
+
+        // Locate message object in local state
+        let targetMsg = (appState.greatHallMessages || []).find(m => m.id === msgId);
+        if (!targetMsg) {
+          for (const k in appState.privateChats) {
+            const found = (appState.privateChats[k] || []).find(m => m.id === msgId);
+            if (found) { targetMsg = found; break; }
+          }
+        }
+        if (!targetMsg) return;
+
+        this.speakingMsgId = msgId;
+        if (btnEl) {
+          this.currentBtn = btnEl;
+          btnEl.innerHTML = '<span>🔊</span> <span class="text-[10px] text-amber-300 animate-pulse">Đang phát...</span>';
+          btnEl.classList.add('text-amber-300');
+        }
+
+        // If audio_url already exists (generated & cached), stream directly!
+        if (targetMsg.audio_url) {
+          this.playAudioUrl(targetMsg.audio_url, () => this.stopVoice());
+          return;
+        }
+
+        // Otherwise generate on-demand via ElevenLabs backend or Web Speech
+        try {
+          const res = await fetch('/api/tts', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ character_id: senderId, text: targetMsg.content })
+          });
+          const data = await res.json();
+          if (data && data.audio_url) {
+            targetMsg.audio_url = data.audio_url; // cache on client
+            this.playAudioUrl(data.audio_url, () => this.stopVoice());
+          } else {
+            // Web Speech fallback
+            const cleaned = data.cleaned_text || targetMsg.content.replace(/[*[\]()]/g, '').trim();
+            const settings = data.voice_settings || { pitch: 1.0, rate: 1.0 };
+            this.speakWebSpeech(cleaned, settings, () => this.stopVoice());
+          }
+        } catch (e) {
+          console.warn('TTS fetch failed, falling back to Web Speech:', e);
+          const cleaned = targetMsg.content.replace(/[*[\]()]/g, '').trim();
+          this.speakWebSpeech(cleaned, { pitch: 1.0, rate: 1.0 }, () => this.stopVoice());
+        }
+      }
+
+      playAudioUrl(url, onEnd) {
+        try {
+          const audio = new Audio(url);
+          this.currentAudio = audio;
+          audio.onended = () => { if (onEnd) onEnd(); };
+          audio.onerror = () => { if (onEnd) onEnd(); };
+          audio.play().catch(e => {
+            console.warn('Audio play error:', e);
+            if (onEnd) onEnd();
+          });
+        } catch (e) {
+          if (onEnd) onEnd();
+        }
+      }
+
+      speakWebSpeech(text, settings, onEnd) {
+        if (!('speechSynthesis' in window)) {
+          if (onEnd) onEnd();
+          return;
+        }
+        try {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(text);
+          this.currentUtterance = u;
+          u.lang = 'vi-VN';
+          u.pitch = (settings && settings.pitch) || 1.0;
+          u.rate = (settings && settings.rate) || 1.0;
+
+          const voices = window.speechSynthesis.getVoices();
+          const viVoice = voices.find(v => v.lang && (v.lang.startsWith('vi') || v.lang.includes('VIE')));
+          if (viVoice) u.voice = viVoice;
+
+          u.onend = () => { if (onEnd) onEnd(); };
+          u.onerror = () => { if (onEnd) onEnd(); };
+          window.speechSynthesis.speak(u);
+        } catch (e) {
+          if (onEnd) onEnd();
+        }
+      }
+
+      async previewCharacterVoice(characterId) {
+        this.stopVoice();
+        const vMeta = this.voicesMeta[characterId] || {};
+        const quote = vMeta.sample_quote || 'Chào mừng chư vị hiệp sĩ và phu nhân đã quang lâm Lâu đài Fernwood!';
+        showMedievalToast(vMeta.name || "Chất Giọng Nhân Vật", "🎙️", `"${quote}"`);
+
+        try {
+          const res = await fetch('/api/tts', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ character_id: characterId, text: quote })
+          });
+          const data = await res.json();
+          if (data && data.audio_url) {
+            this.playAudioUrl(data.audio_url, () => this.stopVoice());
+          } else {
+            const cleaned = data.cleaned_text || quote;
+            const settings = data.voice_settings || { pitch: 1.0, rate: 1.0 };
+            this.speakWebSpeech(cleaned, settings, () => this.stopVoice());
+          }
+        } catch (e) {
+          this.speakWebSpeech(quote, { pitch: 1.0, rate: 1.0 }, () => this.stopVoice());
+        }
+      }
+    }
+
     const soundEngine = new MedievalAudioEngine();
+    soundEngine.voice = new MedievalVoicePlayer();
+
+    function toggleVoiceActing() {
+      soundEngine.voice.isVoiceEnabled = !soundEngine.voice.isVoiceEnabled;
+      localStorage.setItem('knight_voice_enabled', soundEngine.voice.isVoiceEnabled);
+      updateVoiceButtonUI();
+      if (!soundEngine.voice.isVoiceEnabled) {
+        soundEngine.voice.stopVoice();
+      }
+    }
+
+    function updateVoiceButtonUI() {
+      const btn = document.getElementById('voice-toggle-btn');
+      const label = document.getElementById('voice-toggle-label');
+      const enabled = soundEngine.voice.isVoiceEnabled;
+      if (btn) {
+        btn.className = `p-1.5 sm:p-2 rounded-lg border text-xs sm:text-sm transition shadow flex items-center gap-1 ${
+          enabled ? 'bg-amber-950/80 text-amber-300 border-amber-600/60' : 'bg-stone-800/80 text-stone-500 border-stone-700'
+        }`;
+      }
+      if (label) {
+        label.innerText = enabled ? 'Lồng Tiếng: Bật' : 'Lồng Tiếng: Tắt';
+      }
+      const stToggle = document.getElementById('settings-voice-toggle');
+      if (stToggle) stToggle.checked = enabled;
+    }
+
+    function playVoiceForMessage(msgId, senderId, btnEl) {
+      soundEngine.voice.playVoiceForMessage(msgId, senderId, btnEl);
+    }
+
+    function previewCharacterVoice(characterId) {
+      soundEngine.voice.previewCharacterVoice(characterId);
+    }
+
+    async function testVoicePlayback() {
+      showMedievalToast("Thử Nghiệm Lồng Tiếng", "🎙️", "Đang kết nối tới ElevenLabs để phát giọng mẫu của Lãnh chúa Taylor...");
+      await soundEngine.voice.previewCharacterVoice('lord_taylor');
+    }
 
     function toggleAudio() {
       soundEngine.init();
@@ -1291,6 +1531,14 @@
         appState.isGameStarted = data.is_game_started || false;
 
         document.getElementById('cast-size-select').value = appState.castSize;
+        await soundEngine.voice.loadVoicesMeta();
+        updateVoiceButtonUI();
+        if (data.has_elevenlabs_key) {
+          const elKeyInput = document.getElementById('settings-elevenlabs-key-input');
+          if (elKeyInput && !elKeyInput.value) {
+            elKeyInput.placeholder = "✓ Đã thiết lập khóa ElevenLabs trên máy chủ";
+          }
+        }
         renderCharacterSelectionGrid();
         renderExhibitsGrid();
         renderVoteFormOptions();
@@ -1587,6 +1835,13 @@
         if (data.message.is_blackout) {
           triggerBlackoutAnimation();
         }
+        // Auto-voice acting for incoming speech
+        if (soundEngine.voice && soundEngine.voice.isVoiceEnabled && data.message) {
+          const myCid = appState.myCharacter ? appState.myCharacter.id : appState.characterId;
+          if (data.message.sender_id !== myCid) {
+            soundEngine.voice.playVoiceForMessage(data.message.id, data.message.sender_id, null);
+          }
+        }
       } else if (data.type === 'new_private_message') {
         const char = ensureMyCharacter();
         const myCid = char ? char.id : (appState.characterId || null);
@@ -1609,6 +1864,9 @@
           soundEngine.playCoinClink();
 
           if (data.message.sender_id !== myCid) {
+            if (soundEngine.voice && soundEngine.voice.isVoiceEnabled) {
+              soundEngine.voice.playVoiceForMessage(data.message.id, data.message.sender_id, null);
+            }
             const privateTabEl = document.getElementById('tab-private');
             const isPrivateTabActive = privateTabEl && !privateTabEl.classList.contains('hidden');
             if (!isPrivateTabActive || appState.activePrivateRecipientId !== otherId) {
@@ -1677,9 +1935,18 @@
           appState.greatHallMessages.push(data.message);
           renderGreatHallMessages();
         }
+        if (soundEngine.voice && soundEngine.voice.isVoiceEnabled && data.message) {
+          soundEngine.voice.playVoiceForMessage(data.message.id, 'system', null);
+        }
       } else if (data.type === 'game_reset') {
         soundEngine.playFanfare();
         handleGameResetSync(data);
+      } else if (data.type === 'settings_updated') {
+        if (data.tts_enabled !== undefined) {
+          soundEngine.voice.isVoiceEnabled = data.tts_enabled;
+          localStorage.setItem('knight_voice_enabled', data.tts_enabled);
+          updateVoiceButtonUI();
+        }
       }
 
       // Auto-refresh chatlog modal if it is currently open
@@ -1932,10 +2199,15 @@
             <div class="text-xs font-serif italic text-amber-400/80 mb-2">${c.title}</div>
             <p class="text-[11px] text-stone-300 font-serif leading-relaxed line-clamp-3">${c.brief}</p>
           </div>
-          <div class="mt-3 pt-2.5 border-t border-stone-800/80 flex items-center justify-between text-xs">
-            <span class="text-[11px] text-amber-300/80 font-cinzel flex items-center gap-1">
-              <span>💰</span> ${c.coins || 12} Tiền Vàng
-            </span>
+          <div class="mt-3 pt-2.5 border-t border-stone-800/80 flex items-center justify-between text-xs gap-1">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[11px] text-amber-300/80 font-cinzel flex items-center gap-1">
+                <span>💰</span> ${c.coins || 12}
+              </span>
+              <button type="button" onclick="event.stopPropagation(); previewCharacterVoice('${c.id}')" class="text-[10px] text-amber-300 hover:text-amber-100 bg-stone-800/90 hover:bg-stone-700 px-1.5 py-0.5 rounded border border-amber-600/30 flex items-center gap-1 transition" title="Nghe thử chất giọng của nhân vật">
+                <span>🎙️</span> Nghe Giọng
+              </button>
+            </div>
             ${actionButtonHtml}
           </div>
         `;
@@ -2387,7 +2659,12 @@
                 <span class="text-2xl filter drop-shadow">${m.sender_avatar || '🎺'}</span>
                 <span class="font-cinzel font-bold text-amber-300 text-xs md:text-sm tracking-wide">${m.sender_name}</span>
               </div>
-              <span class="text-[10px] text-amber-400/80 font-mono">${timeStr}</span>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="playVoiceForMessage('${m.id}', '${m.sender_id || 'system'}', this)" class="text-[10px] text-amber-300 hover:text-amber-100 bg-amber-900/60 hover:bg-amber-800/80 px-2 py-0.5 rounded border border-amber-600/40 flex items-center gap-1 transition shadow-sm" title="Lắng nghe lời tuyên cáo hoàng gia">
+                  <span>🔊</span> <span class="hidden sm:inline text-[10px]">Nghe</span>
+                </button>
+                <span class="text-[10px] text-amber-400/80 font-mono">${timeStr}</span>
+              </div>
             </div>
             <p class="text-amber-100/95 text-xs md:text-sm font-serif italic whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
           `;
@@ -2413,7 +2690,12 @@
                   ${senderBadge}
                   ${!isMe ? `<button type="button" onclick="openPrivateChat('${m.sender_id}')" class="text-[10px] text-amber-400/90 hover:text-amber-200 underline font-normal ml-1" title="Mở phòng mật đàm riêng">🗝️ Mật Đàm</button>` : ''}
                 </div>
-                <span class="text-[9px] text-stone-400 font-mono shrink-0">${timeStr}</span>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <button type="button" onclick="playVoiceForMessage('${m.id}', '${m.sender_id}', this)" class="text-[10px] text-amber-400/90 hover:text-amber-200 hover:bg-stone-700/60 px-1.5 py-0.5 rounded transition flex items-center gap-1" title="Lắng nghe giọng nhân vật">
+                    <span>🔊</span> <span class="hidden sm:inline text-[10px]">Nghe</span>
+                  </button>
+                  <span class="text-[9px] text-stone-400 font-mono">${timeStr}</span>
+                </div>
               </div>
               <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
             </div>
@@ -2750,6 +3032,11 @@
             ${roleBadge}
           </div>
           <div class="flex items-center justify-end gap-1.5 pt-1.5 border-t border-stone-800/60">
+            <button onclick="previewCharacterVoice('${c.id}')" 
+                    title="Nghe chất giọng ElevenLabs của nhân vật"
+                    class="px-2 py-1 rounded bg-stone-850 hover:bg-stone-700 text-amber-300 border border-stone-700 text-xs font-cinzel transition shadow-sm flex items-center gap-1">
+              <span>🎙️</span> Nghe Giọng
+            </button>
             <button onclick="mentionCharacterInGreatHall('${escapedName}')" 
                     title="Nhắc tên (@) ở Đại Sảnh"
                     class="px-2.5 py-1 rounded bg-amber-950/80 hover:bg-amber-900 text-amber-300 hover:text-amber-100 border border-amber-700/60 text-xs font-cinzel font-bold transition shadow-sm flex items-center gap-1">
@@ -2940,7 +3227,12 @@
                     ? '<span class="text-[9px] px-1.5 py-0.2 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-700/60 shrink-0 font-normal">👤 Người Thật</span>'
                     : '<span class="text-[9px] px-1.5 py-0.2 rounded bg-stone-900 text-stone-400 border border-stone-700 shrink-0 font-normal">🤖 AI</span>'}
               </div>
-              <span class="text-[9px] text-stone-400 font-mono shrink-0">${timeStr}</span>
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button type="button" onclick="playVoiceForMessage('${m.id}', '${m.sender_id}', this)" class="text-[10px] text-amber-400/90 hover:text-amber-200 hover:bg-stone-700/60 px-1.5 py-0.5 rounded transition flex items-center gap-1" title="Lắng nghe lời thì thầm">
+                  <span>🔊</span> <span class="hidden sm:inline text-[10px]">Nghe</span>
+                </button>
+                <span class="text-[9px] text-stone-400 font-mono">${timeStr}</span>
+              </div>
             </div>
             <p class="text-xs md:text-sm font-sans whitespace-pre-line leading-relaxed">${formatMentions(m.content)}</p>
           </div>
@@ -3295,17 +3587,30 @@
       e.preventDefault();
       const provider = document.getElementById('settings-provider-select').value;
       const key = document.getElementById('settings-key-input').value.trim();
+      const elevenlabsKey = document.getElementById('settings-elevenlabs-key-input').value.trim();
+      const ttsToggle = document.getElementById('settings-voice-toggle');
+      const ttsEnabled = ttsToggle ? ttsToggle.checked : true;
+
+      soundEngine.voice.isVoiceEnabled = ttsEnabled;
+      localStorage.setItem('knight_voice_enabled', ttsEnabled);
+      updateVoiceButtonUI();
+
+      const payload = {
+        provider: provider,
+        api_key: key,
+        tts_enabled: ttsEnabled
+      };
+      if (elevenlabsKey) {
+        payload.elevenlabs_api_key = elevenlabsKey;
+      }
 
       await fetch('/api/settings', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          provider: provider,
-          api_key: key
-        })
+        body: JSON.stringify(payload)
       });
       closeModal('settings-modal');
-      alert('Đã cập nhật cài đặt API thành công!');
+      alert('Đã cập nhật cài đặt API và Lồng tiếng thành công!');
     }
 
     function openModal(id) {
